@@ -1,0 +1,7 @@
+:toc:
+
+# BillSim: Utilities to process similarity of bills
+
+This repository extracts the bill similarity functions from the BillMap project https://github.com/unitedstates/BillMap[here]. Both are open source, under the MIT License.  
+
+A separate repository (github.com/aih/bills) contains tools in Go to process bill data.
