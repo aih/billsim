@@ -7,7 +7,6 @@ from elasticsearch import exceptions, Elasticsearch
 es = Elasticsearch()
 from collections import OrderedDict
 
-from django.conf import settings
 from common import constants
 from common.utils import getText, getBillNumberFromBillPath, getBillNumberFromCongressScraperBillPath
 
@@ -15,7 +14,7 @@ bill_file = "BILLS-116hr1500rh.xml"
 bill_file2 = "BILLS-116hr299ih.xml"
 PATH_BILL = os.path.join(constants.PATH_TO_CONGRESSDATA_XML_DIR, bill_file)
 
-BASE_DIR = settings.BASE_DIR
+BASE_DIR = constants.BASE_DIR
 
 def getXMLDirByCongress(congress: str ='117', docType: str = 'dtd', uscongress: bool = True) -> str:
   if uscongress:
@@ -175,7 +174,7 @@ def get_bill_xml(congressDir: str, uscongress: bool = True) -> list:
     return [file for file in os.listdir(congressDir) if file.endswith(".xml")]
 
   xml_files = list()
-  USCONGRESS_XML_FILE = settings.USCONGRESS_XML_FILE
+  USCONGRESS_XML_FILE = constants.USCONGRESS_XML_FILE
   for root, _, files in os.walk(congressDir):
     if USCONGRESS_XML_FILE in files:
       xml_path = os.path.join(root, USCONGRESS_XML_FILE)

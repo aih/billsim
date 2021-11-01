@@ -7,26 +7,15 @@ from re import S
 import pkgutil
 import json
 
-from django.conf import settings
-
 RESULTS_DEFAULT = 20
 MIN_SCORE_DEFAULT = 25
-PATH_SEC_602 = settings.PATH_SEC_602
-PATH_MAL = settings.PATH_MAL
 PATH_BILLSECTIONS_JSON = settings.PATH_BILLSECTIONS_JSON
 PATH_BILL_FULL_JSON = settings.PATH_BILL_FULL_JSON
 
 try:
-  SAMPLE_TEXT_602 = str(pkgutil.get_data(__name__, PATH_SEC_602))
-  SAMPLE_TEXT_MAL = str(pkgutil.get_data(__name__, PATH_MAL))
   BILLSECTION_MAPPING = json.loads(pkgutil.get_data(__name__, PATH_BILLSECTIONS_JSON).decode("utf-8"))
   BILL_FULL_MAPPING = json.loads(pkgutil.get_data(__name__, PATH_BILL_FULL_JSON).decode("utf-8"))
 except Exception as err:
-  with open(PATH_SEC_602, 'r') as f:
-    SAMPLE_TEXT_602 = f.read() 
-
-  with open(PATH_MAL, 'r') as f:
-    SAMPLE_TEXT_MAL = f.read() 
 
   with open(PATH_BILLSECTIONS_JSON, 'r') as f:
     BILLSECTION_MAPPING = json.load(f)
@@ -150,14 +139,11 @@ The Commissioner of Food and Drugs and the Secretary of Agriculture shall establ
 """
 
 def getQueryText(text_path: str=''):
-  if not text_path or text_path == '':
-    return SAMPLE_TEXT_MAL
-  else:
-    with open(text_path, 'r') as f:
+  with open(text_path, 'r') as f:
       queryText = f.read()
-    if not queryText:
-      queryText = ''
-    return queryText
+  if not queryText:
+    queryText = ''
+  return queryText
 
 # more like this query (working)
 SAMPLE_QUERY_NESTED_MLT = {
@@ -185,11 +171,6 @@ SAMPLE_QUERY_NESTED_MLT = {
     }
   }
 }
-
-SAMPLE_QUERY_NESTED_MLT_MARALAGO =  deepcopy(SAMPLE_QUERY_NESTED_MLT)
-SAMPLE_QUERY_NESTED_MLT_MARALAGO['query']['nested']['query']['more_like_this']['like'] = getQueryText()
-SAMPLE_QUERY_NESTED_MLT_116hr5150sec602 = deepcopy(SAMPLE_QUERY_NESTED_MLT)
-SAMPLE_QUERY_NESTED_MLT_116hr5150sec602['query']['nested']['query']['more_like_this']['like'] = SAMPLE_TEXT_602
 
 def makeMLTQuery(queryText: str, queryTextPath: str=''):
   if queryTextPath and not queryText:
