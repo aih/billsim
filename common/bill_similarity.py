@@ -13,7 +13,6 @@ from collections import OrderedDict
 from iteration_utilities import flatten, unique_everseen, duplicates
 
 from common.utils import getText, getBillNumberFromBillPath, getBillNumberFromCongressScraperBillPath 
-from django.conf import settings
 from common import constants
 from bills.models import Bill, MAX_RELATED_BILLS
 
@@ -21,7 +20,7 @@ bill_file = "BILLS-116hr1500rh.xml"
 bill_file2 = "BILLS-116hr299ih.xml"
 PATH_BILL = os.path.join(constants.PATH_TO_CONGRESSDATA_XML_DIR, bill_file)
 
-BASE_DIR = settings.BASE_DIR
+BASE_DIR = constants.BASE_DIR
 
 # The max number of bills to get for each section
 MAX_BILLS_SECTION = 20
@@ -237,7 +236,7 @@ def get_bill_xml(congressDir: str, uscongress: bool = True) -> list:
     return [file for file in os.listdir(congressDir) if file.endswith(".xml")]
 
   xml_files = list()
-  USCONGRESS_XML_FILE = settings.USCONGRESS_XML_FILE
+  USCONGRESS_XML_FILE = constants.USCONGRESS_XML_FILE
   for root, dirs, files in os.walk(congressDir):
     if USCONGRESS_XML_FILE in files:
       xml_path = os.path.join(root, USCONGRESS_XML_FILE)

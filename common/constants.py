@@ -1,13 +1,35 @@
+import os
 import re
 import datetime
 from copy import deepcopy
 import pkgutil
 import json
 
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+
+CONGRESS_DATA_PATH = os.path.join(BASE_DIR, 'congress', 'data')
+BILLS_JSON_PATH = os.path.join(BASE_DIR, 'json_data') 
+
+PATH_BILLSECTIONS_JSON = os.path.join(
+    BASE_DIR, 'elasticsearch/billsections_mapping.json')
+PATH_BILL_FULL_JSON = os.path.join(
+    BASE_DIR, 'elasticsearch/bill_full_mapping.json')
+
+
+BILLMETA_GO_CMD = 'billmeta'
+ESQUERY_GO_CMD = 'esquery'
+COMPAREMATRIX_GO_CMD = 'comparematrix'
+PATH_TO_CONGRESSDATA_DIR = CONGRESS_DATA_PATH
+PATH_TO_DATA_DIR = os.getenv('PATH_TO_DATA_DIR', os.path.join('/', *"/usr/local/share/xcential/public/data".split('/')))
+PATH_TO_CONGRESSDATA_XML_DIR = os.getenv('PATH_TO_CONGRESSDATA_XML_DIR', os.path.join('/', *"/usr/local/share/xcential/public/data/116/dtd".split('/')))
+PATH_TO_RELATEDBILLS_DIR = os.path.join(PATH_TO_CONGRESSDATA_DIR, 'relatedbills')
+
+USCONGRESS_XML_FILE = 'document.xml'
+
 RESULTS_DEFAULT = 20
 MIN_SCORE_DEFAULT = 25
-PATH_BILLSECTIONS_JSON = settings.PATH_BILLSECTIONS_JSON
-PATH_BILL_FULL_JSON = settings.PATH_BILL_FULL_JSON
 
 try:
   BILLSECTION_MAPPING = json.loads(pkgutil.get_data(__name__, PATH_BILLSECTIONS_JSON).decode("utf-8"))
@@ -20,18 +42,7 @@ except Exception as err:
   with open(PATH_BILL_FULL_JSON, 'r') as f:
     BILL_FULL_MAPPING = json.load(f)
 
-PATH_TO_BILLS_META = settings.PATH_TO_BILLS_META 
-BILLMETA_GO_CMD = settings.BILLMETA_GO_CMD
-ESQUERY_GO_CMD = settings.ESQUERY_GO_CMD
-COMPAREMATRIX_GO_CMD = settings.COMPAREMATRIX_GO_CMD
-PATH_TO_BILLS_META_GO = settings.PATH_TO_BILLS_META_GO 
-PATH_TO_CONGRESSDATA_DIR = settings.CONGRESS_DATA_PATH
-PATH_TO_DATA_DIR = settings.PATH_TO_DATA_DIR
-PATH_TO_CONGRESSDATA_XML_DIR = settings.PATH_TO_CONGRESSDATA_XML_DIR
-PATH_TO_BILLS_LIST = settings.PATH_TO_BILLS_LIST
-PATH_TO_TITLES_INDEX = settings.PATH_TO_TITLES_INDEX
-PATH_TO_NOYEAR_TITLES_INDEX = settings.PATH_TO_NOYEAR_TITLES_INDEX
-PATH_TO_RELATEDBILLS_DIR = settings.PATH_TO_RELATEDBILLS_DIR
+
 #PATH_TO_RELATEDBILLS = '../relatedBills.json'
 SAVE_ON_COUNT = 1000
 
