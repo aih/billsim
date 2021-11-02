@@ -12,7 +12,7 @@ es = Elasticsearch()
 from collections import OrderedDict
 from iteration_utilities import flatten, unique_everseen, duplicates
 
-from common.utils import getText, getBillNumberFromBillPath, getBillNumberFromCongressScraperBillPath 
+from common.utils import getText, get_bill_xml_paths, getBillNumberFromBillPath, getBillNumberFromCongressScraperBillPath 
 from common import constants
 from bills.models import Bill, MAX_RELATED_BILLS
 
@@ -230,18 +230,6 @@ def getCleanSimilars(similarBills: dict) -> dict:
   return similarsDict
 
 
-
-def get_bill_xml(congressDir: str, uscongress: bool = True) -> list:
-  if not uscongress:
-    return [file for file in os.listdir(congressDir) if file.endswith(".xml")]
-
-  xml_files = list()
-  USCONGRESS_XML_FILE = constants.USCONGRESS_XML_FILE
-  for root, dirs, files in os.walk(congressDir):
-    if USCONGRESS_XML_FILE in files:
-      xml_path = os.path.join(root, USCONGRESS_XML_FILE)
-      xml_files.append(xml_path)
-  return xml_files
 
 def filterLatestVersionOnly(billFiles: List[str]):
   # For bills that are not unique, get only the latest one
@@ -614,7 +602,7 @@ def processBills(congresses: list=CONGRESS_LIST_DEFAULT, docType: str='dtd', usc
     number_of_bills = 0
     print(str(datetime.now()) + ' - Finding Similarity congress: {0}'.format(congress))
     congressDir = getXMLDirByCongress(congress=congress, docType=docType, uscongress=uscongress)
-    billFiles = get_bill_xml(congressDir=congressDir, uscongress=uscongress)
+    billFiles = get_bill_xml_paths(congressDir=congressDir, uscongress=uscongress)
     if uscongress:
       billFiles = filterLatestVersionOnly(billFiles)
     for billFile in billFiles:
