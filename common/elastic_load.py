@@ -170,6 +170,16 @@ def indexBill(bill_path: str=PATH_BILL, index_types: list=['sections']):
 
 
 def get_bill_xml(congressDir: str, uscongress: bool = True) -> list:
+  """
+  Given a path to congressDir, return a list of bill xml file paths
+
+  Args:
+      congressDir (str): [description]
+      uscongress (bool, optional): [description]. Defaults to True.
+
+  Returns:
+      list: [description]
+  """
   if not uscongress:
     return [file for file in os.listdir(congressDir) if file.endswith(".xml")]
 
