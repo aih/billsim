@@ -52,7 +52,7 @@ def indexBill(bill_path: str, billnumber_version: str, index_types: list=['secti
       [type]: [description]
   """
   try:
-    billTree = etree.parse(bill_path)
+    billTree = etree.parse(bill_path, parser=etree.XMLParser())
   except:
     raise Exception('Could not parse bill')
   dublinCores = billTree.xpath('//dublinCore')

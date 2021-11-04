@@ -1,0 +1,10 @@
+certifi==2021.10.8
+elasticsearch==7.15.1
+greenlet==1.1.2
+lxml==4.6.4
+pydantic==1.8.2
+SQLAlchemy==1.4.26
+sqlalchemy2-stubs==0.0.2a19
+sqlmodel==0.0.4
+typing-extensions==3.10.0.2
+urllib3==1.26.7
