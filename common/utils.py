@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-import os
+import os, sys
 import logging
 from typing import Dict, List
 
-from common.constants import CURRENT_CONGRESS
+from common.constants import CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIR_OPTIONS
 
 logging.basicConfig(filename='utils.log',
                     filemode='w', level='INFO')
@@ -22,11 +22,21 @@ def getText(item) -> str:
   except:
     return ''
 
-def get_bill_xml_paths(congressDir: str, pathType: str = 'congressdotgov', congresses: list[int] = list(range(CURRENT_CONGRESS, CURRENT_CONGRESS-3, -1))) -> list[str]:
+def walkBillDirs(rootDir = PATH_TO_CONGRESSDATA_DIR, processFile = logName, dirMatch = getTopBillLevel, fileMatch = isDataJson):
+    for dirName, subdirList, fileList in os.walk(rootDir):
+      if dirMatch(dirName):
+        logger.info('Entering directory: %s' % dirName)
+        filteredFileList = [fitem for fitem in fileList if fileMatch(fitem)]
+        for fname in filteredFileList:
+            processFile(dirName=dirName, fileName=fname)
+
+# TODO: get bill XML paths depending on the pathType
+# Use walkBillDirs with a filter
+def getBillXmlPaths(congressDir: str, pathType: str = 'congressdotgov', congresses: list[int] = list(range(CURRENT_CONGRESS, CURRENT_CONGRESS-3, -1))) -> list[str]:
   """
   Returns a list of dicts of the form {path: 'data/116/...', billnumber_version: '116hr200ih'} with paths to the bill XML files for the given congress.
   """
-  assert pathType in ['congressdotgov', 'unitedstates', 'lrc']
+  assert pathType in CONGRESS_DIR_OPTIONS, "Directory must be in one of the following forms: " + str(CONGRESS_DIR_OPTIONS)
 
   for congress in congresses:
     congressDir = os.path.join(congressDir, str(congress))
@@ -34,8 +44,6 @@ def get_bill_xml_paths(congressDir: str, pathType: str = 'congressdotgov', congr
       logger.warning('Congress directory %s does not exist.', congressDir)
       continue
     billXmlPaths = []
-    # TODO: get bill XML paths depending on the pathType
-    # Use walkdir with a filter
     for billDir in os.listdir(congressDir):
       billDirPath = os.path.join(congressDir, billDir)
       if os.path.isdir(billDirPath):

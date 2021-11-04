@@ -9,6 +9,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
+CONGRESS_DIR_OPTIONS = ['congressdotgov', 'unitedstates', 'lrc']
 CONGRESS_DATA_PATH = os.path.join(BASE_DIR, 'congress', 'data')
 BILLS_JSON_PATH = os.path.join(BASE_DIR, 'json_data') 
 
