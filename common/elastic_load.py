@@ -6,6 +6,7 @@ from elasticsearch import exceptions, Elasticsearch
 es = Elasticsearch()
 from common.utils import getText
 from common import constants
+from common.pymodels import Status, BillPath, SimilarBill, SimilarSection
 
 def getMapping(map_path: str) -> dict:
     with open(map_path, 'r') as f:
@@ -36,7 +37,7 @@ def getHeader(section) -> str:
     return headerpath[0].text
   return ''
 
-def indexBill(bill_path: str, billnumber_version: str, index_types: list=['sections']):
+def indexBill(bill_path: str, billnumber_version: str, index_types: list=['sections']) -> Status:
   """
   Index bill with Elasticsearch
 
@@ -49,7 +50,7 @@ def indexBill(bill_path: str, billnumber_version: str, index_types: list=['secti
       Exception: [description]
 
   Returns:
-      [type]: [description]
+      Status: status of the indexing of the form {success: True/False, message: 'message'}} 
   """
   try:
     billTree = etree.parse(bill_path, parser=etree.XMLParser())
@@ -146,7 +147,8 @@ def indexBill(bill_path: str, billnumber_version: str, index_types: list=['secti
       'billtext': billText
     }
     res = es.index(index="bill_full", body=doc_full)
-  return
+  # TODO: check res for status before returning Status
+  return Status(success=True, message='Indexed bill')
 
     # billRoot = billTree.getroot()
     # nsmap = {k if k is not None else '':v for k,v in billRoot.nsmap.items()}
