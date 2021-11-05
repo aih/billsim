@@ -4,7 +4,7 @@ import os, sys
 import logging
 from typing import Dict, List
 
-from common.constants import CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIR_OPTIONS
+from common.constants import CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS
 
 logging.basicConfig(filename='utils.log',
                     filemode='w', level='INFO')
@@ -22,6 +22,19 @@ def getText(item) -> str:
   except:
     return ''
 
+def logName(dirName: str, fileName: str):
+  """
+  Prints the name provided (path to a file to be processed) to the log.
+  Returns the file path and file name.
+
+  Args:
+      fname (str): path of file to be processed 
+  """
+
+  logger.info('In directory: \t%s' % dirName)
+  logger.info('Processing: \t%s' % fileName)
+  return {"path": os.path.join(dirName, fileName), "fileName": fileName}
+
 def walkBillDirs(rootDir = PATH_TO_CONGRESSDATA_DIR, processFile = logName, dirMatch = getTopBillLevel, fileMatch = isDataJson):
     for dirName, subdirList, fileList in os.walk(rootDir):
       if dirMatch(dirName):
@@ -36,7 +49,7 @@ def getBillXmlPaths(congressDir: str, pathType: str = 'congressdotgov', congress
   """
   Returns a list of dicts of the form {path: 'data/116/...', billnumber_version: '116hr200ih'} with paths to the bill XML files for the given congress.
   """
-  assert pathType in CONGRESS_DIR_OPTIONS, "Directory must be in one of the following forms: " + str(CONGRESS_DIR_OPTIONS)
+  assert pathType in CONGRESS_DIRS.keys(), "Directory must be in one of the following forms: " + str(CONGRESS_DIRS.keys())
 
   for congress in congresses:
     congressDir = os.path.join(congressDir, str(congress))

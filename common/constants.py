@@ -9,7 +9,6 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
-CONGRESS_DIR_OPTIONS = ['congressdotgov', 'unitedstates', 'lrc']
 CONGRESS_DATA_PATH = os.path.join(BASE_DIR, 'congress', 'data')
 BILLS_JSON_PATH = os.path.join(BASE_DIR, 'json_data') 
 
@@ -48,7 +47,9 @@ except Exception as err:
 SAVE_ON_COUNT = 1000
 
 BILL_ID_REGEX = r'[a-z]+[1-9][0-9]*-[1-9][0-9]+'
-BILL_NUMBER_REGEX = r'(?P<congress>[1-9][0-9]*)(?P<stage>[a-z]+)(?P<number>[0-9]+)(?P<version>[a-z]+)?$'
+BILL_NUMBER_PART_REGEX = r'(?P<congress>[1-9][0-9]*)(?P<stage>[a-z]+)(?P<number>[0-9]+)(?P<version>[a-z]+)?'
+BILL_NUMBER_PART_REGEX_COMPILED = re.compile(BILL_NUMBER_PART_REGEX)
+BILL_NUMBER_REGEX = BILL_NUMBER_PART_REGEX + '$'
 BILL_DIR_REGEX = r'.*?([1-9][0-9]*)\/bills\/[a-z]+\/([a-z]+)([0-9]+)$'
 BILL_NUMBER_REGEX_COMPILED = re.compile(BILL_NUMBER_REGEX)
 BILL_DIR_REGEX_COMPILED = re.compile(BILL_DIR_REGEX)
@@ -60,6 +61,33 @@ BILL_TYPES = {
   'ih': 'introduced',
   'rh': 'reported to house'
 }
+
+# CDG = congress.gov
+def billNumberVersionFromPath_CDG(path: str):
+  match = BILL_NUMBER_PART_REGEX_COMPILED.search(path)
+  if match:
+    return match.group(0) 
+  else:
+    return ''
+
+def billNumberVersionToPath_CDG(billnumber_version: str):
+  match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
+  if match:
+    return 'data/{congress}/bills/{stage}/{stage}{billnumber}/BILLS-{congress}{stage}{billnumber}{version}.xml'.format(**match.groupdict())
+  else:
+    return ''
+
+CONGRESS_DIRS = {"congressdotgov": {
+  "samplePath": "data/117/bills/hr200/BILLS-117hr200ih.xml",
+  "billXMLFilenameRegex": r'BILLS-'+BILL_NUMBER_PART_REGEX+r'\.xml',
+  "pathToBillnumberVersion": billNumberVersionFromPath_CDG,
+  "billNumberVersionToPath": billNumberVersionToPath_CDG
+  },
+ "unitedstates": {
+   "samplePath": "congress/data/117/bills/sconres/sconres2"
+ },
+ "lrc": {},
+ }
 
 CURRENT_CONGRESSIONAL_YEAR = datetime.date.today().year if datetime.date.today() > datetime.date(datetime.date.today().year, 1, 3) else (datetime.date.today().year - 1)
 START_CONGRESS = 110 # Earliest Congress with data in our database
