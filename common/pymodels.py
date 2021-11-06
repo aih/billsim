@@ -6,7 +6,6 @@ class Status(BaseModel):
 
 
 class BillPath(BaseModel):
-    billnumber: str = ''
     billnumber_version: str = ''
     path: str = ''
     fileName: str = '' 

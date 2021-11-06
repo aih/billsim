@@ -26,29 +26,31 @@ def getText(item) -> str:
   except:
     return ''
 
-def logName(dirName: str, fileName: str) -> BillPath:
+def getBillPath(dirName: str, fileName: str, pathType: str = 'congressdotgov') -> BillPath:
   """
-  Prints the name provided (path to a file to be processed) to the log.
-  Returns the file path and file name.
+  Returns a BillPath object, with file path, file name, billnumber and version.
 
   Args:
-      fname (str): path of file to be processed 
+      dirName (str): The directory name.
+      fileName (str): The file name.
   """
 
-  logger.debug('In directory: \t%s' % dirName)
-  logger.debug('Processing: \t%s' % fileName)
-  return BillPath(path= os.path.join(dirName, fileName), fileName= fileName)
+  assert pathType in CONGRESS_DIRS.keys(), "Path type must be in one of the following forms: " + str(CONGRESS_DIRS.keys())
+  # Add billnumber and billnumber_version to the return value
+  billpath = os.path.join(dirName, fileName)
+  billnumber_version = CONGRESS_DIRS[pathType]["pathToBillnumberVersion"](billpath)
+  return BillPath(path= billpath, fileName= fileName, billnumber_version= billnumber_version)
 
 def isDataJson(fileName: str) -> bool:
   return fileName == 'data.json'
 
-def walkBillDirs(rootDir = PATH_TO_CONGRESSDATA_DIR, processFile = logName, dirMatch = CDG["isFileParent"], fileMatch = CDG["fileMatch"]) -> list:
+def walkBillDirs(rootDir = PATH_TO_CONGRESSDATA_DIR, processFile = getBillPath, dirMatch = CDG["isFileParent"], fileMatch = CDG["fileMatch"]) -> list:
   """
   Walks through the data directory and returns a list of dicts of the form {path: '[path/to]/congress/data/116/...', billnumber_version: '116hr200ih'} with paths to the bill XML files.
 
   Args:
       rootDir ([type], optional): [description]. Defaults to PATH_TO_CONGRESSDATA_DIR. This is the `congress/data` directory at the location the function is called from.
-      processFile ([type], optional): [description]. Defaults to logName.
+      processFile ([type], optional): [description]. Defaults to getBillPath.
       dirMatch ([type], optional): [description]. Defaults to isFileParent.
       fileMatch ([type], optional): [description]. Defaults to isDataJson.
 
@@ -63,11 +65,12 @@ def walkBillDirs(rootDir = PATH_TO_CONGRESSDATA_DIR, processFile = logName, dirM
     if dirMatch(dirName):
       logger.debug('Entering directory: %s' % dirName)
       filteredFileList = [fitem for fitem in fileList if fileMatch(fitem)]
-      for fname in filteredFileList:
-          result = processFile(dirName=dirName, fileName=fname)
+      for fileName in filteredFileList:
+          logger.debug('Processing: \t%s' % fileName)
+          result = processFile(dirName=dirName, fileName=fileName)
           processedNum += 1
           if processedNum % 100 == 0:
-            logger.info('Processed %d files' % processedNum)
+            logger.debug('Processed %d files' % processedNum)
           if result is not None:
               accumulator.append(result)
   return accumulator
@@ -78,6 +81,6 @@ def getBillXmlPaths(congressDir: str=PATH_TO_CONGRESSDATA_DIR, pathType: str = '
   """
   Returns a list of dicts of the form {path: 'data/116/...', billnumber_version: '116hr200ih'} with paths to the bill XML files for the given congress.
   """
-  assert pathType in CONGRESS_DIRS.keys(), "Directory must be in one of the following forms: " + str(CONGRESS_DIRS.keys())
+  assert pathType in CONGRESS_DIRS.keys(), "Path type must be in one of the following forms: " + str(CONGRESS_DIRS.keys())
   congressdir = CONGRESS_DIRS[pathType]
-  return walkBillDirs(rootDir = congressDir, processFile=logName, dirMatch = congressdir["isFileParent"], fileMatch = congressdir["fileMatch"])
+  return walkBillDirs(rootDir = congressDir, processFile=getBillPath, dirMatch = congressdir["isFileParent"], fileMatch = congressdir["fileMatch"])
