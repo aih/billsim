@@ -6,6 +6,9 @@ import pkgutil
 import json
 
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -73,7 +76,21 @@ def billNumberVersionFromPath_CDG(path: str):
 def billNumberVersionToPath_CDG(billnumber_version: str):
   match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
   if match:
-    return 'data/{congress}/bills/{stage}/{stage}{billnumber}/BILLS-{congress}{stage}{billnumber}{version}.xml'.format(**match.groupdict())
+    return 'data/{congress}/bills/{stage}{billnumber}/BILLS-{congress}{stage}{billnumber}{version}.xml'.format(**match.groupdict())
+  else:
+    return ''
+
+def billNumberVersionFromPath_USCONGRESS(path: str):
+  match = US_CONGRESS_PATH_REGEX_COMPILED.search(path)
+  if match:
+    return '{congress}{stage}{billnumber}{version}'.format(match.groupdict())
+  else:
+    return '' 
+
+def billNumberVersionToPath_USCONGRESS(billnumber_version: str):
+  match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
+  if match:
+    return 'data/{congress}/bills/{stage}/{stage}{billnumber}/text-versions/{version}/document.xml'.format(**match.groupdict())
   else:
     return ''
 
@@ -84,7 +101,10 @@ CONGRESS_DIRS = {"congressdotgov": {
   "billNumberVersionToPath": billNumberVersionToPath_CDG
   },
  "unitedstates": {
-   "samplePath": "congress/data/117/bills/sconres/sconres2"
+   "samplePath": f'congress/data/117/bills/sconres/sconres2/text-versions/ih/{USCONGRESS_XML_FILE}',
+   "billXMLFilenameRegex": r''+USCONGRESS_XML_FILE,
+   "pathToBillnumberVersion": billNumberVersionFromPath_USCONGRESS,
+   "billNumberVersionToPath": billNumberVersionToPath_USCONGRESS
  },
  "lrc": {},
  }

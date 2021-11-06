@@ -4,9 +4,12 @@ class Status(BaseModel):
     success: bool
     message: str 
 
+
 class BillPath(BaseModel):
-    billnumber_version: str 
-    path: str
+    billnumber: str = ''
+    billnumber_version: str = ''
+    path: str = ''
+    fileName: str = '' 
 
 class SimilarSection(BaseModel):
     from_section_id: str

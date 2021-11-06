@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 
+from genericpath import isfile
 import os, sys
 import logging
 from typing import Dict, List
+import re
 
 from common.constants import CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS
+from pymodels import BillPath
 
 logging.basicConfig(filename='utils.log',
                     filemode='w', level='INFO')
@@ -22,7 +25,7 @@ def getText(item) -> str:
   except:
     return ''
 
-def logName(dirName: str, fileName: str):
+def logName(dirName: str, fileName: str) -> BillPath:
   """
   Prints the name provided (path to a file to be processed) to the log.
   Returns the file path and file name.
@@ -33,10 +36,26 @@ def logName(dirName: str, fileName: str):
 
   logger.info('In directory: \t%s' % dirName)
   logger.info('Processing: \t%s' % fileName)
-  return {"path": os.path.join(dirName, fileName), "fileName": fileName}
+  return BillPath(path= os.path.join(dirName, fileName), fileName= fileName)
 
-def walkBillDirs(rootDir = PATH_TO_CONGRESSDATA_DIR, processFile = logName, dirMatch = getTopBillLevel, fileMatch = isDataJson):
-    for dirName, subdirList, fileList in os.walk(rootDir):
+def isFileParent(dirName: str) -> bool:
+  """
+  Determines if the directory is the parent of the desired file, e.g. ../../congress/data/116/bills/hr/hr1
+
+  Args:
+      dirName (str): path to match 
+
+  Returns:
+      [bool]: True if path is a top level (which will contain data.json); False otherwise  
+  """
+  dirName_parts = dirName.split('/')
+  return (re.match(r'[a-z]+[0-9]+', dirName_parts[-1]) is not None and dirName_parts[-3]=='bills')
+
+def isDataJson(fileName: str) -> bool:
+  return fileName == 'data.json'
+
+def walkBillDirs(rootDir = PATH_TO_CONGRESSDATA_DIR, processFile = logName, dirMatch = isFileParent, fileMatch = isDataJson):
+    for dirName, _, fileList in os.walk(rootDir):
       if dirMatch(dirName):
         logger.info('Entering directory: %s' % dirName)
         filteredFileList = [fitem for fitem in fileList if fileMatch(fitem)]
