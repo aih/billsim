@@ -4,9 +4,9 @@ import json
 from lxml import etree
 from elasticsearch import exceptions, Elasticsearch
 es = Elasticsearch()
-from common.utils import getText
-from common import constants
-from common.pymodels import Status, BillPath, SimilarBill, SimilarSection
+from billsim.utils import getText
+from billsim import constants
+from billsim.pymodels import Status, BillPath, SimilarBill, SimilarSection
 
 def getMapping(map_path: str) -> dict:
     with open(map_path, 'r') as f:

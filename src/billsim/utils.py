@@ -5,8 +5,8 @@ import os, sys
 import logging
 from typing import Dict, List
 
-from common.constants import CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS
-from common.pymodels import BillPath
+from billsim.constants import CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS
+from billsim.pymodels import BillPath
 
 logging.basicConfig(filename='utils.log',
                     filemode='w', level='INFO')

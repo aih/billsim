@@ -5,3 +5,16 @@
 This repository extracts the bill similarity functions from the BillMap project https://github.com/unitedstates/BillMap[here]. Both are open source, under the Public Domain License.  
 
 A separate repository (github.com/aih/bills) contains tools in Go to process bill data.
+
+## Processing bill XML files
+
+The default functions assume that the bill XML files are in a directory three levels up from the `billsim/utils.py`  file, of the form `congress/data/`.
+
+Then you can run the following command to process all the bill XML files in the directory:
+
+```python
+>>> from billsim.utils import getBillXmlPaths
+>>> z=getBillXmlPaths()
+>>> z[30]
+BillPath(billnumber_version='116hr1818ih', path='.../billsim/congress/data/116/bills/hr1818/BILLS-116hr1818ih.xml', fileName='BILLS-116hr1818ih.xml')
+```
