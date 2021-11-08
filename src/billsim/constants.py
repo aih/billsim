@@ -22,6 +22,10 @@ PATH_BILL_FULL_JSON = os.path.join(
     BASE_DIR, 'es/bill_full_mapping.json')
 
 
+# Names of elasticsearch indices
+INDEX_SECTIONS = os.getenv('INDEX_SECTIONS', default='billsim')
+INDEX_BILL_FULL = os.getenv('INDEX_BILL_FULL', default='bill_full')
+
 BILLMETA_GO_CMD = 'billmeta'
 ESQUERY_GO_CMD = 'esquery'
 COMPAREMATRIX_GO_CMD = 'comparematrix'

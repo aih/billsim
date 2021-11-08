@@ -5,9 +5,14 @@ import json
 from lxml import etree
 from elasticsearch import exceptions, Elasticsearch
 es = Elasticsearch()
-from billsim.utils import getText
+from billsim.utils import getBillXmlPaths, getText
 from billsim import constants
 from billsim.pymodels import Status, BillPath, SimilarBill, SimilarSection
+
+logging.basicConfig(filename='elastic_load.log',
+                    filemode='w', level='INFO')
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.StreamHandler(sys.stdout))
 
 def getMapping(map_path: str) -> dict:
     with open(map_path, 'r') as f:
@@ -15,15 +20,15 @@ def getMapping(map_path: str) -> dict:
 
 # For future possible improvements, see https://www.is.inf.uni-due.de/bib/pdf/ir/Abolhassani_Fuhr_04.pdf
 # Applying the Divergence From Randomness Approach for Content-Only Search in XML Documents
-def createIndex(index: str='billsections', body: dict=constants.BILLSECTION_MAPPING, delete=False):
+def createIndex(index: str=constants.INDEX_SECTIONS, body: dict=constants.BILLSECTION_MAPPING,  delete=False):
   if delete:
     try:
       es.indices.delete(index=index)
     except exceptions.NotFoundError:
-      print('No index to delete: {0}'.format(index))
+      logger.error('No index to delete: {0}'.format(index))
 
-  print('Creating index with mapping: ')
-  print(str(body))
+  logger.info('Creating index with mapping: ')
+  logger.info(str(body))
   es.indices.create(index=index, ignore=400, body=body)
 
 def getEnum(section) -> str:
@@ -38,7 +43,7 @@ def getHeader(section) -> str:
     return headerpath[0].text
   return ''
 
-def indexBill(bill_path: str, billnumber_version: str, index_types: list=['sections']) -> Status:
+def indexBill(billPath: BillPath, index_types: list=['sections']) -> Status:
   """
   Index bill with Elasticsearch
 
@@ -54,7 +59,7 @@ def indexBill(bill_path: str, billnumber_version: str, index_types: list=['secti
       Status: status of the indexing of the form {success: True/False, message: 'message'}} 
   """
   try:
-    billTree = etree.parse(bill_path, parser=etree.XMLParser())
+    billTree = etree.parse(billPath.path, parser=etree.XMLParser())
   except:
     raise Exception('Could not parse bill')
   dublinCores = billTree.xpath('//dublinCore')
@@ -64,8 +69,8 @@ def indexBill(bill_path: str, billnumber_version: str, index_types: list=['secti
     dublinCore = ''
   dcdate = getText(billTree.xpath('//dublinCore/dc:date', namespaces={'dc': 'http://purl.org/dc/elements/1.1/'}))
   # TODO find date for enr bills in the bill status (for the flat congress directory structure)
-  if (dcdate is None or len(dcdate) == 0) and  '/data.xml' in bill_path:
-    metadata_path = bill_path.replace('/data.xml', '/data.json')
+  if (dcdate is None or len(dcdate) == 0) and  '/data.xml' in billPath.path:
+    metadata_path = billPath.path.replace('/data.xml', '/data.json')
     try:
       with open(metadata_path, 'rb') as f:
         metadata = json.load(f)
@@ -84,7 +89,7 @@ def indexBill(bill_path: str, billnumber_version: str, index_types: list=['secti
   dctitle = getText(billTree.xpath('//dublinCore/dc:title', namespaces={'dc': 'http://purl.org/dc/elements/1.1/'}))
 
   doc_id = ''
-  billMatch = constants.BILL_NUMBER_REGEX_COMPILED.match(billnumber_version)
+  billMatch = constants.BILL_NUMBER_REGEX_COMPILED.match(billPath.billnumber_version)
   billversion = ''
   billnumber = ''
   if billMatch:
@@ -96,11 +101,13 @@ def indexBill(bill_path: str, billnumber_version: str, index_types: list=['secti
   from collections import OrderedDict
   headers_text = [ header.text for header in headers]
 
+  res = {}
+
   # Uses an OrderedDict to deduplicate headers
   # TODO handle missing header and enum separately
   if 'sections' in index_types:
     doc = {
-        'id': billnumber_version,
+        'id': billPath.billnumber_version,
         'congress': congress_text,
         'session': session_text,
         'dc': dublinCore,
@@ -130,12 +137,12 @@ def indexBill(bill_path: str, billnumber_version: str, index_types: list=['secti
     if doc_id != '' and len(doc_id) > 7:
         doc['id'] = doc_id
 
-    res = es.index(index="billsections", body=doc)
+    res = es.index(index=constants.INDEX_SECTIONS, body=doc)
 
   if 'bill_full' in index_types:
     billText = etree.tostring(billTree, method="text", encoding="unicode") 
     doc_full = {
-      'id': billnumber_version,
+      'id': billPath.billnumber_version,
       'congress': congress_text,
       'session': session_text,
       'dc': dublinCore,
@@ -147,9 +154,23 @@ def indexBill(bill_path: str, billnumber_version: str, index_types: list=['secti
       'headers': list(OrderedDict.fromkeys(headers_text)),
       'billtext': billText
     }
-    res = es.index(index="bill_full", body=doc_full)
-  # TODO: check res for status before returning Status
-  return Status(success=True, message='Indexed bill')
+    res = es.index(index=constants.INDEX_BILL_FULL, body=doc_full)
+
+  # TODO: handle processing of bill section index separately from full bill
+  if res.get('result', None) == 'created':
+      return Status(success=True, message='Indexed bill {0}'.format(billPath.billnumber_version))
+  else:
+      return Status(success=False, message='Failed to index bill {0}'.format(billPath.billnumber_version))
 
     # billRoot = billTree.getroot()
     # nsmap = {k if k is not None else '':v for k,v in billRoot.nsmap.items()}
+
+def initializeBillSectionsIndex():
+  """
+  Initializes the index for the congress directory. The 'id' field is set to the billnumber_version and is unique.
+  """
+
+  createIndex()
+  billPaths = getBillXmlPaths()
+  for billPath in billPaths:
+    indexBill(billPath)

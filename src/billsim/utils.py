@@ -79,7 +79,7 @@ def walkBillDirs(rootDir = PATH_TO_CONGRESSDATA_DIR, processFile = getBillPath, 
 # Uses walkBillDirs with a filter
 def getBillXmlPaths(congressDir: str=PATH_TO_CONGRESSDATA_DIR, pathType: str = 'congressdotgov', congresses: list[int] = list(range(CURRENT_CONGRESS, CURRENT_CONGRESS-3, -1))) -> List[BillPath]:
   """
-  Returns a list of dicts of the form {path: 'data/116/...', billnumber_version: '116hr200ih'} with paths to the bill XML files for the given congress.
+  Returns a list of BillPath objects of the form BillPath(path='data/116/...', billnumber_version='116hr200ih', fileName='Bills-116hr200ih.xml') with paths to the bill XML files for the given congress.
   """
   assert pathType in CONGRESS_DIRS.keys(), "Path type must be in one of the following forms: " + str(CONGRESS_DIRS.keys())
   congressdir = CONGRESS_DIRS[pathType]
