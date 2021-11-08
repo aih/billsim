@@ -26,6 +26,9 @@ PATH_BILL_FULL_JSON = os.path.join(
 INDEX_SECTIONS = os.getenv('INDEX_SECTIONS', default='billsim')
 INDEX_BILL_FULL = os.getenv('INDEX_BILL_FULL', default='bill_full')
 
+# largest number of results for a query of sections
+MAX_BILLS_SECTION = int(os.getenv('MAX_BILLS_SECTIONS', default=100))
+
 BILLMETA_GO_CMD = 'billmeta'
 ESQUERY_GO_CMD = 'esquery'
 COMPAREMATRIX_GO_CMD = 'comparematrix'
@@ -273,6 +276,20 @@ quality_date_guidance = """
 The Commissioner of Food and Drugs and the Secretary of Agriculture shall establish guidance for food labelers on how to determine quality dates and safety dates for food products.
 """
 
+forestry_programs = """
+SEC. 5. MEMORANDUM OF UNDERSTANDING TO COORDINATE URBAN FORESTRY PROGRAMS.
+
+Not later than 120 days after the date of the enactment of this Act, the Secretary of Agriculture shall enter into a memorandum of understanding with the Secretaries of Health and Human Services, Housing and Urban Development, Interior, Labor, and Transportation and the Administrator of the Environmental Protection Agency to—
+
+(1) identify strategies to increase equitable access to urban forests through existing programs and authorities;
+
+(2) coordinate existing urban forestry programs;
+
+(3) conduct research on the benefits of urban forests for air quality, heat island mitigation, energy burden reduction, and enhanced shading for heat-resilient housing and active transit; and
+
+(4) conduct research on improving coordination between the agencies to address insects, disease, and non-native invasive species in urban and community areas.
+"""
+
 def getQueryText(text_path: str=''):
   with open(text_path, 'r') as f:
       queryText = f.read()
@@ -281,16 +298,19 @@ def getQueryText(text_path: str=''):
   return queryText
 
 # more like this query (working)
+# Note that we can change the "nexted.score_mode" to "max" 
+# to give the overall doc score the highest score of the nested docs (sections)
 SAMPLE_QUERY_NESTED_MLT = {
   "size": RESULTS_DEFAULT,
   "min_score": MIN_SCORE_DEFAULT,
+  "_source": ["id", "congress", "session"],
   "query": {
     "nested": {
       "path": "sections",
       "query": {
         "more_like_this": {
           "fields": ["sections.section_text"],
-          "like": reporting_requirement,
+          "like": forestry_programs,
           "min_term_freq" : 2,
           "max_query_terms" : 30,
           "min_doc_freq" : 2 
