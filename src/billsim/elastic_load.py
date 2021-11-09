@@ -7,7 +7,7 @@ from elasticsearch import exceptions, Elasticsearch
 es = Elasticsearch()
 from billsim.utils import getBillXmlPaths, getText
 from billsim import constants
-from billsim.pymodels import Status, BillPath, SimilarBill, SimilarSection
+from billsim.pymodels import Status, BillPath
 
 logging.basicConfig(filename='elastic_load.log',
                     filemode='w', level='INFO')

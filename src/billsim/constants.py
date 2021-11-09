@@ -337,7 +337,7 @@ SAMPLE_QUERY_NESTED_MLT = {
   }
 }
 
-def makeMLTQuery(queryText: str, queryTextPath: str='', min_score: int=constants.MIN_SCORE, score_mode: str=constants.SCORE_MODE_AVG):
+def makeMLTQuery(queryText: str, queryTextPath: str='', min_score: int=MIN_SCORE_DEFAULT, score_mode: str=SCORE_MODE_AVG):
   if queryTextPath and not queryText:
     try:
       queryText = getQueryText(queryTextPath)
@@ -346,6 +346,7 @@ def makeMLTQuery(queryText: str, queryTextPath: str='', min_score: int=constants
 
   newQuery = deepcopy(SAMPLE_QUERY_NESTED_MLT)
   newQuery['query']['nested']['query']['more_like_this']['like'] = queryText 
+  newQuery['query']['min_score'] = min_score 
   newQuery['query']['nested']['score_mode'] = score_mode 
   return newQuery
 

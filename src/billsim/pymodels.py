@@ -13,26 +13,41 @@ class BillPath(BaseModel):
     fileName: str = '' 
 
 class SimilarSection(BaseModel):
-    from_section_id: str
-    to_section_id: str
-    from_section_label: str
-    to_section_label: str
-    from_section_header: str
-    to_section_header: str
+    billnumber_version: str
+    id: str
+    label: str
+    header: str
+    length: int
     score_es: float
     score: float
     score_other: float
+class Section(BaseModel):
+    billnumber_version: str
+    id: str
+    label: str
+    header: str
+    length: int
+    similar_sections: list[SimilarSection]
 
-
-class SimilarBill(BaseModel):
+# Result of the similarity search, collecting top similar sections for each section of the bill
+class BillSections(BaseModel):
     id: int
     billnumber_version: str
+    length: int
+    title: str
+    sections: list[Section]
+
+class BillToBill(BaseModel):
+    id: int
+    billnumber_version: str
+    length: int
     score: float
     score_other: float
     reason: str
-    billnumber_to: str
+    billnumber_version_to: str
     identified_by: str
     title: str
-    similar_sections: list[SimilarSection]
+    title_to: str
+    sections: list[Section] # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
 
 
