@@ -13,24 +13,20 @@ class BillPath(BaseModel):
     path: str = ''
     fileName: str = ''
 
-
-class SimilarSection(BaseModel):
+class SectionMeta(BaseModel):
     billnumber_version: str
     id: str
     label: str
     header: str
     length: int
+
+class SimilarSection(SectionMeta):
     score_es: float
     score: float
     score_other: float
 
 
-class Section(BaseModel):
-    billnumber_version: str
-    id: str
-    label: str
-    header: str
-    length: int
+class Section(SectionMeta):
     similar_sections: list[SimilarSection]
 
 
@@ -49,7 +45,7 @@ class BillToBill(BaseModel):
     length: int
     score: float
     score_other: float
-    reason: str
+    reasons: list[str] 
     billnumber_version_to: str
     identified_by: str
     title: str
