@@ -26,6 +26,10 @@ PATH_BILL_FULL_JSON = os.path.join(
 INDEX_SECTIONS = os.getenv('INDEX_SECTIONS', default='billsim')
 INDEX_BILL_FULL = os.getenv('INDEX_BILL_FULL', default='bill_full')
 
+SCORE_MODE_AVG = 'avg'
+SCORE_MODE_MAX = 'max'
+SCORE_MODE_SUM = 'sum'
+
 # largest number of results for a query of sections
 MAX_BILLS_SECTION = int(os.getenv('MAX_BILLS_SECTIONS', default=100))
 
@@ -298,7 +302,7 @@ def getQueryText(text_path: str=''):
   return queryText
 
 # more like this query (working)
-# Note that we can change the "nexted.score_mode" to "max" 
+# Note that we can change the "nested.score_mode" to "max" 
 # to give the overall doc score the highest score of the nested docs (sections)
 SAMPLE_QUERY_NESTED_MLT = {
   "size": RESULTS_DEFAULT,
@@ -328,7 +332,7 @@ SAMPLE_QUERY_NESTED_MLT = {
   }
 }
 
-def makeMLTQuery(queryText: str, queryTextPath: str=''):
+def makeMLTQuery(queryText: str, queryTextPath: str='', score_mode: str=constants.SCORE_MODE_AVG):
   if queryTextPath and not queryText:
     try:
       queryText = getQueryText(queryTextPath)
@@ -337,4 +341,8 @@ def makeMLTQuery(queryText: str, queryTextPath: str=''):
 
   newQuery = deepcopy(SAMPLE_QUERY_NESTED_MLT)
   newQuery['query']['nested']['query']['more_like_this']['like'] = queryText 
+  newQuery['query']['nested']['score_mode'] = score_mode 
   return newQuery
+
+  # TODO run query section-by-section with both the 'avg' and 'max' score_mode;
+  # set the threshold ~ 50 for 'max'
