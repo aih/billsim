@@ -2,7 +2,7 @@
 
 ### Using Elasticsearch for Similarity and Search
 
-We use Elasticsearch (&#x2265; v7.9.2)
+We use Elasticsearch-OSS (v7.10.2) and the elasticsearch python library (v7.10.1)
 to index bills. With the index, we can calculate similarity between documents or parts of documents using https://www.elastic.co/guide/en/elasticsearch/reference/current/similarity.html[built-in] or https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-similarity.html#_available_similarities[custom] similarity metrics, and provide for full-text search in the app.
 
 #### Install Elasticsearch 
@@ -14,20 +14,31 @@ For MacOS, for example:
 * Install
 
 ```bash
-$ curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.2-darwin-x86_64.tar.gz
-$ tar -xvf elasticsearch-7.9.2-darwin-x86_64.tar.gz
+$ curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.10.2-darwin-x86_64.tar.gz
+$ tar -xvf elasticsearch-7.10.2-darwin-x86_64.tar.gz
 ```
 
 * Run
 
 ```bash
-$ cd elasticsearch-7.9.2/bin
+$ cd elasticsearch-7.10.2/bin
 $ ./elasticsearch
+```
+
+Or install with Homebrew:
+See https://github.com/elastic/homebrew-tap
+
+```bash
+$ brew tap elastic/tap
+$ brew install elastic/tap/elasticsearch-oss
+$ brew install elastic/tap/logstash-oss
+$ brew install elastic/tap/kibana-oss
+$ brew services start elasticsearch-oss
 ```
 
 #### Update memory settings
 
-Elasticsearch may be `kill`ed by the jvm process when running bill similarity calculations. To try to avoid this, we set vm parameters:
+On Linux distributions, Elasticsearch may be `kill`ed by the jvm process when running bill similarity calculations. To try to avoid this, we set vm parameters:
 
 See https://www.elastic.co/guide/en/elasticsearch/reference/5.5/setup-configuration-memory.html
 and https://discuss.elastic.co/t/elasticsearch-process-getting-killed/205691/6
@@ -99,21 +110,3 @@ elasticdump \
   --s3SecretAccessKey "${access_key_secret}" \
   --input "s3://${bucket_name}/${file_name}.json" \
   --output=http://localhost:9200/billsections
-```
-
-### Install Logstash
-
-NOTE: we are not using Logstash to index; the logstash-filter.conf we built in the `elasticsearch` directory does not (yet) work.
-
-For MacOs, for example:
-
-* Install
-
-```bash
-$ curl -L -O https://artifacts.elastic.co/downloads/logstash/logstash-7.9.2.tar.gz
-$ tar -xvf logstash-7.9.2.tar.gz
-```
-
-* Set up a logstash config file
-
-See https://www.elastic.co/guide/en/logstash/current/configuration.html
