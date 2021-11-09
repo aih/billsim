@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from pydantic import BaseModel
+from typing import Optional
 
 
 class Status(BaseModel):
@@ -17,11 +18,11 @@ class SectionMeta(BaseModel):
     billnumber_version: str
     id: str
     label: str
-    header: str
-    length: int
+    header: Optional[str] = None
+    length: Optional[int] = None
 
 class SimilarSection(SectionMeta):
-    score_es: float
+    score_es: Optional[float] = None
     score: float
     score_other: float
 
@@ -42,7 +43,9 @@ class BillSections(BaseModel):
 class BillToBill(BaseModel):
     id: int
     billnumber_version: str
-    length: int
+    length: Optional[int] = None
+    length_to: Optional[int] = None
+    score_es: Optional[float] = None
     score: float
     score_other: float
     reasons: list[str] 
