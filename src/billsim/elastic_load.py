@@ -2,6 +2,8 @@
 
 import re
 import json
+import logging
+import sys
 from lxml import etree
 from elasticsearch import exceptions, Elasticsearch
 es = Elasticsearch()
