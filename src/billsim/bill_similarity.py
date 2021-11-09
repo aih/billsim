@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 from elasticsearch import exceptions, Elasticsearch
+
 es = Elasticsearch()
 from billsim import constants
+
 
 def getMinScore(queryText: str) -> int:
     """
@@ -17,10 +19,10 @@ def getMinScore(queryText: str) -> int:
 
     Returns:
         int: minimum score 
-    """ 
+    """
     length = len(queryText)
     if length < 500:
-        return 20        
+        return 20
     elif length < 1000:
         return 40
     elif length < 1500:
@@ -28,15 +30,24 @@ def getMinScore(queryText: str) -> int:
     else:
         return 60
 
-def runQuery(index: str=constants.INDEX_SECTIONS, query: dict=constants.SAMPLE_QUERY_NESTED_MLT, size: int=constants.MAX_BILLS_SECTION) -> dict:
-  query = query
-  # See API documentation
-  # https://elasticsearch-py.readthedocs.io/en/v7.10.1/api.html#elasticsearch.Elasticsearch.search
-  return es.search(index=index, body=query, size=size)
 
-def moreLikeThis(queryText: str, index: str=constants.INDEX_SECTIONS, score_mode: str=constants.SCORE_MODE_MAX, size: int=constants.MAX_BILLS_SECTION) -> dict:
-  min_score = getMinScore(queryText)
-  query = constants.makeMLTQuery(queryText, min_score= min_score, score_mode=score_mode)
-  return runQuery(index=index, query=query, size=size)
+def runQuery(index: str = constants.INDEX_SECTIONS,
+             query: dict = constants.SAMPLE_QUERY_NESTED_MLT,
+             size: int = constants.MAX_BILLS_SECTION) -> dict:
+    query = query
+    # See API documentation
+    # https://elasticsearch-py.readthedocs.io/en/v7.10.1/api.html#elasticsearch.Elasticsearch.search
+    return es.search(index=index, body=query, size=size)
 
-  # TODO run query section-by-section with both the 'avg' and 'max' score_mode;
+
+def moreLikeThis(queryText: str,
+                 index: str = constants.INDEX_SECTIONS,
+                 score_mode: str = constants.SCORE_MODE_MAX,
+                 size: int = constants.MAX_BILLS_SECTION) -> dict:
+    min_score = getMinScore(queryText)
+    query = constants.makeMLTQuery(queryText,
+                                   min_score=min_score,
+                                   score_mode=score_mode)
+    return runQuery(index=index, query=query, size=size)
+
+    # TODO run query section-by-section with both the 'avg' and 'max' score_mode;

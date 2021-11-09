@@ -2,15 +2,17 @@
 
 from pydantic import BaseModel
 
+
 class Status(BaseModel):
     success: bool
-    message: str 
+    message: str
 
 
 class BillPath(BaseModel):
     billnumber_version: str = ''
     path: str = ''
-    fileName: str = '' 
+    fileName: str = ''
+
 
 class SimilarSection(BaseModel):
     billnumber_version: str
@@ -21,6 +23,8 @@ class SimilarSection(BaseModel):
     score_es: float
     score: float
     score_other: float
+
+
 class Section(BaseModel):
     billnumber_version: str
     id: str
@@ -29,6 +33,7 @@ class Section(BaseModel):
     length: int
     similar_sections: list[SimilarSection]
 
+
 # Result of the similarity search, collecting top similar sections for each section of the bill
 class BillSections(BaseModel):
     id: int
@@ -36,6 +41,7 @@ class BillSections(BaseModel):
     length: int
     title: str
     sections: list[Section]
+
 
 class BillToBill(BaseModel):
     id: int
@@ -48,6 +54,5 @@ class BillToBill(BaseModel):
     identified_by: str
     title: str
     title_to: str
-    sections: list[Section] # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
-
-
+    sections: list[
+        Section]  # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
