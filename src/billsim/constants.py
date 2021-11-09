@@ -294,6 +294,11 @@ Not later than 120 days after the date of the enactment of this Act, the Secreta
 (4) conduct research on improving coordination between the agencies to address insects, disease, and non-native invasive species in urban and community areas.
 """
 
+misc_civil_rights = """
+SEC. 9. MISCELLANEOUS. Title XI of the Civil Rights Act of 1964 is amended— 
+(1) by redesignating sections 1101 through 1104 (42 U.S.C. 2000h et seq.) and sections 1105 and 1106 (42 U.S.C. 2000h–5, 2000h–6) as sections 1102 through 1105 and sections 1108 and 110
+"""
+
 def getQueryText(text_path: str=''):
   with open(text_path, 'r') as f:
       queryText = f.read()
@@ -332,7 +337,7 @@ SAMPLE_QUERY_NESTED_MLT = {
   }
 }
 
-def makeMLTQuery(queryText: str, queryTextPath: str='', score_mode: str=constants.SCORE_MODE_AVG):
+def makeMLTQuery(queryText: str, queryTextPath: str='', min_score: int=constants.MIN_SCORE, score_mode: str=constants.SCORE_MODE_AVG):
   if queryTextPath and not queryText:
     try:
       queryText = getQueryText(queryTextPath)
@@ -344,5 +349,3 @@ def makeMLTQuery(queryText: str, queryTextPath: str='', score_mode: str=constant
   newQuery['query']['nested']['score_mode'] = score_mode 
   return newQuery
 
-  # TODO run query section-by-section with both the 'avg' and 'max' score_mode;
-  # set the threshold ~ 50 for 'max'
