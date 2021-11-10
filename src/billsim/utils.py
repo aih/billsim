@@ -14,19 +14,20 @@ logger.addHandler(logging.StreamHandler(sys.stdout))
 
 CDG = CONGRESS_DIRS["congressdotgov"]
 
-def deep_get(dictionary: Dict, *keys):
-  """
-  A Dict utility to get a field; returns None if the field does not exist
-
-  Args:
-      dictionary (Dict): an arbitrary dictionary 
-
-  Returns:
-      any: value of the specified key, or None if the field does not exist
-  """
-  return reduce(
-    lambda d, key: d.get(key, None) if isinstance(d, dict) else None, keys, 
-    dictionary)
+def deep_get(d, keys, default=None):
+    """
+    Example:
+        d = {'meta': {'status': 'OK', 'status_code': 200}}
+        deep_get(d, ['meta', 'status_code'])          # => 200
+        deep_get(d, ['garbage', 'status_code'])       # => None
+        deep_get(d, ['meta', 'garbage'], default='-') # => '-'
+    """
+    assert type(keys) is list
+    if d is None:
+        return default
+    if not keys:
+        return d
+    return deep_get(d.get(keys[0]), keys[1:], default)
 
 def getText(item) -> str:
     if item is None:

@@ -57,24 +57,27 @@ def moreLikeThis(queryText: str,
                                    score_mode=score_mode)
     return runQuery(index=index, query=query, size=size)
 
-    # TODO run query section with 'max' score_mode;
-    # return in the form of a Section
 
+# Runs query for sections with 'max' score_mode;
+# return in the form of a list of  SimilarSection
 def getSimilarSections(queryText: str) -> list[SimilarSection]:
 
     res = moreLikeThis(queryText)
     hitsHits = getHitsHits(res)
     similarSections = []
     for hitsHit in hitsHits:
-        similar_section_hit = deep_get(hitsHit, "inner_hits", "sections", "hits", "hits")
-        if similar_section_hit and len(similar_section_hit) > 0:
+        similar_section_hits = deep_get(hitsHit, ["inner_hits", "sections", "hits", "hits"])
+        if similar_section_hits and len(similar_section_hits) > 0:
+            similar_section_hit = similar_section_hits[0]
             similar_section = SimilarSection(
-             billnumber_version = hitsHit._source.id,
-             score_es = hitsHit.get('_score', 0),
-             section_id = deep_get(hitsHit, "_source", "section_id"),
-             label = deep_get(similar_section_hit, "_source", "section_number"),
-             header = deep_get(similar_section_hit, "_source", "section_header"),
-             length = deep_get(similar_section_hit, "_source", "section_length"),
+                billnumber_version = deep_get(hitsHit, ["_source", "id"]),
+                score_es = hitsHit.get("_score", 0),
+                score = None,
+                score_other = None,
+                section_id = deep_get(similar_section_hit, ["_source", "section_id"]),
+                label = deep_get(similar_section_hit, ["_source", "section_number"]),
+                header = deep_get(similar_section_hit, ["_source", "section_header"]),
+                length = deep_get(similar_section_hit, ["_source", "section_length"])
             )
             similarSections.append(similar_section)
         else:

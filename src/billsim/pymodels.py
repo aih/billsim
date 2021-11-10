@@ -15,16 +15,16 @@ class BillPath(BaseModel):
     fileName: str = ''
 
 class SectionMeta(BaseModel):
-    billnumber_version: str
-    section_id: str
-    label: str
+    billnumber_version: Optional[str] = None
+    section_id: Optional[str] = None
+    label: Optional[str] = None
     header: Optional[str] = None
     length: Optional[int] = None
 
 class SimilarSection(SectionMeta):
     score_es: Optional[float] = None
-    score: float
-    score_other: float
+    score: Optional[float] = None
+    score_other: Optional[float] = None
 
 
 class Section(SectionMeta):
