@@ -52,8 +52,9 @@ def runQuery(index: str = constants.INDEX_SECTIONS,
 def moreLikeThis(queryText: str,
                  index: str = constants.INDEX_SECTIONS,
                  score_mode: str = constants.SCORE_MODE_MAX,
-                 size: int = constants.MAX_BILLS_SECTION) -> dict:
-  min_score = getMinScore(queryText)
+                 size: int = constants.MAX_BILLS_SECTION, min_score: int=constants.MIN_SCORE_DEFAULT) -> dict:
+  if min_score == constants.MIN_SCORE_DEFAULT:
+    min_score = getMinScore(queryText) 
   query = constants.makeMLTQuery(queryText,
                                  min_score=min_score,
                                  score_mode=score_mode)
@@ -62,9 +63,9 @@ def moreLikeThis(queryText: str,
 
 # Runs query for sections with 'max' score_mode;
 # return in the form of a list of SimilarSection
-def getSimilarSections(queryText: str) -> list[SimilarSection]:
+def getSimilarSections(queryText: str, min_score: int=constants.MIN_SCORE_DEFAULT) -> list[SimilarSection]:
 
-  res = moreLikeThis(queryText)
+  res = moreLikeThis(queryText, min_score=min_score)
   hitsHits = getHitsHits(res)
   similarSections = []
   for hitsHit in hitsHits:
@@ -87,8 +88,8 @@ def getSimilarSections(queryText: str) -> list[SimilarSection]:
   return similarSections
 
 
-def getSimilarSectionItem(queryText: str, sectionMeta: SectionMeta) -> Section:
-  similar_sections = getSimilarSections(queryText)
+def getSimilarSectionItem(queryText: str, sectionMeta: SectionMeta, min_score: int=constants.MIN_SCORE_DEFAULT) -> Section:
+  similar_sections = getSimilarSections(queryText, min_score=min_score)
   return Section(similar_sections=similar_sections,
                  billnumber_version=sectionMeta.billnumber_version,
                  section_id=sectionMeta.section_id,

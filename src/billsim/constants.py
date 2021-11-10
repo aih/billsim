@@ -334,6 +334,20 @@ SEC. 9. MISCELLANEOUS. Title XI of the Civil Rights Act of 1964 is amended—
 (1) by redesignating sections 1101 through 1104 (42 U.S.C. 2000h et seq.) and sections 1105 and 1106 (42 U.S.C. 2000h–5, 2000h–6) as sections 1102 through 1105 and sections 1108 and 110
 """
 
+# 117hr4973
+beef_label = """
+SEC. 2. PRODUCT OF U.S.A. LABEL FOR BEEF.
+
+Section 7 of the Federal Meat Inspection Act (21 U.S.C. 607) is amended by adding at the end the following:
+
+
+“(g) Product Of The United States Label For Beef.—
+
+“(1) IN GENERAL.—Subject to paragraph (2), the label of meat of cattle or a meat food product of cattle may bear the phrase ‘Product of U.S.A.’, or any substantially similar word or phrase, only if the meat or meat food product is exclusively derived from 1 or more cattle exclusively born, raised, and slaughtered in the United States.
+
+“(2) INAPPLICABILITY.—Paragraph (1) shall not apply to meat of cattle or a meat food product of cattle that is intended and offered for export to a foreign country.”.
+"""
+
 
 def getQueryText(text_path: str = ''):
     with open(text_path, 'r') as f:
