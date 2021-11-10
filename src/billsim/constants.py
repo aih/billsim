@@ -364,7 +364,7 @@ SAMPLE_QUERY_NESTED_MLT = {
             },
             "inner_hits": {
                 "_source":
-                ["sections.section_number", "sections.section_header"],
+                ["id", "sections.section_number", "sections.section_header"],
                 "highlight": {
                     "fields": {
                         "sections.section_text": {}

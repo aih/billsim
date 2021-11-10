@@ -4,6 +4,10 @@ from elasticsearch import exceptions, Elasticsearch
 
 es = Elasticsearch()
 from billsim import constants
+from pymodels import SectionMeta, Section
+
+def getHitsHits(res):
+  return res.get('hits').get('hits')
 
 
 def getMinScore(queryText: str) -> int:
@@ -50,4 +54,21 @@ def moreLikeThis(queryText: str,
                                    score_mode=score_mode)
     return runQuery(index=index, query=query, size=size)
 
-    # TODO run query section-by-section with both the 'avg' and 'max' score_mode;
+    # TODO run query section with 'max' score_mode;
+    # return in the form of a Section
+
+def getSimilarSections(queryText: str) -> Section:
+
+    res = moreLikeThis(queryText)
+    hitsHits = getHitsHits(res)
+    for hitsHit in hitsHits:
+        # TODO: 
+        # billnumber_version = hitsHit._source.id
+        # billnumber_version = _source.id
+        # score_es = hitsHit._score
+        # section_id = hitsHit._source.section_id
+        # label = hitsHit._source.section_number
+        # header = hitsHit._source.section_header
+        # length = hitsHit._source.section_length
+    
+        

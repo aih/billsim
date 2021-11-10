@@ -38,12 +38,14 @@ def createIndex(index: str = constants.INDEX_SECTIONS,
     es.indices.create(index=index, ignore=400, body=body)
 
 
+def getId(section) -> str:
+    return section.get('id', '')
+
 def getEnum(section) -> str:
     enumpath = section.xpath('enum')
     if len(enumpath) > 0:
         return enumpath[0].text
     return ''
-
 
 def getHeader(section) -> str:
     headerpath = section.xpath('header')
@@ -146,12 +148,16 @@ def indexBill(billPath: BillPath, index_types: list = ['sections']) -> Status:
             list(OrderedDict.fromkeys(headers_text)),
             'sections':
             [{
+                'section_id': 
+                getId(section),
                 'section_number':
                 getEnum(section),
                 'section_header':
                 getHeader(section),
                 'section_text':
                 etree.tostring(section, method="text", encoding="unicode"),
+                'section_length':
+                len(etree.tostring(section, method="text", encoding="unicode")),
                 'section_xml':
                 etree.tostring(section, method="xml", encoding="unicode")
             } if (section.xpath('header') and len(section.xpath('header')) > 0

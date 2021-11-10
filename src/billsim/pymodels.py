@@ -16,7 +16,7 @@ class BillPath(BaseModel):
 
 class SectionMeta(BaseModel):
     billnumber_version: str
-    id: str
+    section_id: str
     label: str
     header: Optional[str] = None
     length: Optional[int] = None
@@ -55,3 +55,143 @@ class BillToBill(BaseModel):
     title_to: str
     sections: list[
         Section]  # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
+
+
+# The hits.hits array of the similarity search is made up of items of the form:
+"""
+ {
+        "_index" : "billsim",
+        "_type" : "_doc",
+        "_id" : "-Zw7_nwBUuoHSnHyN3tm",
+        "_score" : 97.14994,
+        "_source" : {
+          "congress" : "116",
+          "session" : "1",
+          "id" : "116hr5rh"
+        },
+        "inner_hits" : {
+          "sections" : {
+            "hits" : {
+              "total" : {
+                "value" : 16,
+                "relation" : "eq"
+              },
+              "max_score" : 97.14994,
+              "hits" : [
+                {
+                  "_index" : "billsim",
+                  "_type" : "_doc",
+                  "_id" : "-Zw7_nwBUuoHSnHyN3tm",
+                  "_nested" : {
+                    "field" : "sections",
+                    "offset" : 2
+                  },
+                  "_score" : 97.14994,
+                  "_source" : {
+                    "section_number" : "3.",
+                    "section_header" : "Public accommodations"
+                  }
+                },
+                {
+                  "_index" : "billsim",
+                  "_type" : "_doc",
+                  "_id" : "-Zw7_nwBUuoHSnHyN3tm",
+                  "_nested" : {
+                    "field" : "sections",
+                    "offset" : 7
+                  },
+                  "_score" : 41.923565,
+                  "_source" : {
+                    "section_number" : "7.",
+                    "section_header" : "Employment"
+                  }
+                },
+                {
+                  "_index" : "billsim",
+                  "_type" : "_doc",
+                  "_id" : "-Zw7_nwBUuoHSnHyN3tm",
+                  "_nested" : {
+                    "field" : "sections",
+                    "offset" : 1
+                  },
+                  "_score" : 41.48145,
+                  "_source" : {
+                    "section_number" : "2.",
+                    "section_header" : "Findings and purpose"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+"""
+class SimilarSectionHit(BaseModel):
+    billnumber_version: str # from _source.id
+    score: float # from _score
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
