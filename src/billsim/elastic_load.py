@@ -8,7 +8,7 @@ from lxml import etree
 from elasticsearch import exceptions, Elasticsearch
 
 es = Elasticsearch()
-from billsim.utils import getBillXmlPaths, getText
+from billsim.utils import getBillXmlPaths, getId, getHeader, getEnum, getText
 from billsim import constants
 from billsim.pymodels import Status, BillPath
 
@@ -38,20 +38,6 @@ def createIndex(index: str = constants.INDEX_SECTIONS,
     es.indices.create(index=index, ignore=400, body=body)
 
 
-def getId(section) -> str:
-    return section.get('id', '')
-
-def getEnum(section) -> str:
-    enumpath = section.xpath('enum')
-    if len(enumpath) > 0:
-        return enumpath[0].text
-    return ''
-
-def getHeader(section) -> str:
-    headerpath = section.xpath('header')
-    if len(headerpath) > 0:
-        return headerpath[0].text
-    return ''
 
 
 def indexBill(billPath: BillPath, index_types: list = ['sections']) -> Status:

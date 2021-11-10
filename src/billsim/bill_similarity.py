@@ -7,7 +7,7 @@ from lxml import etree
 
 es = Elasticsearch()
 from billsim import constants
-from billsim.utils import deep_get
+from billsim.utils import billNumberVersionToBillPath, deep_get, getId, getHeader, getEnum, getText
 from billsim.pymodels import SectionMeta, Section
 
 
@@ -98,23 +98,34 @@ def getSimilarSectionItem(queryText: str, sectionMeta: SectionMeta, min_score: i
                  length=sectionMeta.length)
 
 
-def getSimilarBillSections(bill_path: BillPath) -> BillSections:
+def getSimilarBillSections(billnumber_version: str=None, bill_path: BillPath=None, pathType: str="congressdotgov") -> BillSections:
   """
   Get similar sections for a bill.
 
   Args:
+      billnumber_version (str): bill number and version.
       bill_path (BillPath): BillPath object, with billnumber_version and path 
+  NOTE: Only one of billnumber_version and bill_path should be specified.
 
   Raises:
-      Exception: exception upon parsing bill or opening the bill xml file 
+      Exception: exception upon incorrect args or upon parsing bill or opening the bill xml file 
 
   Returns:
       BillSections: a BillSections object, with similar sections for the bill 
   """
+  if bill_path is not None and billnumber_version is not None:
+      raise Exception("bill_path and billnumber_version cannot be specified together")
+
+  if bill_path is None:
+      if billnumber_version is not None:
+        bill_path = billNumberVersionToBillPath(billnumber_version=billnumber_version, pathType=pathType)
+      else:
+        raise Exception("bill_path or billnumber_version must be specified")
+
   try:
-    billTree = etree.parse(bill_path.path, etree.XMLParser())
+    billTree = etree.parse(bill_path.filePath, etree.XMLParser())
     doc_length = 0
-    with open(bill_path.path, 'r') as f:
+    with open(bill_path.filePath, 'r') as f:
       billText = f.read()
       doc_length = len(billText)
   except:
@@ -125,22 +136,25 @@ def getSimilarBillSections(bill_path: BillPath) -> BillSections:
   for section in sections:
     section_text = etree.tostring(section, method="text", encoding="unicode")
     length = len(section_text)
-    if (section.xpath('header') and len(section.xpath('header')) > 0
-        and section.xpath('enum') and len(section.xpath('enum')) > 0):
-      section_meta = SectionMeta(billnumber_version=BillPath.billnumber_version,
-                                 label=section.xpath('enum')[0].text,
-                                 section_header=section.xpath('header')[0].text,
-                                 section_id=section.get('id'),
+    header = getHeader(section)
+    enum = getEnum(section)
+    if (len(header) > 0
+        and len(enum) > 0):
+      section_meta = SectionMeta(billnumber_version=bill_path.billnumber_version,
+                                 label=getText(enum),
+                                 section_header=getText(header),
+                                 section_id=getId(section),
                                  length=length)
     else:
       section_meta = SectionMeta(billnumber_version=BillPath.billnumber_version,
-                                 section_id=section.get('id'),
+                                 section_id=getId(section),
                                  section_number=None,
                                  section_header=None,
                                  length=length)
-      sectionsList = sectionsList.append(
+    sectionsList.append(
           getSimilarSectionItem(queryText=section_text,
                                 sectionMeta=section_meta))
-  return BillSections(billnumber_version=BillPath.billnumber_version,
+  return BillSections(billnumber_version=bill_path.billnumber_version,
                       length=doc_length,
                       sections=sectionsList)
+
