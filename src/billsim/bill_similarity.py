@@ -2,7 +2,8 @@
 
 from elasticsearch import exceptions, Elasticsearch
 
-from billsim.pymodels import SimilarSection
+from billsim.pymodels import BillPath, BillSections, SimilarSection
+from lxml import etree
 
 es = Elasticsearch()
 from billsim import constants
@@ -94,3 +95,51 @@ def getSimilarSectionItem(queryText: str, sectionMeta: SectionMeta) -> Section:
                  label=sectionMeta.label,
                  header=sectionMeta.header,
                  length=sectionMeta.length)
+
+
+def getSimilarBillSections(bill_path: BillPath) -> BillSections:
+  """
+  Get similar sections for a bill.
+
+  Args:
+      bill_path (BillPath): BillPath object, with billnumber_version and path 
+
+  Raises:
+      Exception: exception upon parsing bill or opening the bill xml file 
+
+  Returns:
+      BillSections: a BillSections object, with similar sections for the bill 
+  """
+  try:
+    billTree = etree.parse(bill_path.path, etree.XMLParser())
+    doc_length = 0
+    with open(bill_path.path, 'r') as f:
+      billText = f.read()
+      doc_length = len(billText)
+  except:
+    raise Exception('Could not parse bill')
+  sections = billTree.xpath('//section[not(ancestor::section)]')
+
+  sectionsList = []
+  for section in sections:
+    section_text = etree.tostring(section, method="text", encoding="unicode")
+    length = len(section_text)
+    if (section.xpath('header') and len(section.xpath('header')) > 0
+        and section.xpath('enum') and len(section.xpath('enum')) > 0):
+      section_meta = SectionMeta(billnumber_version=BillPath.billnumber_version,
+                                 label=section.xpath('enum')[0].text,
+                                 section_header=section.xpath('header')[0].text,
+                                 section_id=section.get('id'),
+                                 length=length)
+    else:
+      section_meta = SectionMeta(billnumber_version=BillPath.billnumber_version,
+                                 section_id=section.get('id'),
+                                 section_number=None,
+                                 section_header=None,
+                                 length=length)
+      sectionsList = sectionsList.append(
+          getSimilarSectionItem(queryText=section_text,
+                                sectionMeta=section_meta))
+  return BillSections(billnumber_version=BillPath.billnumber_version,
+                      length=doc_length,
+                      sections=sectionsList)
