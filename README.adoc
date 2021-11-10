@@ -30,6 +30,6 @@ Install Elasticsearch (>=7.0.0 and <7.10.2) and run the following commands to cr
 
 This will gather all of the bill paths in the directory specified in .env and create an Elasticsearch index with the name specified in .env (or the default in constants). Creating the index will take approximately 5 minutes per Congress directory on a reasonably fast server (e.g. 16GB ram, 3 GHz), without any concurrent processing or other optimizations (e.g. using ).
 
-NOTE: This will not delete the index if it already exists. To do so, and start over, pass `delete=True` to `billsim.elastic_load.createIndex`.
+NOTE: This will not delete the index if it already exists. To do so, and start over, pass `delete=True` to `billsim.elastic_load.createIndex` or `delete_index=True` to billsim.elastic_load initializeBillSectionsIndex.
 
 NOTE: The Elasticsearch versions after 7.10.2 are forked between the full 'OSS' version and a more restrictive license (as a challenge to Cloud services like AWS). The python client library must match the version of the Elasticsearch server.

@@ -352,6 +352,7 @@ SAMPLE_QUERY_NESTED_MLT = {
     "_source": ["id", "congress", "session"],
     "query": {
         "nested": {
+            "score_mode": "max",
             "path": "sections",
             "query": {
                 "more_like_this": {
@@ -364,7 +365,7 @@ SAMPLE_QUERY_NESTED_MLT = {
             },
             "inner_hits": {
                 "_source":
-                ["id", "sections.section_number", "sections.section_header"],
+                ["sections.section_id", "sections.section_number", "sections.section_header", "sections.section_length"],
                 "highlight": {
                     "fields": {
                         "sections.section_text": {}
@@ -387,7 +388,7 @@ def makeMLTQuery(queryText: str,
             raise Exception('Error getting text from path: {0}'.format(err))
 
     newQuery = deepcopy(SAMPLE_QUERY_NESTED_MLT)
+    newQuery['min_score'] = min_score
     newQuery['query']['nested']['query']['more_like_this']['like'] = queryText
-    newQuery['query']['min_score'] = min_score
     newQuery['query']['nested']['score_mode'] = score_mode
     return newQuery

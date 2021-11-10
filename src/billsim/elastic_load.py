@@ -212,12 +212,12 @@ def indexBill(billPath: BillPath, index_types: list = ['sections']) -> Status:
     # nsmap = {k if k is not None else '':v for k,v in billRoot.nsmap.items()}
 
 
-def initializeBillSectionsIndex():
+def initializeBillSectionsIndex(delete_index=False):
     """
   Initializes the index for the congress directory. The 'id' field is set to the billnumber_version and is unique.
   """
 
-    createIndex()
+    createIndex(delete=delete_index)
     billPaths = getBillXmlPaths()
     for billPath in billPaths:
         indexBill(billPath)

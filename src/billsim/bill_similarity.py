@@ -2,11 +2,14 @@
 
 from elasticsearch import exceptions, Elasticsearch
 
+from billsim.pymodels import SimilarSection
+
 es = Elasticsearch()
 from billsim import constants
-from pymodels import SectionMeta, Section
+from billsim.utils import deep_get
+from billsim.pymodels import SectionMeta, Section
 
-def getHitsHits(res):
+def getHitsHits(res) -> list:
   return res.get('hits').get('hits')
 
 
@@ -57,18 +60,25 @@ def moreLikeThis(queryText: str,
     # TODO run query section with 'max' score_mode;
     # return in the form of a Section
 
-def getSimilarSections(queryText: str) -> Section:
+def getSimilarSections(queryText: str) -> list[SimilarSection]:
 
     res = moreLikeThis(queryText)
     hitsHits = getHitsHits(res)
+    similarSections = []
     for hitsHit in hitsHits:
-        # TODO: 
-        # billnumber_version = hitsHit._source.id
-        # billnumber_version = _source.id
-        # score_es = hitsHit._score
-        # section_id = hitsHit._source.section_id
-        # label = hitsHit._source.section_number
-        # header = hitsHit._source.section_header
-        # length = hitsHit._source.section_length
+        similar_section_hit = deep_get(hitsHit, "inner_hits", "sections", "hits", "hits")
+        if similar_section_hit and len(similar_section_hit) > 0:
+            similar_section = SimilarSection(
+             billnumber_version = hitsHit._source.id,
+             score_es = hitsHit.get('_score', 0),
+             section_id = deep_get(hitsHit, "_source", "section_id"),
+             label = deep_get(similar_section_hit, "_source", "section_number"),
+             header = deep_get(similar_section_hit, "_source", "section_header"),
+             length = deep_get(similar_section_hit, "_source", "section_length"),
+            )
+            similarSections.append(similar_section)
+        else:
+            pass
+    return similarSections
     
         

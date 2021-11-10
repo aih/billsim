@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from genericpath import isfile
+from functools import reduce
 import os, sys
 import logging
 from typing import Dict, List
@@ -14,6 +14,19 @@ logger.addHandler(logging.StreamHandler(sys.stdout))
 
 CDG = CONGRESS_DIRS["congressdotgov"]
 
+def deep_get(dictionary: Dict, *keys):
+  """
+  A Dict utility to get a field; returns None if the field does not exist
+
+  Args:
+      dictionary (Dict): an arbitrary dictionary 
+
+  Returns:
+      any: value of the specified key, or None if the field does not exist
+  """
+  return reduce(
+    lambda d, key: d.get(key, None) if isinstance(d, dict) else None, keys, 
+    dictionary)
 
 def getText(item) -> str:
     if item is None:
