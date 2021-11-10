@@ -59,7 +59,7 @@ def moreLikeThis(queryText: str,
 
 
 # Runs query for sections with 'max' score_mode;
-# return in the form of a list of  SimilarSection
+# return in the form of a list of SimilarSection
 def getSimilarSections(queryText: str) -> list[SimilarSection]:
 
     res = moreLikeThis(queryText)
@@ -83,5 +83,14 @@ def getSimilarSections(queryText: str) -> list[SimilarSection]:
         else:
             pass
     return similarSections
-    
-        
+
+def getSimilarSectionItem(queryText: str, sectionMeta: SectionMeta) -> Section:
+    similar_sections = getSimilarSections(queryText)
+    return Section(
+        similar_sections=similar_sections,
+        billnumber_version=sectionMeta.billnumber_version,
+        section_id=sectionMeta.section_id,
+        label=sectionMeta.label,
+        header=sectionMeta.header,
+        length=sectionMeta.length
+        )
