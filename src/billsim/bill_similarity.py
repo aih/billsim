@@ -141,15 +141,15 @@ def getSimilarBillSections(billnumber_version: str=None, bill_path: BillPath=Non
     if (len(header) > 0
         and len(enum) > 0):
       section_meta = SectionMeta(billnumber_version=bill_path.billnumber_version,
-                                 label=getText(enum),
-                                 section_header=getText(header),
+                                 label=enum,
+                                 header=header,
                                  section_id=getId(section),
                                  length=length)
     else:
       section_meta = SectionMeta(billnumber_version=BillPath.billnumber_version,
                                  section_id=getId(section),
-                                 section_number=None,
-                                 section_header=None,
+                                 label=None,
+                                 header=None,
                                  length=length)
     sectionsList.append(
           getSimilarSectionItem(queryText=section_text,
