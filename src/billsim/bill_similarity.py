@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import sys, os
+import logging
 from elasticsearch import exceptions, Elasticsearch
 
 from billsim.pymodels import BillPath, BillSections, SimilarSection
@@ -9,6 +11,10 @@ es = Elasticsearch()
 from billsim import constants
 from billsim.utils import billNumberVersionToBillPath, deep_get, getId, getHeader, getEnum, getText
 from billsim.pymodels import SectionMeta, Section
+
+logging.basicConfig(filename='bill_similarity.log', filemode='w', level='INFO')
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.StreamHandler(sys.stdout))
 
 
 def getHitsHits(res) -> list:
@@ -43,27 +49,34 @@ def getMinScore(queryText: str) -> int:
 def runQuery(index: str = constants.INDEX_SECTIONS,
              query: dict = constants.SAMPLE_QUERY_NESTED_MLT,
              size: int = constants.MAX_BILLS_SECTION) -> dict:
+  """
+  See API documentation
+  https://elasticsearch-py.readthedocs.io/en/v7.10.1/api.html#elasticsearch.Elasticsearch.search
+  """
   query = query
-  # See API documentation
-  # https://elasticsearch-py.readthedocs.io/en/v7.10.1/api.html#elasticsearch.Elasticsearch.search
   return es.search(index=index, body=query, size=size)
 
 
 def moreLikeThis(queryText: str,
                  index: str = constants.INDEX_SECTIONS,
                  score_mode: str = constants.SCORE_MODE_MAX,
-                 size: int = constants.MAX_BILLS_SECTION, min_score: int=constants.MIN_SCORE_DEFAULT) -> dict:
+                 size: int = constants.MAX_BILLS_SECTION,
+                 min_score: int = constants.MIN_SCORE_DEFAULT) -> dict:
   if min_score == constants.MIN_SCORE_DEFAULT:
-    min_score = getMinScore(queryText) 
+    min_score = getMinScore(queryText)
   query = constants.makeMLTQuery(queryText,
                                  min_score=min_score,
                                  score_mode=score_mode)
   return runQuery(index=index, query=query, size=size)
 
 
-# Runs query for sections with 'max' score_mode;
-# return in the form of a list of SimilarSection
-def getSimilarSections(queryText: str, min_score: int=constants.MIN_SCORE_DEFAULT) -> list[SimilarSection]:
+def getSimilarSections(
+    queryText: str,
+    min_score: int = constants.MIN_SCORE_DEFAULT) -> list[SimilarSection]:
+  """
+  Runs query for sections with 'max' score_mode;
+  return in the form of a list of SimilarSection
+  """
 
   res = moreLikeThis(queryText, min_score=min_score)
   hitsHits = getHitsHits(res)
@@ -88,7 +101,11 @@ def getSimilarSections(queryText: str, min_score: int=constants.MIN_SCORE_DEFAUL
   return similarSections
 
 
-def getSimilarSectionItem(queryText: str, sectionMeta: SectionMeta, min_score: int=constants.MIN_SCORE_DEFAULT) -> Section:
+# This function is independent of any bill number and is the basis for searching similarity for arbitrary text
+def getSimilarSectionItem(
+    queryText: str,
+    sectionMeta: SectionMeta,
+    min_score: int = constants.MIN_SCORE_DEFAULT) -> Section:
   similar_sections = getSimilarSections(queryText, min_score=min_score)
   return Section(similar_sections=similar_sections,
                  billnumber_version=sectionMeta.billnumber_version,
@@ -98,9 +115,44 @@ def getSimilarSectionItem(queryText: str, sectionMeta: SectionMeta, min_score: i
                  length=sectionMeta.length)
 
 
-def getSimilarBillSections(billnumber_version: str=None, bill_path: BillPath=None, pathType: str="congressdotgov") -> BillSections:
+def getSimilarDocSections(filePath: str, docId: str) -> list[Section]:
+  try:
+    billTree = etree.parse(filePath, etree.XMLParser())
+
+  except:
+    raise Exception('Could not parse bill')
+  sections = billTree.xpath('//section[not(ancestor::section)]')
+
+  sectionsList = []
+  for section in sections:
+    section_text = etree.tostring(section, method="text", encoding="unicode")
+    length = len(section_text)
+    header = getHeader(section)
+    enum = getEnum(section)
+    if (len(header) > 0 and len(enum) > 0):
+      section_meta = SectionMeta(billnumber_version=docId,
+                                 label=enum,
+                                 header=header,
+                                 section_id=getId(section),
+                                 length=length)
+    else:
+      section_meta = SectionMeta(billnumber_version=docId,
+                                 section_id=getId(section),
+                                 label=None,
+                                 header=None,
+                                 length=length)
+    sectionsList.append(
+        getSimilarSectionItem(queryText=section_text, sectionMeta=section_meta))
+  return sectionsList
+
+
+def getSimilarBillSections(billnumber_version: str = None,
+                           bill_path: BillPath = None,
+                           pathType: str = "congressdotgov") -> BillSections:
   """
   Get similar sections for a bill.
+  This function is a wrapper for getSimilarSectionItem and assumes a billnumber_version or BillPath 
+  For a generic document, run getSimilarDocSections 
 
   Args:
       billnumber_version (str): bill number and version.
@@ -114,47 +166,27 @@ def getSimilarBillSections(billnumber_version: str=None, bill_path: BillPath=Non
       BillSections: a BillSections object, with similar sections for the bill 
   """
   if bill_path is not None and billnumber_version is not None:
-      raise Exception("bill_path and billnumber_version cannot be specified together")
+    raise Exception(
+        "bill_path and billnumber_version cannot be specified together")
 
   if bill_path is None:
-      if billnumber_version is not None:
-        bill_path = billNumberVersionToBillPath(billnumber_version=billnumber_version, pathType=pathType)
-      else:
-        raise Exception("bill_path or billnumber_version must be specified")
-
-  try:
-    billTree = etree.parse(bill_path.filePath, etree.XMLParser())
-    doc_length = 0
-    with open(bill_path.filePath, 'r') as f:
-      billText = f.read()
-      doc_length = len(billText)
-  except:
-    raise Exception('Could not parse bill')
-  sections = billTree.xpath('//section[not(ancestor::section)]')
-
-  sectionsList = []
-  for section in sections:
-    section_text = etree.tostring(section, method="text", encoding="unicode")
-    length = len(section_text)
-    header = getHeader(section)
-    enum = getEnum(section)
-    if (len(header) > 0
-        and len(enum) > 0):
-      section_meta = SectionMeta(billnumber_version=bill_path.billnumber_version,
-                                 label=enum,
-                                 header=header,
-                                 section_id=getId(section),
-                                 length=length)
+    if billnumber_version is not None:
+      bill_path = billNumberVersionToBillPath(
+          billnumber_version=billnumber_version, pathType=pathType)
     else:
-      section_meta = SectionMeta(billnumber_version=BillPath.billnumber_version,
-                                 section_id=getId(section),
-                                 label=None,
-                                 header=None,
-                                 length=length)
-    sectionsList.append(
-          getSimilarSectionItem(queryText=section_text,
-                                sectionMeta=section_meta))
+      raise Exception("bill_path or billnumber_version must be specified")
+
+  if not os.path.isfile(bill_path.filePath):
+    logger.error("Bill file does not exist: %s", bill_path.filePath)
+    raise Exception("Bill file does not exist: %s", bill_path.filePath)
+
+  sectionsList = getSimilarDocSections(filePath=bill_path.filePath,
+                                       docId=bill_path.billnumber_version)
+  doc_length = 0
+  with open(bill_path.filePath, 'r') as f:
+    billText = f.read()
+    doc_length = len(billText)
+
   return BillSections(billnumber_version=bill_path.billnumber_version,
                       length=doc_length,
                       sections=sectionsList)
-
