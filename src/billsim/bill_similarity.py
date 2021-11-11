@@ -216,11 +216,21 @@ def getBillToBill(billsections: BillSections) -> dict:
                     length=billsections.length,
                     score_es=similar_section.score_es,
                     billnumber_version_to=similar_section.billnumber_version,
-                    similar_sections=[similar_section])
+                    sections=[
+                        Section(
+                            billnumber_version=billsections.billnumber_version,
+                            section_id=section.section_id,
+                            label=section.label,
+                            header=section.header,
+                            similar_sections=[similar_section])
+                    ])
             else:
-                billToBills[
-                    similar_section.billnumber_version].similar_sections.append(
-                        similar_section)
+                billToBills[similar_section.billnumber_version].sections.append(
+                    Section(billnumber_version=billsections.billnumber_version,
+                            section_id=section.section_id,
+                            label=section.label,
+                            header=section.header,
+                            similar_sections=[similar_section]))
                 billToBills[
                     similar_section.
                     billnumber_version].score_es += similar_section.score_es

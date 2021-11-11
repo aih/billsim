@@ -53,8 +53,8 @@ class BillToBill(BaseModel):
     identified_by: Optional[str] = None
     title: Optional[str] = None
     title_to: Optional[str] = None
-    similar_sections: list[
-        SimilarSection]    # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
+    sections: list[
+        Section]    # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
 
 
 class SimilarSectionHit(BaseModel):
