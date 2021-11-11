@@ -2,7 +2,7 @@
 *-bk.py
 data/
 .env
-./vscode
+.vscode
 
 # Standard Python .gitignore (see https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore) 
 
