@@ -4,7 +4,7 @@ import sys, os
 import logging
 from elasticsearch import exceptions, Elasticsearch
 
-from billsim.pymodels import BillPath, BillSections, SimilarSection
+from billsim.pymodels import BillPath, BillSections, SimilarSection, BillToBill
 from lxml import etree
 
 es = Elasticsearch()
@@ -197,3 +197,31 @@ def getSimilarBillSections(billnumber_version: str = None,
     return BillSections(billnumber_version=bill_path.billnumber_version,
                         length=doc_length,
                         sections=sectionsList)
+
+
+def getBillToBill(billsections: BillSections) -> dict:
+    billToBills = {}
+    if len(billsections.sections) == 0:
+        return billToBills
+    # billsections.sections is a list[Section]
+    for section in billsections.sections:
+        # similar_sections is a list[SimilarSection]
+        similar_sections = section.similar_sections
+        if similar_sections is None or len(similar_sections) == 0:
+            continue
+        for similar_section in similar_sections:
+            if (billToBills.get(similar_section.billnumber_version) is None):
+                billToBills[similar_section.billnumber_version] = BillToBill(
+                    billnumber_version=billsections.billnumber_version,
+                    length=billsections.length,
+                    score_es=similar_section.score_es,
+                    billnumber_version_to=similar_section.billnumber_version,
+                    similar_sections=[similar_section])
+            else:
+                billToBills[
+                    similar_section.billnumber_version].similar_sections.append(
+                        similar_section)
+                billToBills[
+                    similar_section.
+                    billnumber_version].score_es += similar_section.score_es
+    return billToBills

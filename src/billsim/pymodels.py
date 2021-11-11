@@ -41,20 +41,20 @@ class BillSections(BaseModel):
 
 
 class BillToBill(BaseModel):
-    id: int
+    id: Optional[int] = None
     billnumber_version: str
     length: Optional[int] = None
     length_to: Optional[int] = None
     score_es: Optional[float] = None
-    score: float
-    score_other: float
-    reasons: list[str]
+    score: Optional[float] = None
+    score_other: Optional[float] = None
+    reasons: Optional[list[str]] = None
     billnumber_version_to: str
-    identified_by: str
-    title: str
-    title_to: str
-    sections: list[
-        Section]    # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
+    identified_by: Optional[str] = None
+    title: Optional[str] = None
+    title_to: Optional[str] = None
+    similar_sections: list[
+        SimilarSection]    # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
 
 
 class SimilarSectionHit(BaseModel):
