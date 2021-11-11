@@ -48,17 +48,17 @@ RESULTS_DEFAULT = 20
 MIN_SCORE_DEFAULT = 25
 
 try:
-    BILLSECTION_MAPPING = json.loads(
-        pkgutil.get_data(__name__, PATH_BILLSECTIONS_JSON).decode("utf-8"))
-    BILL_FULL_MAPPING = json.loads(
-        pkgutil.get_data(__name__, PATH_BILL_FULL_JSON).decode("utf-8"))
+  BILLSECTION_MAPPING = json.loads(
+      pkgutil.get_data(__name__, PATH_BILLSECTIONS_JSON).decode("utf-8"))
+  BILL_FULL_MAPPING = json.loads(
+      pkgutil.get_data(__name__, PATH_BILL_FULL_JSON).decode("utf-8"))
 except Exception as err:
 
-    with open(PATH_BILLSECTIONS_JSON, 'r') as f:
-        BILLSECTION_MAPPING = json.load(f)
+  with open(PATH_BILLSECTIONS_JSON, 'r') as f:
+    BILLSECTION_MAPPING = json.load(f)
 
-    with open(PATH_BILL_FULL_JSON, 'r') as f:
-        BILL_FULL_MAPPING = json.load(f)
+  with open(PATH_BILL_FULL_JSON, 'r') as f:
+    BILL_FULL_MAPPING = json.load(f)
 
 #PATH_TO_RELATEDBILLS = '../relatedBills.json'
 SAVE_ON_COUNT = 1000
@@ -85,94 +85,93 @@ USCONGRESS_XML_FILE = 'document.xml'
 
 # CDG = congress.gov
 def billNumberVersionFromPath_CDG(path: str):
-    match = BILL_NUMBER_PART_REGEX_COMPILED.search(path)
-    if match:
-        return match.group(0)
-    else:
-        return ''
+  match = BILL_NUMBER_PART_REGEX_COMPILED.search(path)
+  if match:
+    return match.group(0)
+  else:
+    return ''
 
 
 def billNumberVersionToPath_CDG(billnumber_version: str):
-    match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
-    if match:
-        return 'data/{congress}/bills/{stage}{billnumber}/BILLS-{congress}{stage}{billnumber}{version}.xml'.format(
-            **match.groupdict())
-    else:
-        return ''
+  match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
+  if match:
+    return 'data/{congress}/bills/{stage}{billnumber}/BILLS-{congress}{stage}{billnumber}{version}.xml'.format(
+        **match.groupdict())
+  else:
+    return ''
 
 
 # data/117/bills/hr200/
 def isFileParent_CDG(path: str):
-    match = BILL_DIR_REGEX_CDG_COMPILED.search(path)
-    if match:
-        return True
-    else:
-        return False
+  match = BILL_DIR_REGEX_CDG_COMPILED.search(path)
+  if match:
+    return True
+  else:
+    return False
 
 
 def billNumberVersionFromPath_USCONGRESS(path: str):
-    match = US_CONGRESS_PATH_REGEX_COMPILED.search(path)
-    if match:
-        return '{congress}{stage}{billnumber}{version}'.format(
-            match.groupdict())
-    else:
-        return ''
+  match = US_CONGRESS_PATH_REGEX_COMPILED.search(path)
+  if match:
+    return '{congress}{stage}{billnumber}{version}'.format(match.groupdict())
+  else:
+    return ''
 
 
 def billNumberVersionToPath_USCONGRESS(billnumber_version: str):
-    match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
-    if match:
-        return 'data/{congress}/bills/{stage}/{stage}{billnumber}/text-versions/{version}/document.xml'.format(
-            **match.groupdict())
-    else:
-        return ''
+  match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
+  if match:
+    return 'data/{congress}/bills/{stage}/{stage}{billnumber}/text-versions/{version}/document.xml'.format(
+        **match.groupdict())
+  else:
+    return ''
 
 
 # congress/data/117/bills/sconres/sconres2/text-versions/ih
 def isFileParent_USCONGRESS(path: str):
-    match = US_CONGRESS_VERSION_PATH_REGEX_COMPILED.search(path)
-    if match:
-        return True
-    else:
-        return False
+  match = US_CONGRESS_VERSION_PATH_REGEX_COMPILED.search(path)
+  if match:
+    return True
+  else:
+    return False
 
 
 CONGRESS_DIRS = {
     "congressdotgov": {
         "samplePath":
-        "data/117/bills/hr200/BILLS-117hr200ih.xml",
+            "data/117/bills/hr200/BILLS-117hr200ih.xml",
         "billXMLFilenameRegex":
-        r'BILLS-' + BILL_NUMBER_PART_REGEX + r'\.xml',
+            r'BILLS-' + BILL_NUMBER_PART_REGEX + r'\.xml',
         "pathToBillnumberVersion":
-        billNumberVersionFromPath_CDG,
+            billNumberVersionFromPath_CDG,
         "billNumberVersionToPath":
-        billNumberVersionToPath_CDG,
+            billNumberVersionToPath_CDG,
         "isFileParent":
-        isFileParent_CDG,
+            isFileParent_CDG,
         "fileMatch":
-        lambda x: re.compile(r'BILLS-' + BILL_NUMBER_PART_REGEX + r'\.xml').
-        match(x) is not None
+            lambda x: re.compile(r'BILLS-' + BILL_NUMBER_PART_REGEX + r'\.xml').
+            match(x) is not None
     },
     "unitedstates": {
         "samplePath":
-        f'congress/data/117/bills/sconres/sconres2/text-versions/ih/{USCONGRESS_XML_FILE}',
+            f'congress/data/117/bills/sconres/sconres2/text-versions/ih/{USCONGRESS_XML_FILE}',
         "billXMLFilenameRegex":
-        r'' + USCONGRESS_XML_FILE,
+            r'' + USCONGRESS_XML_FILE,
         "pathToBillnumberVersion":
-        billNumberVersionFromPath_USCONGRESS,
+            billNumberVersionFromPath_USCONGRESS,
         "billNumberVersionToPath":
-        billNumberVersionToPath_USCONGRESS,
+            billNumberVersionToPath_USCONGRESS,
         "isFileParent":
-        isFileParent_USCONGRESS,
+            isFileParent_USCONGRESS,
         "fileMatch":
-        lambda x: re.compile(r'' + USCONGRESS_XML_FILE).match(x) is not None
+            lambda x: re.compile(r'' + USCONGRESS_XML_FILE).match(x) is not None
     }
 }
 
 CURRENT_CONGRESSIONAL_YEAR = datetime.date.today(
 ).year if datetime.date.today() > datetime.date(
     datetime.date.today().year, 1, 3) else (datetime.date.today().year - 1)
-START_CONGRESS = 110  # Earliest Congress with data in our database
+START_CONGRESS = 110    # Earliest Congress with data in our database
 CURRENT_CONGRESS, cs_temp = divmod(
     round(((datetime.date(CURRENT_CONGRESSIONAL_YEAR, 1, 3) -
             datetime.date(1788, 1, 3)).days) / 365) + 1, 2)
@@ -350,11 +349,11 @@ Section 7 of the Federal Meat Inspection Act (21 U.S.C. 607) is amended by addin
 
 
 def getQueryText(text_path: str = ''):
-    with open(text_path, 'r') as f:
-        queryText = f.read()
-    if not queryText:
-        queryText = ''
-    return queryText
+  with open(text_path, 'r') as f:
+    queryText = f.read()
+  if not queryText:
+    queryText = ''
+  return queryText
 
 
 # more like this query (working)
@@ -378,8 +377,10 @@ SAMPLE_QUERY_NESTED_MLT = {
                 }
             },
             "inner_hits": {
-                "_source":
-                ["sections.section_id", "sections.section_number", "sections.section_header", "sections.section_length"],
+                "_source": [
+                    "sections.section_id", "sections.section_number",
+                    "sections.section_header", "sections.section_length"
+                ],
                 "highlight": {
                     "fields": {
                         "sections.section_text": {}
@@ -395,14 +396,14 @@ def makeMLTQuery(queryText: str,
                  queryTextPath: str = '',
                  min_score: int = MIN_SCORE_DEFAULT,
                  score_mode: str = SCORE_MODE_AVG):
-    if queryTextPath and not queryText:
-        try:
-            queryText = getQueryText(queryTextPath)
-        except Exception as err:
-            raise Exception('Error getting text from path: {0}'.format(err))
+  if queryTextPath and not queryText:
+    try:
+      queryText = getQueryText(queryTextPath)
+    except Exception as err:
+      raise Exception('Error getting text from path: {0}'.format(err))
 
-    newQuery = deepcopy(SAMPLE_QUERY_NESTED_MLT)
-    newQuery['min_score'] = min_score
-    newQuery['query']['nested']['query']['more_like_this']['like'] = queryText
-    newQuery['query']['nested']['score_mode'] = score_mode
-    return newQuery
+  newQuery = deepcopy(SAMPLE_QUERY_NESTED_MLT)
+  newQuery['min_score'] = min_score
+  newQuery['query']['nested']['query']['more_like_this']['like'] = queryText
+  newQuery['query']['nested']['score_mode'] = score_mode
+  return newQuery

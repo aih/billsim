@@ -43,29 +43,33 @@ def getText(item) -> str:
   except:
     return ''
 
+
 def getId(section) -> str:
-    return section.get('id', '')
+  return section.get('id', '')
+
 
 def getEnum(section) -> str:
-    enumpath = section.xpath('enum')
-    if len(enumpath) > 0:
-        return enumpath[0].text
-    return ''
+  enumpath = section.xpath('enum')
+  if len(enumpath) > 0:
+    return enumpath[0].text
+  return ''
+
 
 def getHeader(section) -> str:
-    headerpath = section.xpath('header')
-    if len(headerpath) > 0:
-        return headerpath[0].text
-    return ''
-
+  headerpath = section.xpath('header')
+  if len(headerpath) > 0:
+    return headerpath[0].text
+  return ''
 
 
 def billNumberVersionToBillPath(billnumber_version: str,
                                 pathType: str = 'congressdotgov') -> BillPath:
-  billxmlpath = CONGRESS_DIRS[pathType]["billNumberVersionToPath"](billnumber_version)
+  billxmlpath = CONGRESS_DIRS[pathType]["billNumberVersionToPath"](
+      billnumber_version)
   logger.debug('billpath: {0}'.format(billxmlpath))
   fileName = os.path.basename(billxmlpath)
-  billxmlpath_abs = os.path.join(PATH_TO_CONGRESSDATA_DIR, re.sub(r'^\/?data\/', r'', billxmlpath)) 
+  billxmlpath_abs = os.path.join(PATH_TO_CONGRESSDATA_DIR,
+                                 re.sub(r'^\/?data\/', r'', billxmlpath))
   logger.debug('Absolute bill path: {0}'.format(billxmlpath_abs))
   return BillPath(filePath=billxmlpath_abs,
                   fileName=fileName,
