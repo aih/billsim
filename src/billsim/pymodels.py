@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 
-from pydantic import BaseModel
+from sqlmodel import SQLModel
 from typing import Optional
 
 
-class Status(BaseModel):
+class Status(SQLModel):
     success: bool
     message: str
 
 
-class BillPath(BaseModel):
+class BillPath(SQLModel):
     billnumber_version: str = ''
     filePath: str = ''
     fileName: str = ''
 
 
-class SectionMeta(BaseModel):
+class SectionMeta(SQLModel):
     billnumber_version: Optional[str] = None
     section_id: Optional[str] = None
     label: Optional[str] = None
@@ -34,13 +34,13 @@ class Section(SectionMeta):
 
 
 # Result of the similarity search, collecting top similar sections for each section of the bill
-class BillSections(BaseModel):
+class BillSections(SQLModel):
     billnumber_version: str
     length: int
     sections: list[Section]
 
 
-class BillToBill(BaseModel):
+class BillToBill(SQLModel):
     id: Optional[int] = None
     billnumber_version: str
     length: Optional[int] = None
@@ -57,6 +57,6 @@ class BillToBill(BaseModel):
         Section]    # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
 
 
-class SimilarSectionHit(BaseModel):
+class SimilarSectionHit(SQLModel):
     billnumber_version: str    # from _source.id
     score: float    # from _score
