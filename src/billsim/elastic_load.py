@@ -54,7 +54,7 @@ def indexBill(billPath: BillPath, index_types: list = ['sections']) -> Status:
       Status: status of the indexing of the form {success: True/False, message: 'message'}} 
   """
     try:
-        billTree = etree.parse(billPath.path, parser=etree.XMLParser())
+        billTree = etree.parse(billPath.filePath, parser=etree.XMLParser())
     except:
         raise Exception('Could not parse bill')
     dublinCores = billTree.xpath('//dublinCore')
@@ -68,8 +68,9 @@ def indexBill(billPath: BillPath, index_types: list = ['sections']) -> Status:
         billTree.xpath('//dublinCore/dc:date',
                        namespaces={'dc': 'http://purl.org/dc/elements/1.1/'}))
     # TODO find date for enr bills in the bill status (for the flat congress directory structure)
-    if (dcdate is None or len(dcdate) == 0) and '/data.xml' in billPath.path:
-        metadata_path = billPath.path.replace('/data.xml', '/data.json')
+    if (dcdate is None
+            or len(dcdate) == 0) and '/data.xml' in billPath.filePath:
+        metadata_path = billPath.filePath.replace('/data.xml', '/data.json')
         try:
             with open(metadata_path, 'rb') as f:
                 metadata = json.load(f)

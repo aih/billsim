@@ -21,15 +21,36 @@ BillPath(billnumber_version='116hr1818ih', path='.../billsim/congress/data/116/b
 
 ## Creating Elasticsearch index of bill sections 
 
-Install Elasticsearch (>=7.0.0 and <7.10.2) and run the following commands to create the index:
+Install Elasticsearch (>=7.0.0 and <7.10.2). This can be done from docker as follows:
+```
+$ docker pull docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+$ docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.10.2 &
+```
+
+NOTE: using `podman` instead of docker on MacOs works better for me. Note also that the docker container memory may be limited, slowing down elasticsearch processes. In production, the docker-compose should set enough memory to ensure performance.
+
+Then, in a virtualenv with all requirements installed, run the following commands in Python, from the `src` directory to create the index:
 
 ```python
 >>> from billsim.elastic_load import initializeBillSectionsIndex
 >>> initializeBillSectionsIndex()
 ```
 
-This will gather all of the bill paths in the directory specified in .env and create an Elasticsearch index with the name specified in .env (or the default in constants). Creating the index will take approximately 5 minutes per Congress directory on a reasonably fast server (e.g. 16GB ram, 3 GHz), without any concurrent processing or other optimizations (e.g. using ).
+This will gather all of the bill paths in the directory specified in .env and create an Elasticsearch index with the name specified in .env (or the default in constants). Creating the index will take approximately 5 minutes per Congress directory on a reasonably fast server (e.g. 16GB ram, 3 GHz), without any concurrent processing or other optimizations.
 
 NOTE: This will not delete the index if it already exists. To do so, and start over, pass `delete=True` to `billsim.elastic_load.createIndex` or `delete_index=True` to billsim.elastic_load initializeBillSectionsIndex.
 
 NOTE: The Elasticsearch versions after 7.10.2 are forked between the full 'OSS' version and a more restrictive license (as a challenge to Cloud services like AWS). The python client library must match the version of the Elasticsearch server.
+
+## Find similar bills 
+
+The `bill_similarity.py` script includes functions to find similar bills by billnumber and version. The default functions assume that the bill XML files are in a directory three levels up from the `bill_similarity.py` file, of the form `congress/data/`. The default `data` directory can also be set in a `.env` file.
+
+Then you can run the following command to find similar bills (the bill itself should be found as the first result):
+```python
+>>> from billsim.bill_similarity import getSimilarBillSections, getBillToBill
+>>> s = getSimilarBillSections('116hr200ih')
+>>> b2b = getBillToBill(s)
+>>> b2b
+{'116hr200ih': BillToBill(id=None, billnumber_version='116hr200ih', length=7313, length_to=None, score_es=190.614846, score=None, score_other=None, reasons=None, billnumber_version_to='116hr200ih', identified_by=None, title=None, title_to=None, sections=[Section(billnumber_version='116hr200ih', section_id='HE90F34DBB44149C6B9BBD6747EB6F645', label='2.', header='Border wall trust fund', length=None, similar_sections=[SimilarSection(billnumber_version='116hr200ih', section_id='HE90F34DBB44149C6B9BBD6747EB6F645', label='2.', header='Border wall trust fund', length=1264, score_es=97.936806, score=None, score_other=None)]), Section(bill...
+```
