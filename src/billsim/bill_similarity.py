@@ -124,7 +124,7 @@ def getSimilarDocSections(filePath: str, docId: str) -> list[Section]:
         billTree = etree.parse(filePath, etree.XMLParser())
 
     except:
-        raise Exception('Could not parse bill')
+        raise Exception('Could not parse bill: {}', filePath)
     sections = billTree.xpath('//section[not(ancestor::section)]')
 
     sectionsList = []

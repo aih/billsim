@@ -38,14 +38,16 @@ def createIndex(index: str = constants.INDEX_SECTIONS,
     es.indices.create(index=index, ignore=400, body=body)
 
 
-def indexBill(billPath: BillPath, index_types: list = ['sections']) -> Status:
+def indexBill(
+        billPath: BillPath,
+        index_types: dict = {'sections': constants.INDEX_SECTIONS}) -> Status:
     """
   Index bill with Elasticsearch
 
   Args:
       bill_path (str): location of the bill xml file.
       billnumber_version (str): bill number and version, of the form 117hr200ih.
-      index_types (list, optional): Index by 'sections', 'bill_full' or both. Defaults to ['sections'].
+      index_types (dict, optional): Index by 'sections', 'bill_full' or both. Defaults to ['sections'].
 
   Raises:
       Exception: [description]
@@ -56,7 +58,7 @@ def indexBill(billPath: BillPath, index_types: list = ['sections']) -> Status:
     try:
         billTree = etree.parse(billPath.filePath, parser=etree.XMLParser())
     except:
-        raise Exception('Could not parse bill')
+        raise Exception('Could not parse bill: {}'.format(billPath.filePath))
     dublinCores = billTree.xpath('//dublinCore')
     if (dublinCores is not None) and (len(dublinCores) > 0):
         dublinCore = etree.tostring(dublinCores[0],
@@ -109,7 +111,7 @@ def indexBill(billPath: BillPath, index_types: list = ['sections']) -> Status:
 
     # Uses an OrderedDict to deduplicate headers
     # TODO handle missing header and enum separately
-    if 'sections' in index_types:
+    if 'sections' in index_types.keys():
         doc = {
             'id':
                 billPath.billnumber_version,
@@ -167,9 +169,9 @@ def indexBill(billPath: BillPath, index_types: list = ['sections']) -> Status:
         if doc_id != '' and len(doc_id) > 7:
             doc['id'] = doc_id
 
-        res = es.index(index=constants.INDEX_SECTIONS, body=doc)
+        res = es.index(index=index_types['sections'], body=doc)
 
-    if 'bill_full' in index_types:
+    if 'bill_full' in index_types.keys():
         billText = etree.tostring(billTree, method="text", encoding="unicode")
         doc_full = {
             'id': billPath.billnumber_version,
@@ -184,7 +186,7 @@ def indexBill(billPath: BillPath, index_types: list = ['sections']) -> Status:
             'headers': list(OrderedDict.fromkeys(headers_text)),
             'billtext': billText
         }
-        res = es.index(index=constants.INDEX_BILL_FULL, body=doc_full)
+        res = es.index(index=index_types['bill_full'], body=doc_full)
 
     # TODO: handle processing of bill section index separately from full bill
     if res.get('result', None) == 'created':

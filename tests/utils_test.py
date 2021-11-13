@@ -6,11 +6,9 @@ from lxml import etree
 from pathlib import Path
 from billsim import constants
 from billsim.pymodels import BillPath
+from tests.constants_test import TEST_DIR
 
-BASE_DIR = Path(__file__).resolve(strict=True).parent
-
-CONGRESS_PATH_TEST = os.path.join(BASE_DIR, 'samples', 'congress')
-CONGRESS_DATA_PATH_TEST = os.path.join(CONGRESS_PATH_TEST, 'data')
+CONGRESS_PATH_TEST = os.path.join(TEST_DIR, 'samples', 'data', 'congress')
 
 
 def test_deep_get():
@@ -80,7 +78,7 @@ def test_billNumberVersionToBillPath():
                                              'BILLS-116hr2005ih.xml')
 
 
-def test_walkBillDirs(rootDir=CONGRESS_DATA_PATH_TEST):
+def test_walkBillDirs(rootDir=CONGRESS_PATH_TEST):
     from billsim.utils import walkBillDirs
     billDirs = walkBillDirs(rootDir=rootDir)
     assert len(billDirs) >= 27
