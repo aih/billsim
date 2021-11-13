@@ -8,7 +8,9 @@ A separate repository (github.com/aih/bills) contains tools in Go to process bil
 
 ## Processing bill XML files
 
-The default functions assume that the bill XML files are in a directory three levels up from the `billsim/utils.py`  file, of the form `congress/data/`.
+The default functions assume that the bill XML files are in a CONGRESS_DATA directory. The absolute path to CONGRESS_DATA must be defined as `PATH_TO_CONGRESS_DATA` in environment variables, or set in the `.env` file, inside the `billsim` directory. It should be a path to a directory of the form `[abspath]/data/congress/117` (for the 117th Congress). See `.env-sample` for an example.
+
+The 'PATHTYPE_DEFAULT' sets the expected hierarchy structure. The 'congressdotgov' structure is `/116/bills/hr1818/BILLS-116hr1818ih.xml`, while the `unitedstates` pathtype structure follows the hierarchy that is created by the scraper in `github.com/unitedstates/congress`: `116/bills/hr/hr1818/text-versions/ih/BILLS-116hr1818ih.xml`.
 
 Then you can run the following command to process all the bill XML files in the directory:
 
@@ -16,7 +18,7 @@ Then you can run the following command to process all the bill XML files in the 
 >>> from billsim.utils import getBillXmlPaths
 >>> z=getBillXmlPaths()
 >>> z[30]
-BillPath(billnumber_version='116hr1818ih', path='.../billsim/congress/data/116/bills/hr1818/BILLS-116hr1818ih.xml', fileName='BILLS-116hr1818ih.xml')
+BillPath(billnumber_version='116hr1818ih', path='[abspath]/billsim/data/congress/116/bills/hr1818/BILLS-116hr1818ih.xml', fileName='BILLS-116hr1818ih.xml')
 ```
 
 ## Creating Elasticsearch index of bill sections 
@@ -24,10 +26,10 @@ BillPath(billnumber_version='116hr1818ih', path='.../billsim/congress/data/116/b
 Install Elasticsearch (>=7.0.0 and <7.10.2). This can be done from docker as follows:
 ```
 $ docker pull docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
-$ docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.10.2 &
+$ docker run -m=4g -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2 &
 ```
 
-NOTE: using `podman` instead of docker on MacOs works better for me. Note also that the docker container memory may be limited, slowing down elasticsearch processes. In production, the docker-compose should set enough memory to ensure performance.
+NOTE: using `podman` instead of docker on MacOs works better for me. Note also that the docker container memory may be limited, slowing down elasticsearch processes. In production, the docker-compose should set enough memory to ensure performance (-m=4g sets the max memory to 4Gb (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb)).
 
 Then, in a virtualenv with all requirements installed, run the following commands in Python, from the `src` directory to create the index:
 

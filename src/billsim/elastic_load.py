@@ -207,5 +207,6 @@ def initializeBillSectionsIndex(delete_index=False):
 
     createIndex(delete=delete_index)
     billPaths = getBillXmlPaths()
+    logger.info('Indexing {0} bills'.format(len(billPaths)))
     for billPath in billPaths:
         indexBill(billPath)

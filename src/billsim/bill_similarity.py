@@ -9,8 +9,9 @@ from lxml import etree
 
 es = Elasticsearch()
 from billsim import constants
-from billsim.utils import billNumberVersionToBillPath, deep_get, getId, getHeader, getEnum, getText
+from billsim.utils import billNumberVersionToBillPath, deep_get, getId, getHeader, getEnum
 from billsim.pymodels import SectionMeta, Section
+from constants import PATHTYPE_DEFAULT
 
 logging.basicConfig(filename='bill_similarity.log', filemode='w', level='INFO')
 logger = logging.getLogger(__name__)
@@ -155,7 +156,7 @@ def getSimilarDocSections(filePath: str, docId: str) -> list[Section]:
 
 def getSimilarBillSections(billnumber_version: str = None,
                            bill_path: BillPath = None,
-                           pathType: str = "congressdotgov") -> BillSections:
+                           pathType: str = PATHTYPE_DEFAULT) -> BillSections:
     """
   Get similar sections for a bill.
   This function is a wrapper for getSimilarSectionItem and assumes a billnumber_version or BillPath 

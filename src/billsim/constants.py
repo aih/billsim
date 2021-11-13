@@ -12,9 +12,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+PATHTYPE_DEFAULT = os.getenv('PATHTYPE_DEFAULT', default='congressdotgov')
 
-CONGRESS_DATA_PATH = os.path.join(BASE_DIR, 'congress', 'data')
+PATH_TO_DATA_DIR = os.getenv(
+    'PATH_TO_DATA_DIR',
+    os.path.join('/', *"/usr/local/share/billsim/public/data".split('/')))
+
+PATH_TO_CONGRESSDATA_DIR = os.getenv('PATH_TO_CONGRESS_DATA_DIR',
+                                     default=os.path.join(
+                                         PATH_TO_DATA_DIR, 'congress'))
+
+BASE_DIR = Path(__file__).resolve(strict=True).parent
 
 PATH_BILLSECTIONS_JSON = os.path.join(BASE_DIR, 'es/billsections_mapping.json')
 PATH_BILL_FULL_JSON = os.path.join(BASE_DIR, 'es/bill_full_mapping.json')
@@ -33,16 +41,6 @@ MAX_BILLS_SECTION = int(os.getenv('MAX_BILLS_SECTIONS', default=100))
 BILLMETA_GO_CMD = 'billmeta'
 ESQUERY_GO_CMD = 'esquery'
 COMPAREMATRIX_GO_CMD = 'comparematrix'
-PATH_TO_CONGRESSDATA_DIR = CONGRESS_DATA_PATH
-PATH_TO_DATA_DIR = os.getenv(
-    'PATH_TO_DATA_DIR',
-    os.path.join('/', *"/usr/local/share/xcential/public/data".split('/')))
-PATH_TO_CONGRESSDATA_XML_DIR = os.getenv(
-    'PATH_TO_CONGRESSDATA_XML_DIR',
-    os.path.join('/',
-                 *"/usr/local/share/xcential/public/data/116/dtd".split('/')))
-PATH_TO_RELATEDBILLS_DIR = os.path.join(PATH_TO_CONGRESSDATA_DIR,
-                                        'relatedbills')
 
 RESULTS_DEFAULT = 20
 MIN_SCORE_DEFAULT = 25
@@ -73,12 +71,12 @@ BILL_DIR_REGEX_COMPILED = re.compile(BILL_DIR_REGEX)
 BILL_DIR_REGEX_CDG = r'.*?([1-9][0-9]*)\/bills\/([a-z]+)([0-9]+)$'
 BILL_DIR_REGEX_CDG_COMPILED = re.compile(BILL_DIR_REGEX_CDG)
 
-# congress/data/117/bills/sconres/sconres2
+# /data/congress/117/bills/sconres/sconres2
 US_CONGRESS_VERSION_PATH_REGEX_COMPILED = re.compile(
-    r'data\/(?P<congress>[1-9][0-9]*)\/(?P<doctype>[a-z]+)\/(?P<stage>[a-z]{1,8})\/(?P<billnumber>[a-z]{1,8}[1-9][0-9]*)\/?(text-versions\/)?(?P<version>[a-z]+)'
+    r'\/(?P<congress>[1-9][0-9]*)\/(?P<doctype>[a-z]+)\/(?P<stage>[a-z]{1,8})\/(?P<billnumber>[a-z]{1,8}[1-9][0-9]*)\/?(text-versions\/)?(?P<version>[a-z]+)'
 )
 US_CONGRESS_PATH_REGEX_COMPILED = re.compile(
-    r'data\/(?P<congress>[1-9][0-9]*)\/(?P<doctype>[a-z]+)\/(?P<stage>[a-z]{1,8})\/(?P<billnumber>[a-z]{1,8}[1-9][0-9]*)\/?(text-versions\/)?(?P<version>[a-z]+)?'
+    r'\/(?P<congress>[1-9][0-9]*)\/(?P<doctype>[a-z]+)\/(?P<stage>[a-z]{1,8})\/(?P<billnumber>[a-z]{1,8}[1-9][0-9]*)\/?(text-versions\/)?(?P<version>[a-z]+)?'
 )
 USCONGRESS_XML_FILE = 'document.xml'
 
@@ -95,7 +93,7 @@ def billNumberVersionFromPath_CDG(path: str):
 def billNumberVersionToPath_CDG(billnumber_version: str):
     match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
     if match:
-        return 'data/{congress}/bills/{stage}{billnumber}/BILLS-{congress}{stage}{billnumber}{version}.xml'.format(
+        return '/{congress}/bills/{stage}{billnumber}/BILLS-{congress}{stage}{billnumber}{version}.xml'.format(
             **match.groupdict())
     else:
         return ''
@@ -122,7 +120,7 @@ def billNumberVersionFromPath_USCONGRESS(path: str):
 def billNumberVersionToPath_USCONGRESS(billnumber_version: str):
     match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
     if match:
-        return 'data/{congress}/bills/{stage}/{stage}{billnumber}/text-versions/{version}/document.xml'.format(
+        return '/{congress}/bills/{stage}/{stage}{billnumber}/text-versions/{version}/document.xml'.format(
             **match.groupdict())
     else:
         return ''
@@ -140,7 +138,7 @@ def isFileParent_USCONGRESS(path: str):
 CONGRESS_DIRS = {
     "congressdotgov": {
         "samplePath":
-            "data/117/bills/hr200/BILLS-117hr200ih.xml",
+            "data/congress/117/bills/hr200/BILLS-117hr200ih.xml",
         "billXMLFilenameRegex":
             r'BILLS-' + BILL_NUMBER_PART_REGEX + r'\.xml',
         "pathToBillnumberVersion":
@@ -155,7 +153,7 @@ CONGRESS_DIRS = {
     },
     "unitedstates": {
         "samplePath":
-            f'congress/data/117/bills/sconres/sconres2/text-versions/ih/{USCONGRESS_XML_FILE}',
+            f'data/congress/117/bills/sconres/sconres2/text-versions/ih/{USCONGRESS_XML_FILE}',
         "billXMLFilenameRegex":
             r'' + USCONGRESS_XML_FILE,
         "pathToBillnumberVersion":
@@ -168,6 +166,8 @@ CONGRESS_DIRS = {
             lambda x: re.compile(r'' + USCONGRESS_XML_FILE).match(x) is not None
     }
 }
+
+PATHTYPE_OBJ = CONGRESS_DIRS[PATHTYPE_DEFAULT]
 
 CURRENT_CONGRESSIONAL_YEAR = datetime.date.today(
 ).year if datetime.date.today() > datetime.date(

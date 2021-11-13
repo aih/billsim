@@ -6,21 +6,20 @@ import re
 import logging
 from typing import Dict, List
 
-from billsim.constants import CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS
+from billsim.constants import PATHTYPE_DEFAULT, PATHTYPE_OBJ, CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS
 from billsim.pymodels import BillPath
 
 logging.basicConfig(filename='utils.log', filemode='w', level='INFO')
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
-CDG = CONGRESS_DIRS["congressdotgov"]
-
 
 def deep_get(d, keys, default=None):
     """
     Example:
-        d = {'meta': {'status': 'OK', 'status_code': 200}}
+        d = {'meta': {'status': 'OK', 'status_code': 200, 'messages': ['first', 'second']}}
         deep_get(d, ['meta', 'status_code'])          # => 200
+        deep_get(d, ['meta', 'messages', 0]) == 'first')
         deep_get(d, ['garbage', 'status_code'])       # => None
         deep_get(d, ['meta', 'garbage'], default='-') # => '-'
     """
@@ -29,6 +28,8 @@ def deep_get(d, keys, default=None):
         return default
     if not keys:
         return d
+    if type(d) is list and type(keys[0]) is int:
+        return deep_get(d[keys[0]], keys[1:], default)
     return deep_get(d.get(keys[0]), keys[1:], default)
 
 
@@ -63,7 +64,7 @@ def getHeader(section) -> str:
 
 
 def billNumberVersionToBillPath(billnumber_version: str,
-                                pathType: str = 'congressdotgov') -> BillPath:
+                                pathType: str = PATHTYPE_DEFAULT) -> BillPath:
     billxmlpath = CONGRESS_DIRS[pathType]["billNumberVersionToPath"](
         billnumber_version)
     logger.debug('billpath: {0}'.format(billxmlpath))
@@ -78,7 +79,7 @@ def billNumberVersionToBillPath(billnumber_version: str,
 
 def getBillPath(dirName: str,
                 fileName: str,
-                pathType: str = 'congressdotgov') -> BillPath:
+                pathType: str = PATHTYPE_DEFAULT) -> BillPath:
     """
   Returns a BillPath object, with file path, file name, billnumber and version.
 
@@ -105,8 +106,8 @@ def isDataJson(fileName: str) -> bool:
 
 def walkBillDirs(rootDir=PATH_TO_CONGRESSDATA_DIR,
                  processFile=getBillPath,
-                 dirMatch=CDG["isFileParent"],
-                 fileMatch=CDG["fileMatch"]) -> list:
+                 dirMatch=PATHTYPE_OBJ["isFileParent"],
+                 fileMatch=PATHTYPE_OBJ["fileMatch"]) -> list:
     """
   Walks through the data directory and returns a list of dicts of the form {path: '[path/to]/congress/data/116/...', billnumber_version: '116hr200ih'} with paths to the bill XML files.
 
@@ -141,8 +142,8 @@ def walkBillDirs(rootDir=PATH_TO_CONGRESSDATA_DIR,
 # Get bill XML paths depending on the pathType
 # Uses walkBillDirs with a filter
 def getBillXmlPaths(
-    congressDir: str = PATH_TO_CONGRESSDATA_DIR,
-    pathType: str = 'congressdotgov',
+    congressDataDir: str = PATH_TO_CONGRESSDATA_DIR,
+    pathType: str = PATHTYPE_DEFAULT,
     congresses: list[int] = list(
         range(CURRENT_CONGRESS, CURRENT_CONGRESS - 3, -1))
 ) -> List[BillPath]:
@@ -150,10 +151,12 @@ def getBillXmlPaths(
   Returns a list of BillPath objects of the form BillPath(path='data/116/...', billnumber_version='116hr200ih', fileName='Bills-116hr200ih.xml') with paths to the bill XML files for the given congress.
   """
     assert pathType in CONGRESS_DIRS.keys(
-    ), "Path type must be in one of the following forms: " + str(
-        CONGRESS_DIRS.keys())
-    congressdir = CONGRESS_DIRS[pathType]
-    return walkBillDirs(rootDir=congressDir,
+    ), "Path type must be in one of the following forms: {}".format(
+        str(CONGRESS_DIRS.keys()))
+    congressdir_obj = CONGRESS_DIRS[pathType]
+    logger.info('Getting bill paths in {}, for congresses: {}'.format(
+        congressDataDir, congresses))
+    return walkBillDirs(rootDir=congressDataDir,
                         processFile=getBillPath,
-                        dirMatch=congressdir["isFileParent"],
-                        fileMatch=congressdir["fileMatch"])
+                        dirMatch=congressdir_obj["isFileParent"],
+                        fileMatch=congressdir_obj["fileMatch"])
