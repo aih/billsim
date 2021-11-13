@@ -211,12 +211,15 @@ def getBillToBill(billsections: BillSections) -> dict:
         if similar_sections is None or len(similar_sections) == 0:
             continue
         for similar_section in similar_sections:
+            billnumber_version = similar_section.billnumber_version
+            if billnumber_version is None:
+                billnumber_version = ''
             if (billToBills.get(similar_section.billnumber_version) is None):
                 billToBills[similar_section.billnumber_version] = BillToBill(
                     billnumber_version=billsections.billnumber_version,
                     length=billsections.length,
                     score_es=similar_section.score_es,
-                    billnumber_version_to=similar_section.billnumber_version,
+                    billnumber_version_to=billnumber_version,
                     sections=[
                         Section(
                             billnumber_version=billsections.billnumber_version,
