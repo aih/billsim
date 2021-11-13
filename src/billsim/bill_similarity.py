@@ -72,13 +72,14 @@ def moreLikeThis(queryText: str,
 
 def getSimilarSections(
         queryText: str,
+        index: str = constants.INDEX_SECTIONS,
         min_score: int = constants.MIN_SCORE_DEFAULT) -> list[SimilarSection]:
     """
   Runs query for sections with 'max' score_mode;
   return in the form of a list of SimilarSection
   """
 
-    res = moreLikeThis(queryText, min_score=min_score)
+    res = moreLikeThis(queryText, index, min_score=min_score)
     hitsHits = getHitsHits(res)
     similarSections = []
     for hitsHit in hitsHits:
@@ -109,8 +110,11 @@ def getSimilarSections(
 def getSimilarSectionItem(
         queryText: str,
         sectionMeta: SectionMeta,
+        index: str = constants.INDEX_SECTIONS,
         min_score: int = constants.MIN_SCORE_DEFAULT) -> Section:
-    similar_sections = getSimilarSections(queryText, min_score=min_score)
+    similar_sections = getSimilarSections(queryText,
+                                          index=index,
+                                          min_score=min_score)
     return Section(similar_sections=similar_sections,
                    billnumber_version=sectionMeta.billnumber_version,
                    section_id=sectionMeta.section_id,

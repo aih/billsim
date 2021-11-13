@@ -15,6 +15,7 @@ def es_service_available() -> bool:
 
 @pytest.mark.skipif(not es_service_available(),
                     reason="Elasticsearch service not available")
+@pytest.mark.run(order=1)
 def test_createIndex():
     from billsim.elastic_load import createIndex
     createIndex(index=constants_test.TEST_INDEX_SECTIONS, delete=True)
@@ -23,6 +24,7 @@ def test_createIndex():
 
 @pytest.mark.skipif(not es_service_available(),
                     reason="Elasticsearch service not available")
+@pytest.mark.run(order=2)
 def test_indexBill():
     from billsim.elastic_load import indexBill
     billPath = constants_test.SAMPLE_BILL_PATH
