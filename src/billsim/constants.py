@@ -93,7 +93,7 @@ def billNumberVersionFromPath_CDG(path: str):
 def billNumberVersionToPath_CDG(billnumber_version: str):
     match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
     if match:
-        return '/{congress}/bills/{stage}{billnumber}/BILLS-{congress}{stage}{billnumber}{version}.xml'.format(
+        return '{congress}/bills/{stage}{billnumber}/BILLS-{congress}{stage}{billnumber}{version}.xml'.format(
             **match.groupdict())
     else:
         return ''
@@ -120,7 +120,7 @@ def billNumberVersionFromPath_USCONGRESS(path: str):
 def billNumberVersionToPath_USCONGRESS(billnumber_version: str):
     match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
     if match:
-        return '/{congress}/bills/{stage}/{stage}{billnumber}/text-versions/{version}/document.xml'.format(
+        return '{congress}/bills/{stage}/{stage}{billnumber}/text-versions/{version}/document.xml'.format(
             **match.groupdict())
     else:
         return ''

@@ -4,7 +4,7 @@ from functools import reduce
 import os, sys
 import re
 import logging
-from typing import Dict, List
+from typing import List
 
 from billsim.constants import PATHTYPE_DEFAULT, PATHTYPE_OBJ, CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS
 from billsim.pymodels import BillPath
@@ -67,35 +67,15 @@ def billNumberVersionToBillPath(billnumber_version: str,
                                 pathType: str = PATHTYPE_DEFAULT) -> BillPath:
     billxmlpath = CONGRESS_DIRS[pathType]["billNumberVersionToPath"](
         billnumber_version)
+    logger.debug(
+        'PATH_TO_CONGRESSDATA_DIR: {0}'.format(PATH_TO_CONGRESSDATA_DIR))
     logger.debug('billpath: {0}'.format(billxmlpath))
     fileName = os.path.basename(billxmlpath)
-    billxmlpath_abs = os.path.join(PATH_TO_CONGRESSDATA_DIR,
-                                   re.sub(r'^\/?data\/', r'', billxmlpath))
+    billxmlpath_abs = os.path.join(
+        PATH_TO_CONGRESSDATA_DIR,
+        re.sub(r'^\/?(data)?\/', r'', billxmlpath.replace()))
     logger.debug('Absolute bill path: {0}'.format(billxmlpath_abs))
     return BillPath(filePath=billxmlpath_abs,
-                    fileName=fileName,
-                    billnumber_version=billnumber_version)
-
-
-def getBillPath(dirName: str,
-                fileName: str,
-                pathType: str = PATHTYPE_DEFAULT) -> BillPath:
-    """
-  Returns a BillPath object, with file path, file name, billnumber and version.
-
-  Args:
-      dirName (str): The directory name.
-      fileName (str): The file name.
-  """
-
-    assert pathType in CONGRESS_DIRS.keys(
-    ), "Path type must be in one of the following forms: " + str(
-        CONGRESS_DIRS.keys())
-    # Add billnumber and billnumber_version to the return value
-    billpath = os.path.join(dirName, fileName)
-    billnumber_version = CONGRESS_DIRS[pathType]["pathToBillnumberVersion"](
-        billpath)
-    return BillPath(filePath=billpath,
                     fileName=fileName,
                     billnumber_version=billnumber_version)
 
@@ -104,8 +84,29 @@ def isDataJson(fileName: str) -> bool:
     return fileName == 'data.json'
 
 
+def GETBILLPATH_DEFAULT(
+    dirName: str,
+    fileName: str,
+) -> BillPath:
+    """
+  Returns a BillPath object, with file path, file name, billnumber and version.
+
+  Args:
+      dirName (str): The directory name.
+      fileName (str): The file name.
+  """
+
+    # Add billnumber and billnumber_version to the return value
+    billpath = os.path.join(dirName, fileName)
+    billnumber_version = CONGRESS_DIRS[PATHTYPE_DEFAULT][
+        "pathToBillNumberVersion"](billpath)
+    return BillPath(filePath=billpath,
+                    fileName=fileName,
+                    billnumber_version=billnumber_version)
+
+
 def walkBillDirs(rootDir=PATH_TO_CONGRESSDATA_DIR,
-                 processFile=getBillPath,
+                 processFile=GETBILLPATH_DEFAULT,
                  dirMatch=PATHTYPE_OBJ["isFileParent"],
                  fileMatch=PATHTYPE_OBJ["fileMatch"]) -> list:
     """
@@ -156,6 +157,19 @@ def getBillXmlPaths(
     congressdir_obj = CONGRESS_DIRS[pathType]
     logger.info('Getting bill paths in {}, for congresses: {}'.format(
         congressDataDir, congresses))
+
+    def getBillPath(
+        dirName: str,
+        fileName: str,
+    ) -> BillPath:
+        # Add billnumber and billnumber_version to the return value
+        billpath = os.path.join(dirName, fileName)
+        billnumber_version = CONGRESS_DIRS[pathType]["pathToBillNumberVersion"](
+            billpath)
+        return BillPath(filePath=billpath,
+                        fileName=fileName,
+                        billnumber_version=billnumber_version)
+
     return walkBillDirs(rootDir=congressDataDir,
                         processFile=getBillPath,
                         dirMatch=congressdir_obj["isFileParent"],
