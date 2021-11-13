@@ -71,9 +71,8 @@ def billNumberVersionToBillPath(billnumber_version: str,
         'PATH_TO_CONGRESSDATA_DIR: {0}'.format(PATH_TO_CONGRESSDATA_DIR))
     logger.debug('billpath: {0}'.format(billxmlpath))
     fileName = os.path.basename(billxmlpath)
-    billxmlpath_abs = os.path.join(
-        PATH_TO_CONGRESSDATA_DIR,
-        re.sub(r'^\/?(data)?\/', r'', billxmlpath.replace()))
+    billxmlpath_abs = os.path.join(PATH_TO_CONGRESSDATA_DIR,
+                                   re.sub(r'^\/?(data)?\/', r'', billxmlpath))
     logger.debug('Absolute bill path: {0}'.format(billxmlpath_abs))
     return BillPath(filePath=billxmlpath_abs,
                     fileName=fileName,
@@ -99,7 +98,7 @@ def GETBILLPATH_DEFAULT(
     # Add billnumber and billnumber_version to the return value
     billpath = os.path.join(dirName, fileName)
     billnumber_version = CONGRESS_DIRS[PATHTYPE_DEFAULT][
-        "pathToBillNumberVersion"](billpath)
+        "pathToBillnumberVersion"](billpath)
     return BillPath(filePath=billpath,
                     fileName=fileName,
                     billnumber_version=billnumber_version)
@@ -164,7 +163,7 @@ def getBillXmlPaths(
     ) -> BillPath:
         # Add billnumber and billnumber_version to the return value
         billpath = os.path.join(dirName, fileName)
-        billnumber_version = CONGRESS_DIRS[pathType]["pathToBillNumberVersion"](
+        billnumber_version = CONGRESS_DIRS[pathType]["pathToBillnumberVersion"](
             billpath)
         return BillPath(filePath=billpath,
                         fileName=fileName,

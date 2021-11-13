@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 import os
+from re import S
 from lxml import etree
 from pathlib import Path
-from billsim.constants import CONGRESS_DATA_PATH
+from billsim import constants
 from billsim.pymodels import BillPath
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
@@ -61,11 +62,22 @@ def test_getHeader():
 
 def test_billNumberVersionToBillPath():
     from billsim.utils import billNumberVersionToBillPath
-    billPath = billNumberVersionToBillPath("116hr2005ih")
+    billPath = billNumberVersionToBillPath("116hr2005ih",
+                                           pathType='unitedstates')
+    assert billPath.billnumber_version == "116hr2005ih"
+    assert billPath.fileName == "document.xml"
+    assert billPath.filePath == os.path.join(constants.PATH_TO_CONGRESSDATA_DIR,
+                                             '116', 'bills', 'hr', 'hr2005',
+                                             'text-versions', 'ih',
+                                             'document.xml')
+
+    billPath = billNumberVersionToBillPath("116hr2005ih",
+                                           pathType='congressdotgov')
     assert billPath.billnumber_version == "116hr2005ih"
     assert billPath.fileName == "BILLS-116hr2005ih.xml"
-    assert billPath.filePath == os.path.join(CONGRESS_DATA_PATH_TEST,
-                                             "BILLS-116hr2005ih.xml")
+    assert billPath.filePath == os.path.join(constants.PATH_TO_CONGRESSDATA_DIR,
+                                             '116', 'bills', 'hr2005',
+                                             'BILLS-116hr2005ih.xml')
 
 
 def test_walkBillDirs(rootDir=CONGRESS_DATA_PATH_TEST):
@@ -76,9 +88,9 @@ def test_walkBillDirs(rootDir=CONGRESS_DATA_PATH_TEST):
     assert billDirs[2].fileName == "BILLS-116hr2005ih.xml"
 
 
-def test_getBillXmlPaths(congressDir=CONGRESS_PATH_TEST):
+def test_getBillXmlPaths(congressDataDir=CONGRESS_PATH_TEST):
     from billsim.utils import getBillXmlPaths
-    billDirs = getBillXmlPaths(congressDir=congressDir)
+    billDirs = getBillXmlPaths(congressDataDir=congressDataDir)
     assert len(billDirs) >= 27
     assert billDirs[2].billnumber_version == "116hr2005ih"
     assert billDirs[2].fileName == "BILLS-116hr2005ih.xml"
