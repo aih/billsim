@@ -233,6 +233,15 @@ BILL_TYPES = {
     'sc': 'SC-Sponsor Change'
 }
 
+# Returns all documents (up to "size")
+SAMPLE_MATCH_ALL_QUERY = {
+    "size": RESULTS_DEFAULT,
+    "min_score": MIN_SCORE_DEFAULT,
+    "query": {
+        "match_all": {}
+    }
+}
+
 SAMPLE_QUERY = {
     "size": RESULTS_DEFAULT,
     "min_score": MIN_SCORE_DEFAULT,

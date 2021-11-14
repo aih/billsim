@@ -60,3 +60,5 @@ Then you can run the following command to find similar bills (the bill itself sh
 ## Build and test
 
 Tests, built with `pytest` are found in the `tests` directory. To run the tests, run `make` (requires cmake and pytest installed) or run `pytest -rs tests` directly. 
+
+Uses the `pytest-order` plugin. See https://pytest-dev.github.io/pytest-order/dev/

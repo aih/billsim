@@ -100,7 +100,7 @@ def indexBill(
     if billMatch:
         billMatchGroup = billMatch.groupdict()
         billnumber = billMatchGroup.get('congress', '') + billMatchGroup.get(
-            'stage', '') + billMatchGroup.get('number', '')
+            'stage', '') + billMatchGroup.get('billnumber', '')
         billversion = billMatchGroup.get('version', '')
     sections = billTree.xpath('//section')
     headers = billTree.xpath('//header')

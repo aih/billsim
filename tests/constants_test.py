@@ -16,6 +16,13 @@ SAMPLE_BILL_PATH = BillPath(
     filePath=os.path.join(
         TEST_DIR, 'samples/data/congress/117/bills/hr200/BILLS-117hr200ih.xml'))
 
+SAMPLE_BILL_PATH_117HR2001 = BillPath(
+    billnumber_version='117hr2001ih',
+    fileName='BILLS-117hr2001ih.xml',
+    filePath=os.path.join(
+        TEST_DIR,
+        'samples/data/congress/117/bills/hr2001/BILLS-117hr2001ih.xml'))
+
 SAMPLE_QUERY_TEXT = """
 2. National Intersection and Interchange Safety Construction Program (a) Establishment 
 Not later than 180 days after the date of enactment of this Act, the Secretary of Transportation shall establish a national intersection and interchange safety construction program (in this section referred to as the Program) to assist safety improvements for high-risk intersections and interchanges.(b) Grant authority(1) In general
