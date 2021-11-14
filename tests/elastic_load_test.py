@@ -18,7 +18,7 @@ def es_service_available() -> bool:
 @pytest.mark.order(1)
 def test_createIndex():
     from billsim.elastic_load import createIndex
-    createIndex(index=constants_test.TEST_INDEX_SECTIONS, delete=True)
+    createIndex(index=constants_test.TEST_INDEX_SECTIONS, delete=False)
     assert (es.indices.exists(index=constants_test.TEST_INDEX_SECTIONS))
 
 
