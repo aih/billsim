@@ -234,11 +234,14 @@ BILL_TYPES = {
 }
 
 # Returns all documents (up to "size")
-SAMPLE_MATCH_ALL_QUERY = {
+SAMPLE_MATCH_ALL_QUERY = {"size": RESULTS_DEFAULT, "query": {"match_all": {}}}
+
+SAMPLE_MATCH_ID_QUERY = {
     "size": RESULTS_DEFAULT,
-    "min_score": MIN_SCORE_DEFAULT,
     "query": {
-        "match_all": {}
+        "match": {
+            "id": "117hr2001ih"
+        }
     }
 }
 

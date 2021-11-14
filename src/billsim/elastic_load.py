@@ -50,7 +50,7 @@ def indexBill(
       index_types (dict, optional): Index by 'sections', 'bill_full' or both. Defaults to ['sections'].
 
   Raises:
-      Exception: [description]
+      Exception: Could not parse bill xml file. 
 
   Returns:
       Status: status of the indexing of the form {success: True/False, message: 'message'}} 
@@ -92,7 +92,6 @@ def indexBill(
         billTree.xpath('//dublinCore/dc:title',
                        namespaces={'dc': 'http://purl.org/dc/elements/1.1/'}))
 
-    doc_id = ''
     billMatch = constants.BILL_NUMBER_REGEX_COMPILED.match(
         billPath.billnumber_version)
     billversion = ''
@@ -164,12 +163,9 @@ def indexBill(
                   } for section in sections]
         }
 
-        # If the document has no identifiable bill number, it will be indexed with a random id
-        # This will make retrieval and updates ambiguous
-        if doc_id != '' and len(doc_id) > 7:
-            doc['id'] = doc_id
-
-        res = es.index(index=index_types['sections'], body=doc)
+        res = es.index(index=index_types['sections'],
+                       body=doc,
+                       id=billPath.billnumber_version)
 
     if 'bill_full' in index_types.keys():
         billText = etree.tostring(billTree, method="text", encoding="unicode")
@@ -186,7 +182,9 @@ def indexBill(
             'headers': list(OrderedDict.fromkeys(headers_text)),
             'billtext': billText
         }
-        res = es.index(index=index_types['bill_full'], body=doc_full)
+        res = es.index(index=index_types['bill_full'],
+                       body=doc_full,
+                       id=billPath.billnumber_version)
 
     # TODO: handle processing of bill section index separately from full bill
     if res.get('result', None) == 'created':
@@ -194,6 +192,7 @@ def indexBill(
                       message='Indexed bill {0}'.format(
                           billPath.billnumber_version))
     else:
+        print(res)
         return Status(success=False,
                       message='Failed to index bill {0}'.format(
                           billPath.billnumber_version))
