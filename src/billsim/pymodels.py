@@ -2,7 +2,10 @@
 
 from sqlmodel import Field, SQLModel, Session, create_engine
 from typing import Optional
-from billsim.database import engine
+try:
+    from billsim.database import engine
+except ImportError:
+    from .database import engine
 
 
 class Status(SQLModel):

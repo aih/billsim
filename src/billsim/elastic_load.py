@@ -17,6 +17,10 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 
+def getDefaultNamespace(billTree) -> str:
+    return billTree.getroot().nsmap.get(None, '')
+
+
 def getMapping(map_path: str) -> dict:
     with open(map_path, 'r') as f:
         return json.load(f)
@@ -59,38 +63,75 @@ def indexBill(
         billTree = etree.parse(billPath.filePath, parser=etree.XMLParser())
     except:
         raise Exception('Could not parse bill: {}'.format(billPath.filePath))
-    dublinCores = billTree.xpath('//dublinCore')
-    if (dublinCores is not None) and (len(dublinCores) > 0):
-        dublinCore = etree.tostring(dublinCores[0],
-                                    method="xml",
-                                    encoding="unicode"),
-    else:
-        dublinCore = ''
-    dcdate = getText(
-        billTree.xpath('//dublinCore/dc:date',
-                       namespaces={'dc': 'http://purl.org/dc/elements/1.1/'}))
-    # TODO find date for enr bills in the bill status (for the flat congress directory structure)
-    if (dcdate is None
-            or len(dcdate) == 0) and '/data.xml' in billPath.filePath:
-        metadata_path = billPath.filePath.replace('/data.xml', '/data.json')
-        try:
-            with open(metadata_path, 'rb') as f:
-                metadata = json.load(f)
-                dcdate = metadata.get('issued_on', None)
-        except:
-            pass
-    if dcdate is None or len(dcdate) == 0:
-        dcdate = None
+    dublinCore = None
+    defaultNS = getDefaultNamespace(billTree)
+    if defaultNS and defaultNS == constants.NAMESPACE_USLM2:
+        dcdate = getText(
+            billTree.xpath('//uslm:meta/dc:date',
+                           namespaces={
+                               'uslm': defaultNS,
+                               'dc': 'http://purl.org/dc/elements/1.1/'
+                           }))
+        congress = billTree.xpath('//uslm:meta/uslm:congress')
+        congress_text = re.sub(r'[a-zA-Z ]+$', '', getText(congress))
+        session = billTree.xpath('//uslm:meta/uslm:session')
+        session_text = re.sub(r'[a-zA-Z ]+$', '', getText(session))
+        dc_type = billTree.xpath('//uslm:preface/dc:type',
+                                 namespaces={'uslm': defaultNS})
+        docNumber = billTree.xpath('//uslm:preface/uslm:docNumber',
+                                   namespaces={'uslm': defaultNS})
+        if dc_type and docNumber:
+            legisnum_text = getText(dc_type) + ' ' + getText(docNumber)
+        else:
+            legisnum_text = ''
 
-    congress = billTree.xpath('//form/congress')
-    congress_text = re.sub(r'[a-zA-Z ]+$', '', getText(congress))
-    session = billTree.xpath('//form/session')
-    session_text = re.sub(r'[a-zA-Z ]+$', '', getText(session))
-    legisnum = billTree.xpath('//legis-num')
-    legisnum_text = getText(legisnum)
-    dctitle = getText(
-        billTree.xpath('//dublinCore/dc:title',
-                       namespaces={'dc': 'http://purl.org/dc/elements/1.1/'}))
+        dctitle = getText(
+            billTree.xpath('//uslm:meta/dc:title',
+                           namespaces={
+                               'uslm': defaultNS,
+                               'dc': 'http://purl.org/dc/elements/1.1/'
+                           }))
+        sections = billTree.xpath('//uslm:section',
+                                  namespaces={'uslm': defaultNS})
+        headers = billTree.xpath('//uslm:header',
+                                 namespaces={'uslm': defaultNS})
+    else:
+        dublinCores = billTree.xpath('//dublinCore')
+        if (dublinCores is not None) and (len(dublinCores) > 0):
+            dublinCore = etree.tostring(dublinCores[0],
+                                        method="xml",
+                                        encoding="unicode"),
+        else:
+            dublinCore = ''
+        dcdate = getText(
+            billTree.xpath(
+                '//dublinCore/dc:date',
+                namespaces={'dc': 'http://purl.org/dc/elements/1.1/'}))
+        # TODO find date for enr bills in the bill status (for the flat congress directory structure)
+        if (dcdate is None
+                or len(dcdate) == 0) and '/data.xml' in billPath.filePath:
+            metadata_path = billPath.filePath.replace('/data.xml', '/data.json')
+            try:
+                with open(metadata_path, 'rb') as f:
+                    metadata = json.load(f)
+                    dcdate = metadata.get('issued_on', None)
+            except:
+                pass
+        if dcdate is None or len(dcdate) == 0:
+            dcdate = None
+
+        congress = billTree.xpath('//form/congress')
+        congress_text = re.sub(r'[a-zA-Z ]+$', '', getText(congress))
+        session = billTree.xpath('//form/session')
+        session_text = re.sub(r'[a-zA-Z ]+$', '', getText(session))
+        legisnum = billTree.xpath('//legis-num')
+        legisnum_text = getText(legisnum)
+        dctitle = getText(
+            billTree.xpath(
+                '//dublinCore/dc:title',
+                namespaces={'dc': 'http://purl.org/dc/elements/1.1/'}))
+        sections = billTree.xpath('//section')
+        headers = billTree.xpath('//header')
 
     billMatch = constants.BILL_NUMBER_REGEX_COMPILED.match(
         billPath.billnumber_version)
@@ -101,8 +142,6 @@ def indexBill(
         billnumber = billMatchGroup.get('congress', '') + billMatchGroup.get(
             'stage', '') + billMatchGroup.get('billnumber', '')
         billversion = billMatchGroup.get('version', '')
-    sections = billTree.xpath('//section')
-    headers = billTree.xpath('//header')
     from collections import OrderedDict
     headers_text = [header.text for header in headers]
 
@@ -118,8 +157,6 @@ def indexBill(
                 congress_text,
             'session':
                 session_text,
-            'dc':
-                dublinCore,
             'dctitle':
                 dctitle,
             'date':
@@ -162,6 +199,8 @@ def indexBill(
                               section, method="xml", encoding="unicode")
                   } for section in sections]
         }
+        if dublinCore:
+            doc['dublinCore'] = dublinCore
 
         res = es.index(index=index_types['sections'],
                        body=doc,

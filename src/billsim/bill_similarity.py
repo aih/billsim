@@ -5,6 +5,7 @@ import logging
 from elasticsearch import Elasticsearch
 
 from billsim.pymodels import BillPath, BillSections, SimilarSection, BillToBillModel
+from billsim.elastic_load import getDefaultNamespace
 from lxml import etree
 
 es = Elasticsearch()
@@ -128,8 +129,14 @@ def getSimilarDocSections(filePath: str, docId: str) -> list[Section]:
         billTree = etree.parse(filePath, etree.XMLParser())
 
     except:
+        logger.error("Error parsing file: {}; {} ", filePath, e)
         raise Exception('Could not parse bill: {}', filePath)
-    sections = billTree.xpath('//section[not(ancestor::section)]')
+    defaultNS = getDefaultNamespace(billTree)
+    if defaultNS is None:
+        sections = billTree.xpath('//section[not(ancestor::section)]')
+    else:
+        sections = billTree.xpath('//ns:section[not(ancestor::ns:section)]',
+                                  namespaces={'ns': defaultNS})
 
     sectionsList = []
     for section in sections:
@@ -137,8 +144,8 @@ def getSimilarDocSections(filePath: str, docId: str) -> list[Section]:
                                       method="text",
                                       encoding="unicode")
         length = len(section_text)
-        header = getHeader(section)
-        enum = getEnum(section)
+        header = getHeader(section, defaultNS)
+        enum = getEnum(section, defaultNS)
         if (len(header) > 0 and len(enum) > 0):
             section_meta = SectionMeta(billnumber_version=docId,
                                        label=enum,

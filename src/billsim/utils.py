@@ -49,15 +49,21 @@ def getId(section) -> str:
     return section.get('id', '')
 
 
-def getEnum(section) -> str:
-    enumpath = section.xpath('enum')
+def getEnum(section, defaultNS) -> str:
+    if defaultNS is not None:
+        enumpath = section.xpath('ns:enum', namespaces={'ns': defaultNS})
+    else:
+        enumpath = section.xpath('enum')
     if len(enumpath) > 0:
         return enumpath[0].text
     return ''
 
 
-def getHeader(section) -> str:
-    headerpath = section.xpath('header')
+def getHeader(section, defaultNS) -> str:
+    if defaultNS is not None:
+        headerpath = section.xpath('header', namespaces={'ns': defaultNS})
+    else:
+        headerpath = section.xpath('header')
     if len(headerpath) > 0:
         return headerpath[0].text
     return ''
