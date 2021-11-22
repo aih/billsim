@@ -210,4 +210,9 @@ def initializeBillSectionsIndex(delete_index=False):
     billPaths = getBillXmlPaths()
     logger.info('Indexing {0} bills'.format(len(billPaths)))
     for billPath in billPaths:
-        indexBill(billPath)
+        try:
+            indexBill(billPath)
+        except Exception as e:
+            logger.error('Failed to index bill {0}'.format(
+                billPath.billnumber_version))
+            logger.error(e)
