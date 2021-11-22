@@ -27,6 +27,11 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent
 PATH_BILLSECTIONS_JSON = os.path.join(BASE_DIR, 'es/billsections_mapping.json')
 PATH_BILL_FULL_JSON = os.path.join(BASE_DIR, 'es/bill_full_mapping.json')
 
+# Namespaces
+NAMESPACE_DC = 'http://purl.org/dc/elements/1.1/'
+NAMESPACE_USLM = 'http://xml.house.gov/schemas/uslm/1.0'
+NAMESPACE_USLM2 = 'http://schemas.gpo.gov/xml/uslm'
+
 # Names of elasticsearch indices
 INDEX_SECTIONS = os.getenv('INDEX_SECTIONS', default='billsim')
 INDEX_BILL_FULL = os.getenv('INDEX_BILL_FULL', default='bill_full')
@@ -93,7 +98,7 @@ def billNumberVersionFromPath_CDG(path: str):
 def billNumberVersionToPath_CDG(billnumber_version: str):
     match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
     if match:
-        return '{congress}/bills/{stage}{billnumber}/BILLS-{congress}{stage}{billnumber}{version}.xml'.format(
+        return '{congress}/bills/{stage}{billnumber}/BILLS-{congress}{stage}{billnumber}{version}-uslm.xml'.format(
             **match.groupdict())
     else:
         return ''
@@ -138,9 +143,9 @@ def isFileParent_USCONGRESS(path: str):
 CONGRESS_DIRS = {
     "congressdotgov": {
         "samplePath":
-            "data/congress/117/bills/hr200/BILLS-117hr200ih.xml",
+            "data/congress/117/bills/hr200/BILLS-117hr200ih-uslm.xml",
         "billXMLFilenameRegex":
-            r'BILLS-' + BILL_NUMBER_PART_REGEX + r'\.xml',
+            r'BILLS-' + BILL_NUMBER_PART_REGEX + r'-uslm\.xml',
         "pathToBillnumberVersion":
             billNumberVersionFromPath_CDG,
         "billNumberVersionToPath":
@@ -148,8 +153,8 @@ CONGRESS_DIRS = {
         "isFileParent":
             isFileParent_CDG,
         "fileMatch":
-            lambda x: re.compile(r'BILLS-' + BILL_NUMBER_PART_REGEX + r'\.xml').
-            match(x) is not None
+            lambda x: re.compile(r'BILLS-' + BILL_NUMBER_PART_REGEX +
+                                 r'-uslm\.xml').match(x) is not None
     },
     "unitedstates": {
         "samplePath":

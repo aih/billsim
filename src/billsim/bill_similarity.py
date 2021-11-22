@@ -2,9 +2,10 @@
 
 import sys, os
 import logging
-from elasticsearch import exceptions, Elasticsearch
+from elasticsearch import Elasticsearch
 
-from billsim.pymodels import BillPath, BillSections, SimilarSection, BillToBill
+from billsim.pymodels import BillPath, BillSections, SimilarSection, BillToBillModel
+from billsim.elastic_load import getDefaultNamespace
 from lxml import etree
 
 es = Elasticsearch()
@@ -70,6 +71,25 @@ def moreLikeThis(queryText: str,
     return runQuery(index=index, query=query, size=size)
 
 
+def getBillLengthbyPath(filePath: str):
+    if not os.path.isfile(filePath):
+        logger.error("Bill file does not exist: %s", filePath)
+        raise Exception("Bill file does not exist: %s", filePath)
+
+    doc_length = 0
+    with open(filePath, 'r') as f:
+        billText = f.read()
+        doc_length = len(billText)
+    return doc_length
+
+
+def getBillLength(billnumber_version: str,
+                  pathType=constants.PATHTYPE_DEFAULT) -> int:
+    bill_path = billNumberVersionToBillPath(
+        billnumber_version=billnumber_version, pathType=pathType)
+    return getBillLengthbyPath(bill_path.filePath)
+
+
 def getSimilarSections(
         queryText: str,
         index: str = constants.INDEX_SECTIONS,
@@ -91,7 +111,7 @@ def getSimilarSections(
                 billnumber_version=deep_get(hitsHit, ["_source", "id"]),
                 score_es=hitsHit.get("_score", 0),
                 score=None,
-                score_other=None,
+                score_to=None,
                 section_id=deep_get(similar_section_hit,
                                     ["_source", "section_id"]),
                 label=deep_get(similar_section_hit,
@@ -128,8 +148,14 @@ def getSimilarDocSections(filePath: str, docId: str) -> list[Section]:
         billTree = etree.parse(filePath, etree.XMLParser())
 
     except:
+        logger.error("Error parsing file: {}; {} ", filePath, e)
         raise Exception('Could not parse bill: {}', filePath)
-    sections = billTree.xpath('//section[not(ancestor::section)]')
+    defaultNS = getDefaultNamespace(billTree)
+    if defaultNS is None:
+        sections = billTree.xpath('//section[not(ancestor::section)]')
+    else:
+        sections = billTree.xpath('//ns:section[not(ancestor::ns:section)]',
+                                  namespaces={'ns': defaultNS})
 
     sectionsList = []
     for section in sections:
@@ -137,8 +163,8 @@ def getSimilarDocSections(filePath: str, docId: str) -> list[Section]:
                                       method="text",
                                       encoding="unicode")
         length = len(section_text)
-        header = getHeader(section)
-        enum = getEnum(section)
+        header = getHeader(section, defaultNS)
+        enum = getEnum(section, defaultNS)
         if (len(header) > 0 and len(enum) > 0):
             section_meta = SectionMeta(billnumber_version=docId,
                                        label=enum,
@@ -188,16 +214,9 @@ def getSimilarBillSections(
         else:
             raise Exception("bill_path or billnumber_version must be specified")
 
-    if not os.path.isfile(bill_path.filePath):
-        logger.error("Bill file does not exist: %s", bill_path.filePath)
-        raise Exception("Bill file does not exist: %s", bill_path.filePath)
-
+    doc_length = getBillLengthbyPath(bill_path.filePath)
     sectionsList = getSimilarDocSections(filePath=bill_path.filePath,
                                          docId=bill_path.billnumber_version)
-    doc_length = 0
-    with open(bill_path.filePath, 'r') as f:
-        billText = f.read()
-        doc_length = len(billText)
 
     return BillSections(billnumber_version=bill_path.billnumber_version,
                         length=doc_length,
@@ -219,19 +238,20 @@ def getBillToBill(billsections: BillSections) -> dict:
             if billnumber_version is None:
                 billnumber_version = ''
             if (billToBills.get(similar_section.billnumber_version) is None):
-                billToBills[similar_section.billnumber_version] = BillToBill(
-                    billnumber_version=billsections.billnumber_version,
-                    length=billsections.length,
-                    score_es=similar_section.score_es,
-                    billnumber_version_to=billnumber_version,
-                    sections=[
-                        Section(
-                            billnumber_version=billsections.billnumber_version,
-                            section_id=section.section_id,
-                            label=section.label,
-                            header=section.header,
-                            similar_sections=[similar_section])
-                    ])
+                billToBills[
+                    similar_section.billnumber_version] = BillToBillModel(
+                        billnumber_version=billsections.billnumber_version,
+                        length=billsections.length,
+                        score_es=similar_section.score_es,
+                        billnumber_version_to=billnumber_version,
+                        sections=[
+                            Section(billnumber_version=billsections.
+                                    billnumber_version,
+                                    section_id=section.section_id,
+                                    label=section.label,
+                                    header=section.header,
+                                    similar_sections=[similar_section])
+                        ])
             else:
                 billToBills[similar_section.billnumber_version].sections.append(
                     Section(billnumber_version=billsections.billnumber_version,
