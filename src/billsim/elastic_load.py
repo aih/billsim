@@ -61,25 +61,36 @@ def indexBill(
   """
     try:
         billTree = etree.parse(billPath.filePath, parser=etree.XMLParser())
-    except:
+    except Exception as e:
+        logger.error('Exception: '.format(e))
         raise Exception('Could not parse bill: {}'.format(billPath.filePath))
     dublinCore = None
     defaultNS = getDefaultNamespace(billTree)
     if defaultNS and defaultNS == constants.NAMESPACE_USLM2:
+        logger.debug('INDEXING WITH USLM2')
+        logger.debug('defaultNS: {}'.format(defaultNS))
         dcdate = getText(
             billTree.xpath('//uslm:meta/dc:date',
                            namespaces={
                                'uslm': defaultNS,
-                               'dc': 'http://purl.org/dc/elements/1.1/'
+                               'dc': constants.NAMESPACE_DC
                            }))
-        congress = billTree.xpath('//uslm:meta/uslm:congress')
+        congress = billTree.xpath('//uslm:meta/uslm:congress',
+                                  namespaces={'uslm': defaultNS})
         congress_text = re.sub(r'[a-zA-Z ]+$', '', getText(congress))
-        session = billTree.xpath('//uslm:meta/uslm:session')
+        session = billTree.xpath('//uslm:meta/uslm:session',
+                                 namespaces={'uslm': defaultNS})
         session_text = re.sub(r'[a-zA-Z ]+$', '', getText(session))
         dc_type = billTree.xpath('//uslm:preface/dc:type',
-                                 namespaces={'uslm': defaultNS})
+                                 namespaces={
+                                     'uslm': defaultNS,
+                                     'dc': constants.NAMESPACE_DC
+                                 })
         docNumber = billTree.xpath('//uslm:preface/uslm:docNumber',
-                                   namespaces={'uslm': defaultNS})
+                                   namespaces={
+                                       'uslm': defaultNS,
+                                       'dc': constants.NAMESPACE_DC
+                                   })
         if dc_type and docNumber:
             legisnum_text = getText(dc_type) + ' ' + getText(docNumber)
         else:
@@ -89,13 +100,14 @@ def indexBill(
             billTree.xpath('//uslm:meta/dc:title',
                            namespaces={
                                'uslm': defaultNS,
-                               'dc': 'http://purl.org/dc/elements/1.1/'
+                               'dc': constants.NAMESPACE_DC
                            }))
         sections = billTree.xpath('//uslm:section',
                                   namespaces={'uslm': defaultNS})
         headers = billTree.xpath('//uslm:header',
                                  namespaces={'uslm': defaultNS})
     else:
+        logger.debug('NO NAMESPACE')
         dublinCores = billTree.xpath('//dublinCore')
         if (dublinCores is not None) and (len(dublinCores) > 0):
             dublinCore = etree.tostring(dublinCores[0],
@@ -104,9 +116,8 @@ def indexBill(
         else:
             dublinCore = ''
         dcdate = getText(
-            billTree.xpath(
-                '//dublinCore/dc:date',
-                namespaces={'dc': 'http://purl.org/dc/elements/1.1/'}))
+            billTree.xpath('//dublinCore/dc:date',
+                           namespaces={'dc': constants.NAMESPACE_DC}))
         # TODO find date for enr bills in the bill status (for the flat congress directory structure)
         if (dcdate is None
                 or len(dcdate) == 0) and '/data.xml' in billPath.filePath:
@@ -127,9 +138,8 @@ def indexBill(
         legisnum = billTree.xpath('//legis-num')
         legisnum_text = getText(legisnum)
         dctitle = getText(
-            billTree.xpath(
-                '//dublinCore/dc:title',
-                namespaces={'dc': 'http://purl.org/dc/elements/1.1/'}))
+            billTree.xpath('//dublinCore/dc:title',
+                           namespaces={'dc': constants.NAMESPACE_DC}))
         sections = billTree.xpath('//section')
         headers = billTree.xpath('//header')
 
@@ -173,9 +183,9 @@ def indexBill(
                 'section_id':
                     getId(section),
                 'section_number':
-                    getEnum(section),
+                    getEnum(section, defaultNS=defaultNS),
                 'section_header':
-                    getHeader(section),
+                    getHeader(section, defaultNS=defaultNS),
                 'section_text':
                     etree.tostring(section, method="text", encoding="unicode"),
                 'section_length':

@@ -162,6 +162,7 @@ def getBillXmlPaths(
     congressdir_obj = CONGRESS_DIRS[pathType]
     logger.info('Getting bill paths in {}, for congresses: {}'.format(
         congressDataDir, congresses))
+    logger.info('pathType: {}'.format(pathType))
 
     def getBillPath(
         dirName: str,

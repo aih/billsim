@@ -28,6 +28,7 @@ PATH_BILLSECTIONS_JSON = os.path.join(BASE_DIR, 'es/billsections_mapping.json')
 PATH_BILL_FULL_JSON = os.path.join(BASE_DIR, 'es/bill_full_mapping.json')
 
 # Namespaces
+NAMESPACE_DC = 'http://purl.org/dc/elements/1.1/'
 NAMESPACE_USLM = 'http://xml.house.gov/schemas/uslm/1.0'
 NAMESPACE_USLM2 = 'http://schemas.gpo.gov/xml/uslm'
 
@@ -152,8 +153,8 @@ CONGRESS_DIRS = {
         "isFileParent":
             isFileParent_CDG,
         "fileMatch":
-            lambda x: re.compile(r'BILLS-' + BILL_NUMBER_PART_REGEX + r'\.xml').
-            match(x) is not None
+            lambda x: re.compile(r'BILLS-' + BILL_NUMBER_PART_REGEX +
+                                 r'-uslm\.xml').match(x) is not None
     },
     "unitedstates": {
         "samplePath":

@@ -47,7 +47,7 @@ def test_getId():
 
 def test_getEnum():
     from billsim.utils import getEnum
-    enum = getEnum(section)
+    enum = getEnum(section, defaultNS=None)
     assert enum == "2."
 
 
