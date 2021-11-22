@@ -85,6 +85,24 @@ def billNumberVersionToBillPath(billnumber_version: str,
                     billnumber_version=billnumber_version)
 
 
+def getBillLengthbyPath(filePath: str):
+    if not os.path.isfile(filePath):
+        logger.error("Bill file does not exist: %s", filePath)
+        raise Exception("Bill file does not exist: %s", filePath)
+
+    doc_length = 0
+    with open(filePath, 'r') as f:
+        billText = f.read()
+        doc_length = len(billText)
+    return doc_length
+
+
+def getBillLength(billnumber_version: str, pathType=PATHTYPE_DEFAULT) -> int:
+    bill_path = billNumberVersionToBillPath(
+        billnumber_version=billnumber_version, pathType=pathType)
+    return getBillLengthbyPath(bill_path.filePath)
+
+
 def isDataJson(fileName: str) -> bool:
     return fileName == 'data.json'
 

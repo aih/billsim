@@ -10,7 +10,7 @@ from lxml import etree
 
 es = Elasticsearch()
 from billsim import constants
-from billsim.utils import billNumberVersionToBillPath, deep_get, getId, getHeader, getEnum
+from billsim.utils import billNumberVersionToBillPath, deep_get, getBillLengthbyPath, getId, getHeader, getEnum
 from billsim.pymodels import SectionMeta, Section
 
 logging.basicConfig(filename='bill_similarity.log', filemode='w', level='INFO')
@@ -69,25 +69,6 @@ def moreLikeThis(queryText: str,
                                    min_score=min_score,
                                    score_mode=score_mode)
     return runQuery(index=index, query=query, size=size)
-
-
-def getBillLengthbyPath(filePath: str):
-    if not os.path.isfile(filePath):
-        logger.error("Bill file does not exist: %s", filePath)
-        raise Exception("Bill file does not exist: %s", filePath)
-
-    doc_length = 0
-    with open(filePath, 'r') as f:
-        billText = f.read()
-        doc_length = len(billText)
-    return doc_length
-
-
-def getBillLength(billnumber_version: str,
-                  pathType=constants.PATHTYPE_DEFAULT) -> int:
-    bill_path = billNumberVersionToBillPath(
-        billnumber_version=billnumber_version, pathType=pathType)
-    return getBillLengthbyPath(bill_path.filePath)
 
 
 def getSimilarSections(

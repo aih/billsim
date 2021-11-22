@@ -3,7 +3,7 @@
 import sys
 import logging
 from sqlalchemy.orm import Session
-from billsim.bill_similarity import getBillLength
+from billsim.utils import getBillLength
 from billsim.database import SessionLocal
 from billsim import pymodels, constants
 
