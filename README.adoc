@@ -26,10 +26,13 @@ BillPath(billnumber_version='116hr1818ih', path='[abspath]/billsim/data/congress
 Install Elasticsearch (>=7.0.0 and <7.10.2). This can be done from docker as follows:
 ```
 $ docker pull docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
-$ docker run -m=4g -p 127.0.0.1:9200:9200 -p 127.0.0.1:9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2 &
 ```
 
-NOTE: using `podman` instead of docker on MacOs works better for me. Note also that the docker container memory may be limited, slowing down elasticsearch processes. In production, the docker-compose should set enough memory to ensure performance (-m=4g sets the max memory to 4Gb (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb) (-m=4g sets the max memory to 4Gb)).
+NOTE: using `podman` instead of docker on MacOs works better for me. Note also that the docker container memory may be limited, slowing down elasticsearch processes. In production, the docker-compose should set enough memory to ensure performance (-m=4g sets the max memory to 4Gb).
+
+```
+$ docker run -m=4g -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2 &
+```
 
 Then, in a virtualenv with all requirements installed, run the following commands in Python, from the `src` directory to create the index:
 

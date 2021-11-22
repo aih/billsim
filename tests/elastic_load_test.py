@@ -72,8 +72,6 @@ class TestBillSimilarity:
         #    except exceptions.NotFoundError:
         #        print('No index to delete: {0}'.format(index))
 
-    @pytest.mark.skip(
-        reason="Es query coming up empty when the first test deletes the index")
     def test_matchAllQuery(self):
         from billsim.bill_similarity import runQuery
         matchall_query = SAMPLE_MATCH_ALL_QUERY
