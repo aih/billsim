@@ -54,10 +54,13 @@ The `bill_similarity.py` script includes functions to find similar bills by bill
 Then you can run the following command to find similar bills (the bill itself should be found as the first result):
 ```python
 >>> from billsim.bill_similarity import getSimilarBillSections, getBillToBill
+>>> from billsim.utils_db import save_bill_to_bill 
 >>> s = getSimilarBillSections('116hr200ih')
 >>> b2b = getBillToBill(s)
 >>> b2b
 {'116hr200ih': BillToBillModel(id=None, billnumber_version='116hr200ih', length=7313, length_to=None, score_es=190.614846, score=None, score_to=None, reasons=None, billnumber_version_to='116hr200ih', identified_by=None, title=None, title_to=None, sections=[Section(billnumber_version='116hr200ih', section_id='HE90F34DBB44149C6B9BBD6747EB6F645', label='2.', header='Border wall trust fund', length=None, similar_sections=[SimilarSection(billnumber_version='116hr200ih', section_id='HE90F34DBB44149C6B9BBD6747EB6F645', label='2.', header='Border wall trust fund', length=1264, score_es=97.936806, score=None, score_to=None)]), Section(bill...
+>>> for bill in b2b:
+>>>    save_bill_to_bill(b2b[bill]) 
 ```
 
 ## Build and test
