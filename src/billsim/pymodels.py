@@ -2,10 +2,7 @@
 
 from sqlmodel import Field, SQLModel, Session, create_engine
 from typing import Optional
-try:
-    from billsim.database import engine
-except ImportError:
-    from .database import engine
+from billsim.database import engine
 
 
 class Status(SQLModel):
@@ -87,8 +84,8 @@ class BillToBillLite(SQLModel, table=True):
     score_to: Optional[float] = None
     reasons: Optional[list[str]] = None
     identified_by: Optional[str] = None
-    sections: Optional[
-        str] = None    # json converted to str; needs to be parsed upon retrieval
+    #sections: Optional[
+    #    str] = None
 
 
 def create_db_and_tables():
