@@ -2,9 +2,9 @@
 
 import sys, os
 import logging
-from elasticsearch import exceptions, Elasticsearch
+from elasticsearch import Elasticsearch
 
-from billsim.pymodels import BillPath, BillSections, SimilarSection, BillToBill
+from billsim.pymodels import BillPath, BillSections, SimilarSection, BillToBillModel
 from lxml import etree
 
 es = Elasticsearch()
@@ -219,19 +219,20 @@ def getBillToBill(billsections: BillSections) -> dict:
             if billnumber_version is None:
                 billnumber_version = ''
             if (billToBills.get(similar_section.billnumber_version) is None):
-                billToBills[similar_section.billnumber_version] = BillToBill(
-                    billnumber_version=billsections.billnumber_version,
-                    length=billsections.length,
-                    score_es=similar_section.score_es,
-                    billnumber_version_to=billnumber_version,
-                    sections=[
-                        Section(
-                            billnumber_version=billsections.billnumber_version,
-                            section_id=section.section_id,
-                            label=section.label,
-                            header=section.header,
-                            similar_sections=[similar_section])
-                    ])
+                billToBills[
+                    similar_section.billnumber_version] = BillToBillModel(
+                        billnumber_version=billsections.billnumber_version,
+                        length=billsections.length,
+                        score_es=similar_section.score_es,
+                        billnumber_version_to=billnumber_version,
+                        sections=[
+                            Section(billnumber_version=billsections.
+                                    billnumber_version,
+                                    section_id=section.section_id,
+                                    label=section.label,
+                                    header=section.header,
+                                    similar_sections=[similar_section])
+                        ])
             else:
                 billToBills[similar_section.billnumber_version].sections.append(
                     Section(billnumber_version=billsections.billnumber_version,
