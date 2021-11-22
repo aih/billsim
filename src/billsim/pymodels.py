@@ -27,7 +27,7 @@ class SectionMeta(SQLModel):
 class SimilarSection(SectionMeta):
     score_es: Optional[float] = None
     score: Optional[float] = None
-    score_other: Optional[float] = None
+    score_to: Optional[float] = None
 
 
 class Section(SectionMeta):
@@ -56,15 +56,15 @@ class BillToBillModel(SQLModel):
     bill_id: Optional[int] = Field(default=None,
                                    foreign_key="bill.id",
                                    primary_key=True)
-    bill_other_id: Optional[int] = Field(default=None,
-                                         foreign_key="bill.id",
-                                         primary_key=True)
+    bill_to_id: Optional[int] = Field(default=None,
+                                      foreign_key="bill.id",
+                                      primary_key=True)
     billnumber_version: str
     length: Optional[int] = None
     billnumber_version_to: str
     score_es: Optional[float] = None
     score: Optional[float] = None
-    score_other: Optional[float] = None
+    score_to: Optional[float] = None
     reasons: Optional[list[str]] = None
     identified_by: Optional[str] = None
     sections: list[
@@ -76,12 +76,12 @@ class BillToBillLite(SQLModel, table=True):
     bill_id: Optional[int] = Field(default=None,
                                    foreign_key="bill.id",
                                    primary_key=True)
-    bill_other_id: Optional[int] = Field(default=None,
-                                         foreign_key="bill.id",
-                                         primary_key=True)
+    bill_to_id: Optional[int] = Field(default=None,
+                                      foreign_key="bill.id",
+                                      primary_key=True)
     score_es: Optional[float] = None
     score: Optional[float] = None
-    score_other: Optional[float] = None
+    score_to: Optional[float] = None
     reasons: Optional[list[str]] = None
     identified_by: Optional[str] = None
     sections: Optional[

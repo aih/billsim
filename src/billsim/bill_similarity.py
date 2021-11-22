@@ -91,7 +91,7 @@ def getSimilarSections(
                 billnumber_version=deep_get(hitsHit, ["_source", "id"]),
                 score_es=hitsHit.get("_score", 0),
                 score=None,
-                score_other=None,
+                score_to=None,
                 section_id=deep_get(similar_section_hit,
                                     ["_source", "section_id"]),
                 label=deep_get(similar_section_hit,
