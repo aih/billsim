@@ -71,6 +71,25 @@ def moreLikeThis(queryText: str,
     return runQuery(index=index, query=query, size=size)
 
 
+def getBillLengthbyPath(filePath: str):
+    if not os.path.isfile(filePath):
+        logger.error("Bill file does not exist: %s", filePath)
+        raise Exception("Bill file does not exist: %s", filePath)
+
+    doc_length = 0
+    with open(filePath, 'r') as f:
+        billText = f.read()
+        doc_length = len(billText)
+    return doc_length
+
+
+def getBillLength(billnumber_version: str,
+                  pathType=constants.PATHTYPE_DEFAULT) -> int:
+    bill_path = billNumberVersionToBillPath(
+        billnumber_version=billnumber_version, pathType=pathType)
+    return getBillLengthbyPath(bill_path.filePath)
+
+
 def getSimilarSections(
         queryText: str,
         index: str = constants.INDEX_SECTIONS,
@@ -195,16 +214,9 @@ def getSimilarBillSections(
         else:
             raise Exception("bill_path or billnumber_version must be specified")
 
-    if not os.path.isfile(bill_path.filePath):
-        logger.error("Bill file does not exist: %s", bill_path.filePath)
-        raise Exception("Bill file does not exist: %s", bill_path.filePath)
-
+    doc_length = getBillLengthbyPath(bill_path.filePath)
     sectionsList = getSimilarDocSections(filePath=bill_path.filePath,
                                          docId=bill_path.billnumber_version)
-    doc_length = 0
-    with open(bill_path.filePath, 'r') as f:
-        billText = f.read()
-        doc_length = len(billText)
 
     return BillSections(billnumber_version=bill_path.billnumber_version,
                         length=doc_length,

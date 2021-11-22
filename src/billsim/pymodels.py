@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from sqlalchemy.sql.schema import UniqueConstraint
 from sqlmodel import Field, SQLModel, Session, create_engine
 from typing import Optional
 from billsim.database import engine
@@ -48,8 +49,15 @@ class SimilarSectionHit(SQLModel):
 
 class Bill(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    billnumber_version: str
     length: Optional[int] = None
+    billnumber: str
+    version: str
+
+    @classmethod
+    def getBillnumberversion(cls):
+        return "{cls.billnumber}{cls.version}".format(cls=cls)
+
+    UniqueConstraint('billnumber', 'version', name='billnumber_version')
 
 
 class BillToBillModel(SQLModel):

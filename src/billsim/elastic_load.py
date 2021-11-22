@@ -143,15 +143,15 @@ def indexBill(
         sections = billTree.xpath('//section')
         headers = billTree.xpath('//header')
 
-    billMatch = constants.BILL_NUMBER_REGEX_COMPILED.match(
+    billmatch = constants.BILL_NUMBER_REGEX_COMPILED.match(
         billPath.billnumber_version)
     billversion = ''
     billnumber = ''
-    if billMatch:
-        billMatchGroup = billMatch.groupdict()
-        billnumber = billMatchGroup.get('congress', '') + billMatchGroup.get(
-            'stage', '') + billMatchGroup.get('billnumber', '')
-        billversion = billMatchGroup.get('version', '')
+    if billmatch:
+        billmatch_dict = billmatch.groupdict()
+        billnumber = billmatch_dict.get('congress', '') + billmatch_dict.get(
+            'stage', '') + billmatch_dict.get('billnumber', '')
+        billversion = billmatch_dict.get('version', '')
     from collections import OrderedDict
     headers_text = [header.text for header in headers]
 
