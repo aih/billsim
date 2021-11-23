@@ -75,6 +75,8 @@ class BillToBillModel(SQLModel):
     score_to: Optional[float] = None
     reasons: Optional[list[str]] = None
     identified_by: Optional[str] = None
+    sections_num: Optional[int] = None
+    sections_match: Optional[int] = None
     sections: list[
         Section]    # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
 
@@ -92,6 +94,8 @@ class BillToBillLite(SQLModel, table=True):
     score_to: Optional[float] = None
     reasons: Optional[list[str]] = None
     identified_by: Optional[str] = None
+    sections_num: Optional[int] = None
+    sections_matched: Optional[int] = None
     #sections: Optional[
     #    str] = None
 

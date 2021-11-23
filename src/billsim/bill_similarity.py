@@ -225,6 +225,7 @@ def getBillToBill(billsections: BillSections) -> dict:
                         length=billsections.length,
                         score_es=similar_section.score_es,
                         billnumber_version_to=billnumber_version,
+                        sections_num=len(billsections.sections),
                         sections=[
                             Section(billnumber_version=billsections.
                                     billnumber_version,
@@ -243,4 +244,7 @@ def getBillToBill(billsections: BillSections) -> dict:
                 billToBills[
                     similar_section.
                     billnumber_version].score_es += similar_section.score_es
+    for billToBillKey in billToBills:
+        billToBills[billToBillKey].sections_match = len(
+            billToBills[billToBillKey].sections)
     return billToBills

@@ -141,7 +141,9 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
         score=bill_to_bill_model.score,
         score_to=bill_to_bill_model.score_to,
         reasons=bill_to_bill_model.reasons,
-        identified_by=bill_to_bill_model.identified_by)
+        identified_by=bill_to_bill_model.identified_by,
+        sections_num=bill_to_bill_model.sections_num,
+        sections_matched=bill_to_bill_model.sections_match)
     with db as session:
         session.add(bill_to_bill)
         session.commit()
