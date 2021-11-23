@@ -35,6 +35,11 @@ class Section(SectionMeta):
     similar_sections: list[SimilarSection]
 
 
+# This is the basis for making queries, using billsim.bill_similarity.py getSimilarSectionItem
+class QuerySection(SectionMeta):
+    query_text: str
+
+
 # Result of the similarity search, collecting top similar sections for each section of the bill
 class BillSections(SQLModel):
     billnumber_version: str

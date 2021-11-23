@@ -4,6 +4,7 @@ import sys
 import logging
 from elasticsearch import exceptions, Elasticsearch
 from billsim import constants
+from billsim.pymodels import SectionMeta, QuerySection
 
 es = Elasticsearch()
 
@@ -109,7 +110,36 @@ def getBill_es(billnumber: str,
             query['query']['match']['billnumber'] = billnumber
             res = runQuery(index=index, query=query)
 
-        return [item['_source'] for item in getHitsHits(res)]
+        if res.get('_source'):
+            return [res['_source']]
+        else:
+            return [item['_source'] for item in getHitsHits(res)]
     except exceptions.NotFoundError:
         logger.error(f'No bill found in db for {billnumber}')
         return None
+
+
+def esSourceToQueryData(source: dict) -> list[QuerySection]:
+    """
+    Convert the _source field of an Elasticsearch document to a list of bill sections.
+    Args:
+        source (dict): _source field of an Elasticsearch document.
+
+    Returns:
+        list[QuerySection]: a list of items with SectionMeta and query_text.
+    """
+
+    # In general, the billnumber_version is also the `id` of the es source.
+    billnumber_version = source['billnumber'] + source['billversion']
+    sections = source.get('sections')
+    if sections is None or len(sections) == 0:
+        return []
+    return [
+        QuerySection(billnumber_version=billnumber_version,
+                     section_id=section.get('section_id', ''),
+                     label=section.get('section_number', ''),
+                     header=section.get('section_header', ''),
+                     length=section.get('section_length', 0),
+                     query_text=section.get('section_text'))
+        for section in sections
+    ]

@@ -6,7 +6,7 @@ import re
 import logging
 from typing import List
 
-from billsim.constants import PATHTYPE_DEFAULT, PATHTYPE_OBJ, CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS
+from billsim.constants import PATHTYPE_DEFAULT, PATHTYPE_OBJ, CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS, BILL_NUMBER_PART_REGEX_COMPILED
 from billsim.pymodels import BillPath
 
 import traceback
@@ -74,6 +74,32 @@ def getHeader(section, defaultNS=None) -> str:
     if len(headerpath) > 0:
         return headerpath[0].text
     return ''
+
+
+def getBillnumberversionParts(billnumber_version: str) -> dict:
+    """
+    Split a billnumber_version string into its parts.
+
+    Args:
+        billnumber_version (str): billnumber_version string of the form '117hr2222enr' 
+
+    Raises:
+        ValueError: if the billnumber_version does not match the BILL_NUMBER_PART_REGEX_COMPILED format.
+
+    Returns:
+        dict: {'billnumber': xxx, 'version': xxx}} 
+    """
+    billmatch = BILL_NUMBER_PART_REGEX_COMPILED.match(billnumber_version)
+    if billmatch is None:
+        raise ValueError(
+            'Billnumber version not of the correct form: {}'.format(
+                billnumber_version))
+    else:
+        billmatch_dict = billmatch.groupdict()
+        return {
+            'billnumber': '{congress}{stage}{number}'.format(**billmatch_dict),
+            'version': billmatch_dict.get('version', '')
+        }
 
 
 def billNumberVersionToBillPath(billnumber_version: str,

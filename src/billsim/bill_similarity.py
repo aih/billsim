@@ -4,8 +4,10 @@ import sys, os
 import logging
 from elasticsearch import Elasticsearch
 
-from billsim.pymodels import BillPath, BillSections, SimilarSection, BillToBillModel
+from billsim.pymodels import BillPath, BillSections, SimilarSection, BillToBillModel, QuerySection
 from billsim.elastic_load import getDefaultNamespace
+from billsim.utils import getBillnumberversionParts
+from billsim.utils_es import getBill_es, esSourceToQueryData
 from lxml import etree
 
 es = Elasticsearch()
@@ -196,3 +198,45 @@ def getBillToBill(billsections: BillSections) -> dict:
         billToBills[billToBillKey].sections_match = len(
             billToBills[billToBillKey].sections)
     return billToBills
+
+
+# *****************************************************************************
+# *****************************  Use ES document to get similar bills  ******************************
+# *****************************************************************************
+# Steps:
+# 1. Get bill by billnumber and version (utils_es.getBill_es)
+# 2. Convert es result to (utils_es.esSourceToQueryData)
+# 3. Get similar sections for each section in the bill (getSimilarSectionItemFromQuerySection)
+
+
+def getSimilarSectionItemFromQuerySection(
+        querySection: QuerySection) -> Section:
+    return getSimilarSectionItem(
+        queryText=querySection.query_text,
+        sectionMeta=SectionMeta(
+            billnumber_version=querySection.billnumber_version,
+            section_id=querySection.section_id,
+            label=querySection.label,
+            header=querySection.header,
+            length=querySection.length))
+
+
+def getSimilarBillSections_es(billnumber_version: str = None) -> BillSections:
+    if billnumber_version is None:
+        raise Exception("billnumber_version must be specified")
+    bnv = getBillnumberversionParts(billnumber_version)
+    billnumber = bnv.get('billnumber', '')
+    version = bnv.get('version', '')
+    logger.info(f"getSimilarBillSections_es for: {billnumber} {version} ")
+    if billnumber and version:
+        bill = getBill_es(billnumber=billnumber, version=version)
+        if bill is None:
+            raise Exception(f"Bill not found: {billnumber_version}")
+        billItem = bill[0]
+        return BillSections(
+            billnumber_version=billnumber_version,
+            length=billItem.get('length', 0),
+            sections=[
+                getSimilarSectionItemFromQuerySection(querySection)
+                for querySection in esSourceToQueryData(billItem)
+            ])

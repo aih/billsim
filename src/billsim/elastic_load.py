@@ -8,7 +8,7 @@ from lxml import etree
 from elasticsearch import exceptions, Elasticsearch
 
 es = Elasticsearch()
-from billsim.utils import getBillXmlPaths, getId, getHeader, getEnum, getText
+from billsim.utils import getBillXmlPaths, getBillLengthbyPath, getId, getHeader, getEnum, getText
 from billsim import constants
 from billsim.pymodels import Status, BillPath
 
@@ -66,6 +66,7 @@ def indexBill(
     except Exception as e:
         logger.error('Exception: '.format(e))
         raise Exception('Could not parse bill: {}'.format(billPath.filePath))
+    length = getBillLengthbyPath(billPath.filePath)
     dublinCore = None
     defaultNS = getDefaultNamespace(billTree)
     if defaultNS and defaultNS == constants.NAMESPACE_USLM2:
@@ -168,6 +169,8 @@ def indexBill(
                 congress_text,
             'session':
                 session_text,
+            'length':
+                length,
             'dctitle':
                 dctitle,
             'date':
@@ -180,6 +183,8 @@ def indexBill(
                 billversion,
             'headers':
                 list(OrderedDict.fromkeys(headers_text)),
+            'sections_num':
+                len(sections),
             'sections': [{
                 'section_id':
                     getId(section),
@@ -223,6 +228,8 @@ def indexBill(
             'id': billPath.billnumber_version,
             'congress': congress_text,
             'session': session_text,
+            'length': length,
+            'sections_num': len(sections),
             'dc': dublinCore,
             'dctitle': dctitle,
             'date': dcdate,
@@ -261,8 +268,6 @@ def initializeBillSectionsIndex(delete_index=False):
     logger.info('Indexing {0} bills'.format(len(billPaths)))
     for billPath in billPaths:
         try:
-            # TODO get number of sections and length
-            # and add bill to db
             indexBill(billPath)
         except Exception as e:
             logger.error('Failed to index bill {0}'.format(
