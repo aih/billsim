@@ -240,3 +240,7 @@ def getSimilarBillSections_es(billnumber_version: str = None) -> BillSections:
                 getSimilarSectionItemFromQuerySection(querySection)
                 for querySection in esSourceToQueryData(billItem)
             ])
+    else:
+        raise Exception(
+            f"billnumber_version is not of the correct form: {billnumber_version}"
+        )

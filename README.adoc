@@ -77,6 +77,8 @@ Then you can run the following command to find similar bills (the bill itself sh
 >>>    save_bill_to_bill(b2b[bill]) 
 ```
 
+To get similar bills starting with a bill stored in ES, use the `getSimilarBillSections_es` function.
+
 ## Build and test
 
 Tests, built with `pytest` are found in the `tests` directory. To run the tests, run `make` (requires cmake and pytest installed) or run `pytest -rs tests` directly. 
