@@ -146,8 +146,6 @@ def walkBillDirs(rootDir=PATH_TO_CONGRESSDATA_DIR,
   """
     logger.debug("WalkDirs called with the following arguments:")
     logger.debug(locals())
-    print("WalkDirs called with the following arguments:")
-    print(locals())
     accumulator = []
     processedNum = 0
     for dirName, _, fileList in os.walk(rootDir):

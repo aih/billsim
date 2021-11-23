@@ -78,17 +78,42 @@ def test_billNumberVersionToBillPath():
                                              'BILLS-116hr2005ih-uslm.xml')
 
 
+def getBillPath_ext(pathType: str,):
+
+    def _getBillPath_(
+        dirName: str,
+        fileName: str,
+    ) -> BillPath:
+
+        # Add billnumber and billnumber_version to the return value
+        billpath = os.path.join(dirName, fileName)
+        billnumber_version = constants.CONGRESS_DIRS[pathType][
+            "pathToBillnumberVersion"](billpath)
+        return BillPath(filePath=billpath,
+                        fileName=fileName,
+                        billnumber_version=billnumber_version)
+
+    return _getBillPath_
+
+
 def test_walkBillDirs(rootDir=CONGRESS_PATH_TEST):
     from billsim.utils import walkBillDirs
-    billDirs = walkBillDirs(rootDir=rootDir)
+    from billsim.constants import CONGRESS_DIRS as cd
+    CDG = cd['congressdotgov']
+    billDirs = walkBillDirs(rootDir=rootDir,
+                            dirMatch=CDG['isFileParent'],
+                            fileMatch=CDG['fileMatch'],
+                            processFile=getBillPath_ext('congressdotgov'))
     assert len(billDirs) >= 27
+    print(billDirs[2])
     assert billDirs[2].billnumber_version == "116hr2005ih"
     assert billDirs[2].fileName == "BILLS-116hr2005ih-uslm.xml"
 
 
 def test_getBillXmlPaths(congressDataDir=CONGRESS_PATH_TEST):
     from billsim.utils import getBillXmlPaths
-    billDirs = getBillXmlPaths(congressDataDir=congressDataDir)
+    billDirs = getBillXmlPaths(congressDataDir=congressDataDir,
+                               pathType='congressdotgov')
     assert len(billDirs) >= 27
     assert billDirs[2].billnumber_version == "116hr2005ih"
     assert billDirs[2].fileName == "BILLS-116hr2005ih-uslm.xml"
