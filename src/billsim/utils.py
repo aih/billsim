@@ -9,9 +9,16 @@ from typing import List
 from billsim.constants import PATHTYPE_DEFAULT, PATHTYPE_OBJ, CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS
 from billsim.pymodels import BillPath
 
+import traceback
+
 logging.basicConfig(filename='utils.log', filemode='w', level='INFO')
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
+
+
+def get_traceback(e):
+    lines = traceback.format_exception(type(e), e, e.__traceback__)
+    return ''.join(lines)
 
 
 def deep_get(d, keys, default=None):
@@ -49,7 +56,7 @@ def getId(section) -> str:
     return section.get('id', '')
 
 
-def getEnum(section, defaultNS) -> str:
+def getEnum(section, defaultNS=None) -> str:
     if defaultNS is not None:
         enumpath = section.xpath('ns:enum', namespaces={'ns': defaultNS})
     else:
@@ -59,7 +66,7 @@ def getEnum(section, defaultNS) -> str:
     return ''
 
 
-def getHeader(section, defaultNS) -> str:
+def getHeader(section, defaultNS=None) -> str:
     if defaultNS is not None:
         headerpath = section.xpath('header', namespaces={'ns': defaultNS})
     else:

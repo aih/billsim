@@ -30,6 +30,20 @@ $ docker pull docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
 
 NOTE: using `podman` instead of docker on MacOs works better for me. Note also that the docker container memory may be limited, slowing down elasticsearch processes. In production, the docker-compose should set enough memory to ensure performance (-m=4g sets the max memory to 4Gb).
 
+Memory settings for elasticsearch (set in Kibana). These are necessary or ES returns errors during high-volume indexing and processing of documents:
+
+```
+PUT _cluster/settings
+{
+   "transient": {
+       "cluster.routing.allocation.disk.watermark.low": "100gb",
+       "cluster.routing.allocation.disk.watermark.high": "50gb",
+       "cluster.routing.allocation.disk.watermark.flood_stage": "10gb",
+       "cluster.info.update.interval": "1m"
+   }
+}
+```
+
 ```
 $ docker run -m=4g -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2 &
 ```

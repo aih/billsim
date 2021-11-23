@@ -12,6 +12,8 @@ from billsim.utils import getBillXmlPaths, getId, getHeader, getEnum, getText
 from billsim import constants
 from billsim.pymodels import Status, BillPath
 
+from billsim.utils import get_traceback
+
 logging.basicConfig(filename='elastic_load.log', filemode='w', level='INFO')
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -182,9 +184,9 @@ def indexBill(
                 'section_id':
                     getId(section),
                 'section_number':
-                    getEnum(section, defaultNS=defaultNS),
+                    getEnum(section),
                 'section_header':
-                    getHeader(section, defaultNS=defaultNS),
+                    getHeader(section),
                 'section_text':
                     etree.tostring(section, method="text", encoding="unicode"),
                 'section_length':
