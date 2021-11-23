@@ -149,8 +149,7 @@ def indexBill(
     billnumber = ''
     if billmatch:
         billmatch_dict = billmatch.groupdict()
-        billnumber = billmatch_dict.get('congress', '') + billmatch_dict.get(
-            'stage', '') + billmatch_dict.get('billnumber', '')
+        billnumber = '{congress}{stage}{billnumber}'.format(**billmatch_dict)
         billversion = billmatch_dict.get('version', '')
     from collections import OrderedDict
     headers_text = [header.text for header in headers]

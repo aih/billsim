@@ -18,6 +18,8 @@ PATH_TO_DATA_DIR = os.getenv(
     'PATH_TO_DATA_DIR',
     os.path.join('/', *"/usr/local/share/billsim/public/data".split('/')))
 
+# Parent of the /115, /116, /117 directories
+# May be the same as the PATH_TO_DATA_DIR (e.g. for the `unitedstates` pathType)
 PATH_TO_CONGRESSDATA_DIR = os.getenv('PATH_TO_CONGRESS_DATA_DIR',
                                      default=os.path.join(
                                          PATH_TO_DATA_DIR, 'congress'))
@@ -87,8 +89,8 @@ USCONGRESS_XML_FILE = 'document.xml'
 
 
 # CDG = congress.gov
-def billNumberVersionFromPath_CDG(path: str):
-    match = BILL_NUMBER_PART_REGEX_COMPILED.search(path)
+def billNumberVersionFromPath_CDG(billpath: str):
+    match = BILL_NUMBER_PART_REGEX_COMPILED.search(billpath)
     if match:
         return match.group(0)
     else:
@@ -105,19 +107,19 @@ def billNumberVersionToPath_CDG(billnumber_version: str):
 
 
 # data/117/bills/hr200/
-def isFileParent_CDG(path: str):
-    match = BILL_DIR_REGEX_CDG_COMPILED.search(path)
+def isFileParent_CDG(billpath: str):
+    match = BILL_DIR_REGEX_CDG_COMPILED.search(billpath)
     if match:
         return True
     else:
         return False
 
 
-def billNumberVersionFromPath_USCONGRESS(path: str):
-    match = US_CONGRESS_PATH_REGEX_COMPILED.search(path)
+def billNumberVersionFromPath_USCONGRESS(billpath: str) -> str:
+    match = US_CONGRESS_PATH_REGEX_COMPILED.search(billpath)
     if match:
         return '{congress}{stage}{billnumber}{version}'.format(
-            match.groupdict())
+            **match.groupdict())
     else:
         return ''
 

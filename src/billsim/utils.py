@@ -9,7 +9,7 @@ from typing import List
 from billsim.constants import PATHTYPE_DEFAULT, PATHTYPE_OBJ, CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS
 from billsim.pymodels import BillPath
 
-logging.basicConfig(filename='utils.log', filemode='w', level='INFO')
+logging.basicConfig(filename='utils.log', filemode='w', level='DEBUG')
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
@@ -188,8 +188,9 @@ def getBillXmlPaths(
     ) -> BillPath:
         # Add billnumber and billnumber_version to the return value
         billpath = os.path.join(dirName, fileName)
+        logger.debug('billpath: {0}'.format(billpath))
         billnumber_version = CONGRESS_DIRS[pathType]["pathToBillnumberVersion"](
-            billpath)
+            billpath=billpath)
         return BillPath(filePath=billpath,
                         fileName=fileName,
                         billnumber_version=billnumber_version)
