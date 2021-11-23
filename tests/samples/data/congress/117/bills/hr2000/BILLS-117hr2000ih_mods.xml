@@ -1,0 +1,265 @@
+<mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd" ID="P0b002ee1ae27e696">
+<name type="corporate">
+ <namePart>United States Government Publishing Office</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">publisher</roleTerm>
+  <roleTerm authority="marcrelator" type="code">pbl</roleTerm>
+</role>
+ <role>
+  <roleTerm authority="marcrelator" type="text">distributor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">dst</roleTerm>
+</role>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">author</roleTerm>
+  <roleTerm authority="marcrelator" type="code">aut</roleTerm>
+</role>
+ <description>Government Organization</description>
+</name>
+<typeOfResource>text</typeOfResource>
+<genre authority="marcgt">government publication</genre>
+<language>
+ <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</language>
+<extension>
+ <collectionCode>BILLS</collectionCode>
+ <searchTitle>To amend section 230 of the Communications Act of 1934 to clarify that such section does not prevent a provider or user of an interactive computer service from being treated as the distributor of information provided by another information content provider, and for other purposes.;Stop Shielding Culpable Platforms Act;H.R. 2000 (IH)
+    </searchTitle>
+ <category>Bills and Statutes</category>
+ <waisDatabaseName>117_cong_bills</waisDatabaseName>
+ <branch>legislative</branch>
+ <dateIngested>2021-05-18</dateIngested>
+</extension>
+<titleInfo>
+ <title>To amend section 230 of the Communications Act of 1934 to clarify that such section does not prevent a provider or user of an interactive computer service from being treated as the distributor of information provided by another information content provider, and for other purposes.</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>Stop Shielding Culpable Platforms Act</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>H.R. 2000 (IH)
+    </title>
+</titleInfo>
+<originInfo>
+ <publisher>U.S. Government Publishing Office</publisher>
+ <dateIssued encoding="w3cdtf">2021-03-18</dateIssued>
+ <issuance>monographic</issuance>
+</originInfo>
+<physicalDescription>
+ <note type="source content type">deposited</note>
+ <digitalOrigin>born digital</digitalOrigin>
+ <extent>4 p.</extent>
+</physicalDescription>
+<classification authority="sudocs">Y 1.6:</classification>
+<classification authority="sudocs">Y 1.4/6:</classification>
+<identifier type="local">P0b002ee1ae27e696</identifier>
+<identifier type="uri">https://www.govinfo.gov/app/details/BILLS-117hr2000ih</identifier>
+<identifier type="preferred citation">H.R. 2000</identifier>
+<identifier type="stock number">021-610-00252-9</identifier>
+<identifier type="Parent ILS system id">000501532</identifier>
+<identifier type="Child ILS system id">000325573</identifier>
+<identifier type="Parent ILS title">Congressional bills</identifier>
+<identifier type="Child ILS title">House bills</identifier>
+<identifier type="former package identifier">f:h2000_ih.txt</identifier>
+<location>
+ <url displayLabel="Content Detail" access="object in context">https://www.govinfo.gov/app/details/BILLS-117hr2000ih</url>
+ <url displayLabel="HTML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr2000ih/html/BILLS-117hr2000ih.htm</url>
+ <url displayLabel="PDF rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr2000ih/pdf/BILLS-117hr2000ih.pdf</url>
+ <url displayLabel="XML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr2000ih/xml/BILLS-117hr2000ih.xml</url>
+</location>
+<accessCondition type="GPO scope determination">fdlp</accessCondition>
+<recordInfo>
+ <recordContentSource authority="marcorg">DGPO</recordContentSource>
+ <recordCreationDate encoding="w3cdtf">2021-05-18</recordCreationDate>
+ <recordChangeDate encoding="w3cdtf">2021-05-18</recordChangeDate>
+ <recordIdentifier source="DGPO">BILLS-117hr2000ih</recordIdentifier>
+ <recordOrigin>machine generated</recordOrigin>
+ <languageOfCataloging>
+  <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</languageOfCataloging>
+</recordInfo>
+<name type="personal">
+ <namePart>Jim Banks</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm authority="marcrelator" type="text">sponsor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">spn</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Thomas P. Tiffany</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Guy Reschenthaler</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Andy Barr</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Ralph Norman</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Randy K. Weber, Sr.</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Dan Bishop</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Brian Babin</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Bob Gibbs</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <namePart>Committee on Energy and Commerce</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">associated name</roleTerm>
+  <roleTerm authority="marcrelator" type="code">asn</roleTerm>
+</role>
+</name>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Code</title>
+  <partNumber>Title 47 Section 230</partNumber>
+  <partNumber>Title 47 Section 230(c)(1)</partNumber>
+</titleInfo>
+ <identifier type="USC citation">47 U.S.C. 230</identifier>
+ <identifier type="USC citation">47 U.S.C. 230(c)(1)</identifier>
+</relatedItem>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Statutes at Large</title>
+  <partNumber>Volume 110 Page 133</partNumber>
+</titleInfo>
+ <identifier type="Statute citation">110 Stat. 133</identifier>
+</relatedItem>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Public Law 104 (104th Congress)</title>
+</titleInfo>
+ <identifier type="public law citation">Public Law 104-104</identifier>
+</relatedItem>
+<extension>
+ <docClass>hr</docClass>
+ <accessId>BILLS-117hr2000ih</accessId>
+ <congress>117</congress>
+ <session>1</session>
+ <originChamber>HOUSE</originChamber>
+ <currentChamber>HOUSE</currentChamber>
+ <billNumber>2000</billNumber>
+ <billVersion reprint="false">ih</billVersion>
+ <fileSuffix>ih</fileSuffix>
+ <shortTitle type="measure">Stop Shielding Culpable Platforms Act</shortTitle>
+ <officialTitle>To amend section 230 of the Communications Act of 1934 to clarify that such section does not prevent a provider or user of an interactive computer service from being treated as the distributor of information provided by another information content provider, and for other purposes.</officialTitle>
+ <action date="2021-03-18">Mr. Banks (for himself, Mr. Tiffany, Mr. Reschenthaler, Mr. Barr, Mr. Norman, Mr. Weber of Texas, Mr. Bishop of North Carolina, Mr. Babin, and Mr. Gibbs) introduced the following bill; which was referred to the Committee on Energy and Commerce</action>
+ <congCommittee authorityId="hsif00" chamber="H" congress="117" type="S">
+                      <name type="authority-standard">Committee on Energy and Commerce</name>
+                      <name type="authority-short">Energy and Commerce</name>
+                </congCommittee>
+ <congMember authorityId="2326" bioGuideId="B001299" chamber="H" congress="117" party="R" role="SPONSOR" state="IN">
+                      <name type="parsed">Mr. Banks</name>
+                      <name type="authority-fnf">Jim Banks</name>
+                      <name type="authority-lnf">Banks, Jim</name>
+                </congMember>
+ <congMember authorityId="2480" bioGuideId="T000165" chamber="H" congress="117" party="R" role="COSPONSOR" state="WI">
+                      <name type="parsed">Mr. Tiffany</name>
+                      <name type="authority-fnf">Thomas P. Tiffany</name>
+                      <name type="authority-lnf">Tiffany, Thomas P.</name>
+                      <name type="authority-other">Thomas Tiffany</name>
+                </congMember>
+ <congMember authorityId="2436" bioGuideId="R000610" chamber="H" congress="117" party="R" role="COSPONSOR" state="PA">
+                      <name type="parsed">Mr. Reschenthaler</name>
+                      <name type="authority-fnf">Guy Reschenthaler</name>
+                      <name type="authority-lnf">Reschenthaler, Guy</name>
+                </congMember>
+ <congMember authorityId="2131" bioGuideId="B001282" chamber="H" congress="117" party="R" role="COSPONSOR" state="KY">
+                      <name type="parsed">Mr. Barr</name>
+                      <name type="authority-fnf">Andy Barr</name>
+                      <name type="authority-lnf">Barr, Andy</name>
+                </congMember>
+ <congMember authorityId="2361" bioGuideId="N000190" chamber="H" congress="117" party="R" role="COSPONSOR" state="SC">
+                      <name type="parsed">Mr. Norman</name>
+                      <name type="authority-fnf">Ralph Norman</name>
+                      <name type="authority-lnf">Norman, Ralph</name>
+                </congMember>
+ <congMember authorityId="2161" bioGuideId="W000814" chamber="H" congress="117" party="R" role="COSPONSOR" state="TX">
+                      <name type="parsed">Mr. Weber of Texas</name>
+                      <name type="authority-fnf">Randy K. Weber, Sr.</name>
+                      <name type="authority-lnf">Weber, Randy K., Sr.</name>
+                      <name type="authority-other">Mr. Randy Weber Sr.</name>
+                </congMember>
+ <congMember authorityId="2473" bioGuideId="B001311" chamber="H" congress="117" party="R" role="COSPONSOR" state="NC">
+                      <name type="parsed">Mr. Bishop of North Carolina</name>
+                      <name type="authority-fnf">Dan Bishop</name>
+                      <name type="authority-lnf">Bishop, Dan</name>
+                </congMember>
+ <congMember authorityId="2270" bioGuideId="B001291" chamber="H" congress="117" party="R" role="COSPONSOR" state="TX">
+                      <name type="parsed">Mr. Babin</name>
+                      <name type="authority-fnf">Brian Babin</name>
+                      <name type="authority-lnf">Babin, Brian</name>
+                </congMember>
+ <congMember authorityId="2049" bioGuideId="G000563" chamber="H" congress="117" gpoId="8108" party="R" role="COSPONSOR" state="OH">
+                      <name type="parsed">Mr. Gibbs</name>
+                      <name type="authority-fnf">Bob Gibbs</name>
+                      <name type="authority-lnf">Gibbs, Bob</name>
+                </congMember>
+ <law congress="104" isPrivate="false" number="104"></law>
+ <isPrivate>false</isPrivate>
+ <isAppropriation>false</isAppropriation>
+ <USCode title="47">
+                      <section number="230"></section>
+                      <section detail="(c)(1)" number="230"></section>
+                </USCode>
+ <statuteAtLarge volume="110">
+                      <pages pages="133"></pages>
+                </statuteAtLarge>
+</extension>
+</mods>

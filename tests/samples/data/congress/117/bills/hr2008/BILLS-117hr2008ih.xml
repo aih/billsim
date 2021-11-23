@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="billres.xsl"?>
+<!DOCTYPE bill PUBLIC "-//US Congress//DTDs/bill.dtd//EN" "bill.dtd">
+<bill bill-stage="Introduced-in-House" dms-id="H624C4C3DF5634D439C60937B73E0BCBE" public-private="public" key="H" bill-type="olc"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+<dublinCore>
+<dc:title>117 HR 2008 IH: Local Water Protection Act</dc:title>
+<dc:publisher>U.S. House of Representatives</dc:publisher>
+<dc:date>2021-03-18</dc:date>
+<dc:format>text/xml</dc:format>
+<dc:language>EN</dc:language>
+<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>
+</dublinCore>
+</metadata>
+<form>
+<distribution-code display="yes">I</distribution-code><congress display="yes">117th CONGRESS</congress><session display="yes">1st Session</session><legis-num display="yes">H. R. 2008</legis-num><current-chamber>IN THE HOUSE OF REPRESENTATIVES</current-chamber><action display="yes"><action-date date="20210318">March 18, 2021</action-date><action-desc><sponsor name-id="C001119">Ms. Craig</sponsor> (for herself and <cosponsor name-id="M001199">Mr. Mast</cosponsor>) introduced the following bill; which was referred to the <committee-name committee-id="HPW00">Committee on Transportation and Infrastructure</committee-name></action-desc></action><legis-type>A BILL</legis-type><official-title display="yes">To amend the Federal Water Pollution Control Act to reauthorize certain programs relating to nonpoint source management, and for other purposes.</official-title></form><legis-body id="HCFE5BD4FB5424788816832649FA9676C" style="OLC"><section id="HF11DCBBCE2D540D69A009E9D088B3134" section-type="section-one"><enum>1.</enum><header>Short title</header><text display-inline="no-display-inline">This Act may be cited as the <quote><short-title>Local Water Protection Act</short-title></quote>.</text></section><section id="HBFF36D255B394EE2AD34A68674BA345F" section-type="subsequent-section"><enum>2.</enum><header>Nonpoint source management programs</header><text display-inline="no-display-inline">Section 319(j) of the Federal Water Pollution Control Act (<external-xref legal-doc="usc" parsable-cite="usc/33/1329">33 U.S.C. 1329(j)</external-xref>) is amended by striking <quote>subsections (h) and (i) not to exceed</quote> and all that follows through <quote>fiscal year 1991</quote> and inserting <quote>subsections (h) and (i) $200,000,000 for each of fiscal years 2022 through 2026</quote>.</text></section></legis-body></bill> 
+

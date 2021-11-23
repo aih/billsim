@@ -1,0 +1,217 @@
+<mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd" ID="P0b002ee1a049418d">
+<name type="corporate">
+ <namePart>United States Government Publishing Office</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">publisher</roleTerm>
+  <roleTerm authority="marcrelator" type="code">pbl</roleTerm>
+</role>
+ <role>
+  <roleTerm authority="marcrelator" type="text">distributor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">dst</roleTerm>
+</role>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">author</roleTerm>
+  <roleTerm authority="marcrelator" type="code">aut</roleTerm>
+</role>
+ <description>Government Organization</description>
+</name>
+<typeOfResource>text</typeOfResource>
+<genre authority="marcgt">government publication</genre>
+<language>
+ <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</language>
+<extension>
+ <collectionCode>BILLS</collectionCode>
+ <searchTitle>To establish a public health plan.;Medicare-X Choice Act of 2019;H.R. 2000 (IH)
+    </searchTitle>
+ <category>Bills and Statutes</category>
+ <waisDatabaseName>116_cong_bills</waisDatabaseName>
+ <branch>legislative</branch>
+ <dateIngested>2019-04-09</dateIngested>
+</extension>
+<titleInfo>
+ <title>To establish a public health plan.</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>Medicare-X Choice Act of 2019</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>H.R. 2000 (IH)
+    </title>
+</titleInfo>
+<originInfo>
+ <publisher>U.S. Government Publishing Office</publisher>
+ <dateIssued encoding="w3cdtf">2019-04-01</dateIssued>
+ <issuance>monographic</issuance>
+</originInfo>
+<physicalDescription>
+ <note type="source content type">deposited</note>
+ <digitalOrigin>born digital</digitalOrigin>
+ <extent>18 p.</extent>
+</physicalDescription>
+<classification authority="sudocs">Y 1.6:</classification>
+<classification authority="sudocs">Y 1.4/6:</classification>
+<identifier type="local">P0b002ee1a049418d</identifier>
+<identifier type="uri">https://www.govinfo.gov/app/details/BILLS-116hr2000ih</identifier>
+<identifier type="preferred citation">H.R. 2000</identifier>
+<identifier type="stock number">021-610-00252-9</identifier>
+<identifier type="Parent ILS system id">000501532</identifier>
+<identifier type="Child ILS system id">000325573</identifier>
+<identifier type="Parent ILS title">Congressional bills</identifier>
+<identifier type="Child ILS title">House bills</identifier>
+<identifier type="former package identifier">f:h2000_ih.txt</identifier>
+<location>
+ <url displayLabel="Content Detail" access="object in context">https://www.govinfo.gov/app/details/BILLS-116hr2000ih</url>
+ <url displayLabel="HTML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-116hr2000ih/html/BILLS-116hr2000ih.htm</url>
+ <url displayLabel="PDF rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-116hr2000ih/pdf/BILLS-116hr2000ih.pdf</url>
+ <url displayLabel="XML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-116hr2000ih/xml/BILLS-116hr2000ih.xml</url>
+</location>
+<accessCondition type="GPO scope determination">fdlp</accessCondition>
+<recordInfo>
+ <recordContentSource authority="marcorg">DGPO</recordContentSource>
+ <recordCreationDate encoding="w3cdtf">2019-04-09</recordCreationDate>
+ <recordChangeDate encoding="w3cdtf">2019-04-09</recordChangeDate>
+ <recordIdentifier source="DGPO">BILLS-116hr2000ih</recordIdentifier>
+ <recordOrigin>machine generated</recordOrigin>
+ <languageOfCataloging>
+  <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</languageOfCataloging>
+</recordInfo>
+<name type="personal">
+ <namePart>Antonio Delgado</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm authority="marcrelator" type="text">sponsor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">spn</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>John B. Larson</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Brian Higgins</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <namePart>Committee on Energy and Commerce</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">associated name</roleTerm>
+  <roleTerm authority="marcrelator" type="code">asn</roleTerm>
+</role>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <namePart>Committee on Ways and Means</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">associated name</roleTerm>
+  <roleTerm authority="marcrelator" type="code">asn</roleTerm>
+</role>
+</name>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Code</title>
+  <partNumber>Title 38 Section 3452(f)</partNumber>
+</titleInfo>
+ <identifier type="USC citation">38 U.S.C. 3452(f)</identifier>
+</relatedItem>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Code</title>
+  <partNumber>Title 42 Section 1320d-2note</partNumber>
+  <partNumber>Title 42 Section 1395w-111</partNumber>
+  <partNumber>Title 42 Section 18021et seq.</partNumber>
+  <partNumber>Title 42 Section 18022(d)(1)</partNumber>
+  <partNumber>Title 42 Section 18031</partNumber>
+  <partNumber>Title 42 Section 18032</partNumber>
+  <partNumber>Title 42 Section 18041</partNumber>
+  <partNumber>Title 42 Section 18063</partNumber>
+  <partNumber>Title 42 Section 300gg-91</partNumber>
+  <partNumber>Title 42 Section 300gget seq.</partNumber>
+</titleInfo>
+ <identifier type="USC citation">42 U.S.C. 1320d-2note</identifier>
+ <identifier type="USC citation">42 U.S.C. 1395w-111</identifier>
+ <identifier type="USC citation">42 U.S.C. 18021et seq.</identifier>
+ <identifier type="USC citation">42 U.S.C. 18022(d)(1)</identifier>
+ <identifier type="USC citation">42 U.S.C. 18031</identifier>
+ <identifier type="USC citation">42 U.S.C. 18032</identifier>
+ <identifier type="USC citation">42 U.S.C. 18041</identifier>
+ <identifier type="USC citation">42 U.S.C. 18063</identifier>
+ <identifier type="USC citation">42 U.S.C. 300gg-91</identifier>
+ <identifier type="USC citation">42 U.S.C. 300gget seq.</identifier>
+</relatedItem>
+<extension>
+ <docClass>hr</docClass>
+ <accessId>BILLS-116hr2000ih</accessId>
+ <congress>116</congress>
+ <session>1</session>
+ <originChamber>HOUSE</originChamber>
+ <currentChamber>HOUSE</currentChamber>
+ <billNumber>2000</billNumber>
+ <billVersion reprint="false">ih</billVersion>
+ <fileSuffix>ih</fileSuffix>
+ <shortTitle type="measure">Medicare-X Choice Act of 2019</shortTitle>
+ <officialTitle>To establish a public health plan.</officialTitle>
+ <action date="2019-04-01">Mr. Delgado (for himself, Mr. Larson of Connecticut, and Mr. Higgins of New York) introduced the following bill; which was referred to the Committee on Energy and Commerce, and in addition to the Committee on Ways and Means, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned</action>
+ <congCommittee authorityId="hsif00" chamber="H" congress="116" type="S">
+                      <name type="authority-standard">Committee on Energy and Commerce</name>
+                      <name type="authority-short">Energy and Commerce</name>
+                </congCommittee>
+ <congCommittee authorityId="hswm00" chamber="H" congress="116" type="S">
+                      <name type="authority-standard">Committee on Ways and Means</name>
+                      <name type="authority-short">Ways and Means</name>
+                </congCommittee>
+ <congMember authorityId="2428" bioGuideId="D000630" chamber="H" congress="116" party="D" role="SPONSOR" state="NY">
+                      <name type="parsed">Mr. Delgado</name>
+                      <name type="authority-fnf">Antonio Delgado</name>
+                      <name type="authority-lnf">Delgado, Antonio</name>
+                </congMember>
+ <congMember authorityId="1583" bioGuideId="L000557" chamber="H" congress="116" gpoId="7866" party="D" role="COSPONSOR" state="CT">
+                      <name type="parsed">Mr. Larson of Connecticut</name>
+                      <name type="authority-fnf">John B. Larson</name>
+                      <name type="authority-lnf">Larson, John B.</name>
+                      <name type="authority-other">John Larson</name>
+                </congMember>
+ <congMember authorityId="1794" bioGuideId="H001038" chamber="H" congress="116" gpoId="8088" party="D" role="COSPONSOR" state="NY">
+                      <name type="parsed">Mr. Higgins of New York</name>
+                      <name type="authority-fnf">Brian Higgins</name>
+                      <name type="authority-lnf">Higgins, Brian</name>
+                </congMember>
+ <isPrivate>false</isPrivate>
+ <isAppropriation>false</isAppropriation>
+ <USCode title="38">
+                      <section detail="(f)" number="3452"></section>
+                </USCode>
+ <USCode title="42">
+                      <section detail="note" number="1320d-2"></section>
+                      <section number="1395w-111"></section>
+                      <section detail="et seq." number="18021"></section>
+                      <section detail="(d)(1)" number="18022"></section>
+                      <section number="18031"></section>
+                      <section number="18032"></section>
+                      <section number="18041"></section>
+                      <section number="18063"></section>
+                      <section number="300gg-91"></section>
+                      <section detail="et seq." number="300gg"></section>
+                </USCode>
+</extension>
+</mods>

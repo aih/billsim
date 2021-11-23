@@ -1,0 +1,129 @@
+<mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd" ID="P0b002ee1ab3e28ab">
+<name type="corporate">
+ <namePart>United States Government Publishing Office</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">publisher</roleTerm>
+  <roleTerm authority="marcrelator" type="code">pbl</roleTerm>
+</role>
+ <role>
+  <roleTerm authority="marcrelator" type="text">distributor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">dst</roleTerm>
+</role>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">author</roleTerm>
+  <roleTerm authority="marcrelator" type="code">aut</roleTerm>
+</role>
+ <description>Government Organization</description>
+</name>
+<typeOfResource>text</typeOfResource>
+<genre authority="marcgt">government publication</genre>
+<language>
+ <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</language>
+<extension>
+ <collectionCode>BILLS</collectionCode>
+ <searchTitle>To direct the Secretary of Transportation to establish a national intersection and interchange safety construction program, and for other purposes.;National Intersection and Interchange Safety Construction Program Act of 2021;H.R. 200 (IH)
+    </searchTitle>
+ <category>Bills and Statutes</category>
+ <waisDatabaseName>117_cong_bills</waisDatabaseName>
+ <branch>legislative</branch>
+ <dateIngested>2021-02-05</dateIngested>
+</extension>
+<titleInfo>
+ <title>To direct the Secretary of Transportation to establish a national intersection and interchange safety construction program, and for other purposes.</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>National Intersection and Interchange Safety Construction Program Act of 2021</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>H.R. 200 (IH)
+    </title>
+</titleInfo>
+<originInfo>
+ <publisher>U.S. Government Publishing Office</publisher>
+ <dateIssued encoding="w3cdtf">2021-01-05</dateIssued>
+ <issuance>monographic</issuance>
+</originInfo>
+<physicalDescription>
+ <note type="source content type">deposited</note>
+ <digitalOrigin>born digital</digitalOrigin>
+ <extent>4 p.</extent>
+</physicalDescription>
+<classification authority="sudocs">Y 1.6:</classification>
+<classification authority="sudocs">Y 1.4/6:</classification>
+<identifier type="local">P0b002ee1ab3e28ab</identifier>
+<identifier type="uri">https://www.govinfo.gov/app/details/BILLS-117hr200ih</identifier>
+<identifier type="preferred citation">H.R. 200</identifier>
+<identifier type="stock number">021-610-00252-9</identifier>
+<identifier type="Parent ILS system id">000501532</identifier>
+<identifier type="Child ILS system id">000325573</identifier>
+<identifier type="Parent ILS title">Congressional bills</identifier>
+<identifier type="Child ILS title">House bills</identifier>
+<identifier type="former package identifier">f:h200_ih.txt</identifier>
+<location>
+ <url displayLabel="Content Detail" access="object in context">https://www.govinfo.gov/app/details/BILLS-117hr200ih</url>
+ <url displayLabel="HTML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr200ih/html/BILLS-117hr200ih.htm</url>
+ <url displayLabel="PDF rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr200ih/pdf/BILLS-117hr200ih.pdf</url>
+ <url displayLabel="XML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr200ih/xml/BILLS-117hr200ih.xml</url>
+</location>
+<accessCondition type="GPO scope determination">fdlp</accessCondition>
+<recordInfo>
+ <recordContentSource authority="marcorg">DGPO</recordContentSource>
+ <recordCreationDate encoding="w3cdtf">2021-02-05</recordCreationDate>
+ <recordChangeDate encoding="w3cdtf">2021-02-05</recordChangeDate>
+ <recordIdentifier source="DGPO">BILLS-117hr200ih</recordIdentifier>
+ <recordOrigin>machine generated</recordOrigin>
+ <languageOfCataloging>
+  <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</languageOfCataloging>
+</recordInfo>
+<name type="personal">
+ <namePart>Tom Emmer</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm authority="marcrelator" type="text">sponsor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">spn</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <namePart>Committee on Transportation and Infrastructure</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">associated name</roleTerm>
+  <roleTerm authority="marcrelator" type="code">asn</roleTerm>
+</role>
+</name>
+<extension>
+ <docClass>hr</docClass>
+ <accessId>BILLS-117hr200ih</accessId>
+ <congress>117</congress>
+ <session>1</session>
+ <originChamber>HOUSE</originChamber>
+ <currentChamber>HOUSE</currentChamber>
+ <billNumber>200</billNumber>
+ <billVersion reprint="false">ih</billVersion>
+ <fileSuffix>ih</fileSuffix>
+ <shortTitle type="measure">National Intersection and Interchange Safety Construction Program Act of 2021</shortTitle>
+ <officialTitle>To direct the Secretary of Transportation to establish a national intersection and interchange safety construction program, and for other purposes.</officialTitle>
+ <action date="2021-01-05">Mr. Emmer introduced the following bill; which was referred to the Committee on Transportation and Infrastructure</action>
+ <congCommittee authorityId="hspw00" chamber="H" congress="117" type="S">
+                      <name type="authority-standard">Committee on Transportation and Infrastructure</name>
+                      <name type="authority-short">Transportation and Infrastructure</name>
+                </congCommittee>
+ <congMember authorityId="2253" bioGuideId="E000294" chamber="H" congress="117" party="R" role="SPONSOR" state="MN">
+                      <name type="parsed">Mr. Emmer</name>
+                      <name type="authority-fnf">Tom Emmer</name>
+                      <name type="authority-lnf">Emmer, Tom</name>
+                </congMember>
+ <isPrivate>false</isPrivate>
+ <isAppropriation>false</isAppropriation>
+</extension>
+</mods>

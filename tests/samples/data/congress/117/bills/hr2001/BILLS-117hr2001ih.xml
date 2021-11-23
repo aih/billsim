@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="billres.xsl"?>
+<!DOCTYPE bill PUBLIC "-//US Congress//DTDs/bill.dtd//EN" "bill.dtd">
+<bill bill-stage="Introduced-in-House" dms-id="HE3CD61A0DC234F958D9CB0D3D16F998A" public-private="public" key="H" bill-type="olc"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+<dublinCore>
+<dc:title>117 HR 2001 IH: Diversity Data Accountability Act</dc:title>
+<dc:publisher>U.S. House of Representatives</dc:publisher>
+<dc:date>2021-03-18</dc:date>
+<dc:format>text/xml</dc:format>
+<dc:language>EN</dc:language>
+<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>
+</dublinCore>
+</metadata>
+<form>
+<distribution-code display="yes">I</distribution-code><congress display="yes">117th CONGRESS</congress><session display="yes">1st Session</session><legis-num display="yes">H. R. 2001</legis-num><current-chamber>IN THE HOUSE OF REPRESENTATIVES</current-chamber><action display="yes"><action-date date="20210318">March 18, 2021</action-date><action-desc><sponsor name-id="B001281">Mrs. Beatty</sponsor> introduced the following bill; which was referred to the <committee-name committee-id="HBA00">Committee on Financial Services</committee-name></action-desc></action><legis-type>A BILL</legis-type><official-title display="yes">To amend the Dodd-Frank Wall Street Reform and Consumer Protection Act to require regulated entities to provide information necessary for the Offices of Women and Minority Inclusion to carry out their duties, and for other purposes.</official-title></form><legis-body id="HB139F87FE9394124A4C05C7BC90F0676" style="OLC"><section id="H3D0953176A6A4A7AB5EC66A5D819F4B4" section-type="section-one"><enum>1.</enum><header>Short title</header><text display-inline="no-display-inline">This Act may be cited as the <quote><short-title>Diversity Data Accountability Act</short-title></quote>. </text></section><section id="H31EC0AF760174A099A586B24A049FA8D"><enum>2.</enum><header>Disclosures by regulated entities</header><text display-inline="no-display-inline">Section 342(b) of the Dodd-Frank Wall Street Reform and Consumer Protection Act (<external-xref legal-doc="usc" parsable-cite="usc/12/5452">12 U.S.C. 5452(b)</external-xref>) is amended by adding at the end the following:</text><quoted-block style="OLC" id="H285B1DECB3364DC4AA4ED7ACF8593378" display-inline="no-display-inline"><paragraph id="HDE033F92108E49ECAA17BCD1EF477F66"><enum>(5)</enum><header>Disclosures by regulated entities</header><text display-inline="yes-display-inline">The Director of each Office shall require entities regulated by the applicable agency to provide such information as may be required to carry out the duties of the Director.</text></paragraph><after-quoted-block>.</after-quoted-block></quoted-block></section></legis-body></bill> 
+

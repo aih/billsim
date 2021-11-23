@@ -1,0 +1,139 @@
+<mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd" ID="P0b002ee1a0494a07">
+<name type="corporate">
+ <namePart>United States Government Publishing Office</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">publisher</roleTerm>
+  <roleTerm authority="marcrelator" type="code">pbl</roleTerm>
+</role>
+ <role>
+  <roleTerm authority="marcrelator" type="text">distributor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">dst</roleTerm>
+</role>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">author</roleTerm>
+  <roleTerm authority="marcrelator" type="code">aut</roleTerm>
+</role>
+ <description>Government Organization</description>
+</name>
+<typeOfResource>text</typeOfResource>
+<genre authority="marcgt">government publication</genre>
+<language>
+ <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</language>
+<extension>
+ <collectionCode>BILLS</collectionCode>
+ <searchTitle>To require the Secretary of the Treasury to establish a program for the automated disclosure of taxpayer information for third-party income verification, and for other purposes.;H.R. 2007 (IH)
+    </searchTitle>
+ <category>Bills and Statutes</category>
+ <waisDatabaseName>116_cong_bills</waisDatabaseName>
+ <branch>legislative</branch>
+ <dateIngested>2019-04-09</dateIngested>
+</extension>
+<titleInfo>
+ <title>To require the Secretary of the Treasury to establish a program for the automated disclosure of taxpayer information for third-party income verification, and for other purposes.</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>H.R. 2007 (IH)
+    </title>
+</titleInfo>
+<originInfo>
+ <publisher>U.S. Government Publishing Office</publisher>
+ <dateIssued encoding="w3cdtf">2019-04-01</dateIssued>
+ <issuance>monographic</issuance>
+</originInfo>
+<physicalDescription>
+ <note type="source content type">deposited</note>
+ <digitalOrigin>born digital</digitalOrigin>
+ <extent>3 p.</extent>
+</physicalDescription>
+<classification authority="sudocs">Y 1.6:</classification>
+<classification authority="sudocs">Y 1.4/6:</classification>
+<identifier type="local">P0b002ee1a0494a07</identifier>
+<identifier type="uri">https://www.govinfo.gov/app/details/BILLS-116hr2007ih</identifier>
+<identifier type="preferred citation">H.R. 2007</identifier>
+<identifier type="stock number">021-610-00252-9</identifier>
+<identifier type="Parent ILS system id">000501532</identifier>
+<identifier type="Child ILS system id">000325573</identifier>
+<identifier type="Parent ILS title">Congressional bills</identifier>
+<identifier type="Child ILS title">House bills</identifier>
+<identifier type="former package identifier">f:h2007_ih.txt</identifier>
+<location>
+ <url displayLabel="Content Detail" access="object in context">https://www.govinfo.gov/app/details/BILLS-116hr2007ih</url>
+ <url displayLabel="HTML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-116hr2007ih/html/BILLS-116hr2007ih.htm</url>
+ <url displayLabel="PDF rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-116hr2007ih/pdf/BILLS-116hr2007ih.pdf</url>
+ <url displayLabel="XML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-116hr2007ih/xml/BILLS-116hr2007ih.xml</url>
+</location>
+<accessCondition type="GPO scope determination">fdlp</accessCondition>
+<recordInfo>
+ <recordContentSource authority="marcorg">DGPO</recordContentSource>
+ <recordCreationDate encoding="w3cdtf">2019-04-09</recordCreationDate>
+ <recordChangeDate encoding="w3cdtf">2019-04-09</recordChangeDate>
+ <recordIdentifier source="DGPO">BILLS-116hr2007ih</recordIdentifier>
+ <recordOrigin>machine generated</recordOrigin>
+ <languageOfCataloging>
+  <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</languageOfCataloging>
+</recordInfo>
+<name type="personal">
+ <namePart>Earl Blumenauer</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm authority="marcrelator" type="text">sponsor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">spn</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Patrick T. McHenry</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <namePart>Committee on Ways and Means</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">associated name</roleTerm>
+  <roleTerm authority="marcrelator" type="code">asn</roleTerm>
+</role>
+</name>
+<extension>
+ <docClass>hr</docClass>
+ <accessId>BILLS-116hr2007ih</accessId>
+ <congress>116</congress>
+ <session>1</session>
+ <originChamber>HOUSE</originChamber>
+ <currentChamber>HOUSE</currentChamber>
+ <billNumber>2007</billNumber>
+ <billVersion reprint="false">ih</billVersion>
+ <fileSuffix>ih</fileSuffix>
+ <officialTitle>To require the Secretary of the Treasury to establish a program for the automated disclosure of taxpayer information for third-party income verification, and for other purposes.</officialTitle>
+ <action date="2019-04-01">Mr. Blumenauer (for himself and Mr. McHenry) introduced the following bill; which was referred to the Committee on Ways and Means</action>
+ <congCommittee authorityId="hswm00" chamber="H" congress="116" type="S">
+                      <name type="authority-standard">Committee on Ways and Means</name>
+                      <name type="authority-short">Ways and Means</name>
+                </congCommittee>
+ <congMember authorityId="99" bioGuideId="B000574" chamber="H" congress="116" gpoId="8116" party="D" role="SPONSOR" state="OR">
+                      <name type="parsed">Mr. Blumenauer</name>
+                      <name type="authority-fnf">Earl Blumenauer</name>
+                      <name type="authority-lnf">Blumenauer, Earl</name>
+                </congMember>
+ <congMember authorityId="1792" bioGuideId="M001156" chamber="H" congress="116" gpoId="8033" party="R" role="COSPONSOR" state="NC">
+                      <name type="parsed">Mr. McHenry</name>
+                      <name type="authority-fnf">Patrick T. McHenry</name>
+                      <name type="authority-lnf">McHenry, Patrick T.</name>
+                      <name type="authority-other">Mr. Patrick Mchenry</name>
+                </congMember>
+ <isPrivate>false</isPrivate>
+ <isAppropriation>false</isAppropriation>
+</extension>
+</mods>

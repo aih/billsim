@@ -9,7 +9,7 @@ from typing import List
 from billsim.constants import PATHTYPE_DEFAULT, PATHTYPE_OBJ, CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS
 from billsim.pymodels import BillPath
 
-logging.basicConfig(filename='utils.log', filemode='w', level='DEBUG')
+logging.basicConfig(filename='utils.log', filemode='w', level='INFO')
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
@@ -146,6 +146,8 @@ def walkBillDirs(rootDir=PATH_TO_CONGRESSDATA_DIR,
   """
     logger.debug("WalkDirs called with the following arguments:")
     logger.debug(locals())
+    print("WalkDirs called with the following arguments:")
+    print(locals())
     accumulator = []
     processedNum = 0
     for dirName, _, fileList in os.walk(rootDir):

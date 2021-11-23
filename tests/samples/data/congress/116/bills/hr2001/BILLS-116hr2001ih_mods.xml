@@ -1,0 +1,245 @@
+<mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd" ID="P0b002ee1a048933a">
+<name type="corporate">
+ <namePart>United States Government Publishing Office</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">publisher</roleTerm>
+  <roleTerm authority="marcrelator" type="code">pbl</roleTerm>
+</role>
+ <role>
+  <roleTerm authority="marcrelator" type="text">distributor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">dst</roleTerm>
+</role>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">author</roleTerm>
+  <roleTerm authority="marcrelator" type="code">aut</roleTerm>
+</role>
+ <description>Government Organization</description>
+</name>
+<typeOfResource>text</typeOfResource>
+<genre authority="marcgt">government publication</genre>
+<language>
+ <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</language>
+<extension>
+ <collectionCode>BILLS</collectionCode>
+ <searchTitle>To amend the McKinney-Vento Homeless Assistance Act to meet the needs of homeless children, youth, and families, and honor the assessments and priorities of local communities.;Homeless Children and Youth Act of 2019;H.R. 2001 (IH)
+    </searchTitle>
+ <category>Bills and Statutes</category>
+ <waisDatabaseName>116_cong_bills</waisDatabaseName>
+ <branch>legislative</branch>
+ <dateIngested>2019-04-08</dateIngested>
+</extension>
+<titleInfo>
+ <title>To amend the McKinney-Vento Homeless Assistance Act to meet the needs of homeless children, youth, and families, and honor the assessments and priorities of local communities.</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>Homeless Children and Youth Act of 2019</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>H.R. 2001 (IH)
+    </title>
+</titleInfo>
+<originInfo>
+ <publisher>U.S. Government Publishing Office</publisher>
+ <dateIssued encoding="w3cdtf">2019-04-01</dateIssued>
+ <issuance>monographic</issuance>
+</originInfo>
+<physicalDescription>
+ <note type="source content type">deposited</note>
+ <digitalOrigin>born digital</digitalOrigin>
+ <extent>19 p.</extent>
+</physicalDescription>
+<classification authority="sudocs">Y 1.6:</classification>
+<classification authority="sudocs">Y 1.4/6:</classification>
+<identifier type="local">P0b002ee1a048933a</identifier>
+<identifier type="uri">https://www.govinfo.gov/app/details/BILLS-116hr2001ih</identifier>
+<identifier type="preferred citation">H.R. 2001</identifier>
+<identifier type="stock number">021-610-00252-9</identifier>
+<identifier type="Parent ILS system id">000501532</identifier>
+<identifier type="Child ILS system id">000325573</identifier>
+<identifier type="Parent ILS title">Congressional bills</identifier>
+<identifier type="Child ILS title">House bills</identifier>
+<identifier type="former package identifier">f:h2001_ih.txt</identifier>
+<location>
+ <url displayLabel="Content Detail" access="object in context">https://www.govinfo.gov/app/details/BILLS-116hr2001ih</url>
+ <url displayLabel="HTML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-116hr2001ih/html/BILLS-116hr2001ih.htm</url>
+ <url displayLabel="PDF rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-116hr2001ih/pdf/BILLS-116hr2001ih.pdf</url>
+ <url displayLabel="XML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-116hr2001ih/xml/BILLS-116hr2001ih.xml</url>
+</location>
+<accessCondition type="GPO scope determination">fdlp</accessCondition>
+<recordInfo>
+ <recordContentSource authority="marcorg">DGPO</recordContentSource>
+ <recordCreationDate encoding="w3cdtf">2019-04-08</recordCreationDate>
+ <recordChangeDate encoding="w3cdtf">2019-04-08</recordChangeDate>
+ <recordIdentifier source="DGPO">BILLS-116hr2001ih</recordIdentifier>
+ <recordOrigin>machine generated</recordOrigin>
+ <languageOfCataloging>
+  <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</languageOfCataloging>
+</recordInfo>
+<name type="personal">
+ <namePart>Steve Stivers</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm authority="marcrelator" type="text">sponsor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">spn</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>David Loebsack</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <namePart>Committee on Financial Services</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">associated name</roleTerm>
+  <roleTerm authority="marcrelator" type="code">asn</roleTerm>
+</role>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <namePart>Committee on Education and Labor</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">associated name</roleTerm>
+  <roleTerm authority="marcrelator" type="code">asn</roleTerm>
+</role>
+</name>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Code</title>
+  <partNumber>Title 20 Section 1001</partNumber>
+  <partNumber>Title 20 Section 1001et seq.</partNumber>
+  <partNumber>Title 20 Section 1087vv</partNumber>
+  <partNumber>Title 20 Section 1090</partNumber>
+  <partNumber>Title 20 Section 1401</partNumber>
+  <partNumber>Title 20 Section 1432</partNumber>
+</titleInfo>
+ <identifier type="USC citation">20 U.S.C. 1001</identifier>
+ <identifier type="USC citation">20 U.S.C. 1001et seq.</identifier>
+ <identifier type="USC citation">20 U.S.C. 1087vv</identifier>
+ <identifier type="USC citation">20 U.S.C. 1090</identifier>
+ <identifier type="USC citation">20 U.S.C. 1401</identifier>
+ <identifier type="USC citation">20 U.S.C. 1432</identifier>
+</relatedItem>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Code</title>
+  <partNumber>Title 42 Section 11301note</partNumber>
+  <partNumber>Title 42 Section 11302</partNumber>
+  <partNumber>Title 42 Section 11360a(f)</partNumber>
+  <partNumber>Title 42 Section 11360</partNumber>
+  <partNumber>Title 42 Section 11364</partNumber>
+  <partNumber>Title 42 Section 11382</partNumber>
+  <partNumber>Title 42 Section 11384(d)</partNumber>
+  <partNumber>Title 42 Section 11385(c)</partNumber>
+  <partNumber>Title 42 Section 11386a(b)</partNumber>
+  <partNumber>Title 42 Section 11386b</partNumber>
+  <partNumber>Title 42 Section 11386(b)</partNumber>
+  <partNumber>Title 42 Section 11388</partNumber>
+  <partNumber>Title 42 Section 14043eet seq.</partNumber>
+  <partNumber>Title 42 Section 1437et seq.</partNumber>
+  <partNumber>Title 42 Section 1786</partNumber>
+  <partNumber>Title 42 Section 254b(h)</partNumber>
+  <partNumber>Title 42 Section 5701et seq.</partNumber>
+  <partNumber>Title 42 Section 9831et seq.</partNumber>
+  <partNumber>Title 42 Section 9858et seq.</partNumber>
+</titleInfo>
+ <identifier type="USC citation">42 U.S.C. 11301note</identifier>
+ <identifier type="USC citation">42 U.S.C. 11302</identifier>
+ <identifier type="USC citation">42 U.S.C. 11360a(f)</identifier>
+ <identifier type="USC citation">42 U.S.C. 11360</identifier>
+ <identifier type="USC citation">42 U.S.C. 11364</identifier>
+ <identifier type="USC citation">42 U.S.C. 11382</identifier>
+ <identifier type="USC citation">42 U.S.C. 11384(d)</identifier>
+ <identifier type="USC citation">42 U.S.C. 11385(c)</identifier>
+ <identifier type="USC citation">42 U.S.C. 11386a(b)</identifier>
+ <identifier type="USC citation">42 U.S.C. 11386b</identifier>
+ <identifier type="USC citation">42 U.S.C. 11386(b)</identifier>
+ <identifier type="USC citation">42 U.S.C. 11388</identifier>
+ <identifier type="USC citation">42 U.S.C. 14043eet seq.</identifier>
+ <identifier type="USC citation">42 U.S.C. 1437et seq.</identifier>
+ <identifier type="USC citation">42 U.S.C. 1786</identifier>
+ <identifier type="USC citation">42 U.S.C. 254b(h)</identifier>
+ <identifier type="USC citation">42 U.S.C. 5701et seq.</identifier>
+ <identifier type="USC citation">42 U.S.C. 9831et seq.</identifier>
+ <identifier type="USC citation">42 U.S.C. 9858et seq.</identifier>
+</relatedItem>
+<extension>
+ <docClass>hr</docClass>
+ <accessId>BILLS-116hr2001ih</accessId>
+ <congress>116</congress>
+ <session>1</session>
+ <originChamber>HOUSE</originChamber>
+ <currentChamber>HOUSE</currentChamber>
+ <billNumber>2001</billNumber>
+ <billVersion reprint="false">ih</billVersion>
+ <fileSuffix>ih</fileSuffix>
+ <shortTitle type="measure">Homeless Children and Youth Act of 2019</shortTitle>
+ <officialTitle>To amend the McKinney-Vento Homeless Assistance Act to meet the needs of homeless children, youth, and families, and honor the assessments and priorities of local communities.</officialTitle>
+ <action date="2019-04-01">Mr. Stivers (for himself and Mr. Loebsack) introduced the following bill; which was referred to the Committee on Financial Services, and in addition to the Committee on Education and Labor, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned</action>
+ <congCommittee authorityId="hsba00" chamber="H" congress="116" type="S">
+                      <name type="authority-standard">Committee on Financial Services</name>
+                      <name type="authority-short">Financial Services</name>
+                </congCommittee>
+ <congCommittee authorityId="hsed00" chamber="H" congress="116" type="S">
+                      <name type="authority-standard">Committee on Education and Labor</name>
+                      <name type="authority-short">Education and Labor</name>
+                </congCommittee>
+ <congMember authorityId="2047" bioGuideId="S001187" chamber="H" congress="116" gpoId="8105" party="R" role="SPONSOR" state="OH">
+                      <name type="parsed">Mr. Stivers</name>
+                      <name type="authority-fnf">Steve Stivers</name>
+                      <name type="authority-lnf">Stivers, Steve</name>
+                </congMember>
+ <congMember authorityId="1846" bioGuideId="L000565" chamber="H" congress="116" gpoId="7915" party="D" role="COSPONSOR" state="IA">
+                      <name type="parsed">Mr. Loebsack</name>
+                      <name type="authority-fnf">David Loebsack</name>
+                      <name type="authority-lnf">Loebsack, David</name>
+                </congMember>
+ <isPrivate>false</isPrivate>
+ <isAppropriation>false</isAppropriation>
+ <USCode title="20">
+                      <section number="1001"></section>
+                      <section detail="et seq." number="1001"></section>
+                      <section number="1087vv"></section>
+                      <section number="1090"></section>
+                      <section number="1401"></section>
+                      <section number="1432"></section>
+                </USCode>
+ <USCode title="42">
+                      <section detail="note" number="11301"></section>
+                      <section number="11302"></section>
+                      <section detail="(f)" number="11360a"></section>
+                      <section number="11360"></section>
+                      <section number="11364"></section>
+                      <section number="11382"></section>
+                      <section detail="(d)" number="11384"></section>
+                      <section detail="(c)" number="11385"></section>
+                      <section detail="(b)" number="11386a"></section>
+                      <section number="11386b"></section>
+                      <section detail="(b)" number="11386"></section>
+                      <section number="11388"></section>
+                      <section detail="et seq." number="14043e"></section>
+                      <section detail="et seq." number="1437"></section>
+                      <section number="1786"></section>
+                      <section detail="(h)" number="254b"></section>
+                      <section detail="et seq." number="5701"></section>
+                      <section detail="et seq." number="9831"></section>
+                      <section detail="et seq." number="9858"></section>
+                </USCode>
+</extension>
+</mods>

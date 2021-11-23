@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="billres.xsl"?>
+<!DOCTYPE bill PUBLIC "-//US Congress//DTDs/bill.dtd//EN" "bill.dtd">
+<bill bill-stage="Introduced-in-House" bill-type="olc" dms-id="HF74C2727B9304FD1BF51B37EC54A0793" key="H" public-private="public"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+<dublinCore>
+<dc:title>116 HR 2007 IH: To require the Secretary of the Treasury to establish a program for the automated disclosure of taxpayer information for third-party income verification, and for other purposes.</dc:title>
+<dc:publisher>U.S. House of Representatives</dc:publisher>
+<dc:date>2019-04-01</dc:date>
+<dc:format>text/xml</dc:format>
+<dc:language>EN</dc:language>
+<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>
+</dublinCore>
+</metadata>
+<form>
+<distribution-code display="yes">I</distribution-code><congress display="yes">116th CONGRESS</congress><session display="yes">1st Session</session><legis-num display="yes">H. R. 2007</legis-num><current-chamber>IN THE HOUSE OF REPRESENTATIVES</current-chamber><action display="yes"><action-date date="20190401">April 1, 2019</action-date><action-desc><sponsor name-id="B000574">Mr. Blumenauer</sponsor> (for himself and <cosponsor name-id="M001156">Mr. McHenry</cosponsor>) introduced the following bill; which was referred to the <committee-name committee-id="HWM00">Committee on Ways and Means</committee-name></action-desc></action><legis-type>A BILL</legis-type><official-title display="yes">To require the Secretary of the Treasury to establish a program for the automated disclosure of
+			 taxpayer information for third-party income verification, and for other
+			 purposes.</official-title></form>
+	<legis-body id="H50312B23D83B450D8D34E900FEF3A60A" style="OLC">
+		<section commented="no" id="H2A5B4E00005D430DA6563CCAC50E2E62" section-type="section-one"><enum>1.</enum><header>Disclosure of taxpayer information for third-party income verification</header>
+ <subsection commented="no" display-inline="no-display-inline" id="H9B2423592A2F45559678377ED3B5CE75"><enum>(a)</enum><header>In general</header><text>Not later than 1 year after the close of the 2-year period described in subsection (d)(1), the Secretary of the Treasury or the Secretary’s delegate (hereafter referred to in this section as the <quote>Secretary</quote>) shall implement a program to ensure that any qualified disclosure—</text>
+ <paragraph commented="no" id="HAE509A56284A46F49CB4CF7C16A40E31"><enum>(1)</enum><text>is fully automated and accomplished through the Internet; and</text> </paragraph><paragraph commented="no" id="H181E4DF31F8E49D8A8851C560D45D191"><enum>(2)</enum><text>is accomplished in as close to real-time as is practicable.</text>
+ </paragraph></subsection><subsection commented="no" id="H0A45BD69E5BF45DCA5BE94ABC60205B7"><enum>(b)</enum><header>Qualified disclosure</header><text>For purposes of this section, the term <term>qualified disclosure</term> means a disclosure under <external-xref legal-doc="usc" parsable-cite="usc/26/6103">section 6103(c)</external-xref> of the Internal Revenue Code of 1986 of returns or return information by the Secretary to a person seeking to verify the income or creditworthiness of a taxpayer who is a borrower in the process of a loan application.</text>
+ </subsection><subsection id="H7BDCF1CDDD8E4AF2A5C405C4ACAB7BF1"><enum>(c)</enum><header>Application of security standards</header><text display-inline="yes-display-inline">The Secretary shall ensure that the program described in subsection (a) complies with applicable security standards and guidelines.</text>
+			</subsection><subsection commented="no" id="HE8E5FD2E19CA4A63B50BE929BF665F02"><enum>(d)</enum><header>User fee</header>
+ <paragraph commented="no" id="H8A58ECBC71224426A8090FC792915CC6"><enum>(1)</enum><header>In general</header><text display-inline="yes-display-inline">During the 2-year period beginning on the first day of the 6th calendar month beginning after the date of the enactment of this Act, the Secretary shall assess and collect a fee for qualified disclosures (in addition to any other fee assessed and collected for such disclosures) at such rates as the Secretary determines are sufficient to cover the costs related to implementing the program described in subsection (a), including the costs of any necessary infrastructure or technology.</text>
+ </paragraph><paragraph commented="no" id="H0721581A9BCE48359714EC9377D65D6F"><enum>(2)</enum><header>Deposit of collections</header><text display-inline="yes-display-inline">Amounts received from fees assessed and collected under paragraph (1) shall be deposited in, and credited to, an account solely for the purpose of carrying out the activities described in subsection (a). Such amounts shall be available to carry out such activities without need of further appropriation and without fiscal year limitation.</text>
+				</paragraph></subsection></section></legis-body></bill>
+
+

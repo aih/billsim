@@ -12,16 +12,17 @@ TEST_MIN_SCORE = 10
 TEST_DIR = Path(__file__).resolve(strict=True).parent
 SAMPLE_BILL_PATH = BillPath(
     billnumber_version='117hr200ih',
-    fileName='BILLS-117hr200ih.xml',
+    fileName='BILLS-117hr200ih-uslm.xml',
     filePath=os.path.join(
-        TEST_DIR, 'samples/data/congress/117/bills/hr200/BILLS-117hr200ih.xml'))
+        TEST_DIR,
+        'samples/data/congress/117/bills/hr200/BILLS-117hr200ih-uslm.xml'))
 
 SAMPLE_BILL_PATH_117HR2001 = BillPath(
     billnumber_version='117hr2001ih',
-    fileName='BILLS-117hr2001ih.xml',
+    fileName='BILLS-117hr2001ih-uslm.xml',
     filePath=os.path.join(
         TEST_DIR,
-        'samples/data/congress/117/bills/hr2001/BILLS-117hr2001ih.xml'))
+        'samples/data/congress/117/bills/hr2001/BILLS-117hr2001ih-uslm.xml'))
 
 SAMPLE_QUERY_TEXT = """
 2. National Intersection and Interchange Safety Construction Program (a) Establishment 

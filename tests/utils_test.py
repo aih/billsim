@@ -54,7 +54,7 @@ def test_getEnum():
 # Tests both getHeader and getText, which it depends on
 def test_getHeader():
     from billsim.utils import getHeader
-    header = getHeader(section)
+    header = getHeader(section, defaultNS=None)
     assert header == "National Intersection and Interchange Safety Construction Program"
 
 
@@ -72,10 +72,10 @@ def test_billNumberVersionToBillPath():
     billPath = billNumberVersionToBillPath("116hr2005ih",
                                            pathType='congressdotgov')
     assert billPath.billnumber_version == "116hr2005ih"
-    assert billPath.fileName == "BILLS-116hr2005ih.xml"
+    assert billPath.fileName == "BILLS-116hr2005ih-uslm.xml"
     assert billPath.filePath == os.path.join(constants.PATH_TO_CONGRESSDATA_DIR,
                                              '116', 'bills', 'hr2005',
-                                             'BILLS-116hr2005ih.xml')
+                                             'BILLS-116hr2005ih-uslm.xml')
 
 
 def test_walkBillDirs(rootDir=CONGRESS_PATH_TEST):
@@ -83,7 +83,7 @@ def test_walkBillDirs(rootDir=CONGRESS_PATH_TEST):
     billDirs = walkBillDirs(rootDir=rootDir)
     assert len(billDirs) >= 27
     assert billDirs[2].billnumber_version == "116hr2005ih"
-    assert billDirs[2].fileName == "BILLS-116hr2005ih.xml"
+    assert billDirs[2].fileName == "BILLS-116hr2005ih-uslm.xml"
 
 
 def test_getBillXmlPaths(congressDataDir=CONGRESS_PATH_TEST):
@@ -91,4 +91,4 @@ def test_getBillXmlPaths(congressDataDir=CONGRESS_PATH_TEST):
     billDirs = getBillXmlPaths(congressDataDir=congressDataDir)
     assert len(billDirs) >= 27
     assert billDirs[2].billnumber_version == "116hr2005ih"
-    assert billDirs[2].fileName == "BILLS-116hr2005ih.xml"
+    assert billDirs[2].fileName == "BILLS-116hr2005ih-uslm.xml"

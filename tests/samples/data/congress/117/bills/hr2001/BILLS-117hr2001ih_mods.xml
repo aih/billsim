@@ -1,0 +1,139 @@
+<mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd" ID="P0b002ee1ae27e619">
+<name type="corporate">
+ <namePart>United States Government Publishing Office</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">publisher</roleTerm>
+  <roleTerm authority="marcrelator" type="code">pbl</roleTerm>
+</role>
+ <role>
+  <roleTerm authority="marcrelator" type="text">distributor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">dst</roleTerm>
+</role>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">author</roleTerm>
+  <roleTerm authority="marcrelator" type="code">aut</roleTerm>
+</role>
+ <description>Government Organization</description>
+</name>
+<typeOfResource>text</typeOfResource>
+<genre authority="marcgt">government publication</genre>
+<language>
+ <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</language>
+<extension>
+ <collectionCode>BILLS</collectionCode>
+ <searchTitle>To amend the Dodd-Frank Wall Street Reform and Consumer Protection Act to require regulated entities to provide information necessary for the Offices of Women and Minority Inclusion to carry out their duties, and for other purposes.;Diversity Data Accountability Act;H.R. 2001 (IH)
+    </searchTitle>
+ <category>Bills and Statutes</category>
+ <waisDatabaseName>117_cong_bills</waisDatabaseName>
+ <branch>legislative</branch>
+ <dateIngested>2021-05-18</dateIngested>
+</extension>
+<titleInfo>
+ <title>To amend the Dodd-Frank Wall Street Reform and Consumer Protection Act to require regulated entities to provide information necessary for the Offices of Women and Minority Inclusion to carry out their duties, and for other purposes.</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>Diversity Data Accountability Act</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>H.R. 2001 (IH)
+    </title>
+</titleInfo>
+<originInfo>
+ <publisher>U.S. Government Publishing Office</publisher>
+ <dateIssued encoding="w3cdtf">2021-03-18</dateIssued>
+ <issuance>monographic</issuance>
+</originInfo>
+<physicalDescription>
+ <note type="source content type">deposited</note>
+ <digitalOrigin>born digital</digitalOrigin>
+ <extent>2 p.</extent>
+</physicalDescription>
+<classification authority="sudocs">Y 1.6:</classification>
+<classification authority="sudocs">Y 1.4/6:</classification>
+<identifier type="local">P0b002ee1ae27e619</identifier>
+<identifier type="uri">https://www.govinfo.gov/app/details/BILLS-117hr2001ih</identifier>
+<identifier type="preferred citation">H.R. 2001</identifier>
+<identifier type="stock number">021-610-00252-9</identifier>
+<identifier type="Parent ILS system id">000501532</identifier>
+<identifier type="Child ILS system id">000325573</identifier>
+<identifier type="Parent ILS title">Congressional bills</identifier>
+<identifier type="Child ILS title">House bills</identifier>
+<identifier type="former package identifier">f:h2001_ih.txt</identifier>
+<location>
+ <url displayLabel="Content Detail" access="object in context">https://www.govinfo.gov/app/details/BILLS-117hr2001ih</url>
+ <url displayLabel="HTML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr2001ih/html/BILLS-117hr2001ih.htm</url>
+ <url displayLabel="PDF rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr2001ih/pdf/BILLS-117hr2001ih.pdf</url>
+ <url displayLabel="XML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr2001ih/xml/BILLS-117hr2001ih.xml</url>
+</location>
+<accessCondition type="GPO scope determination">fdlp</accessCondition>
+<recordInfo>
+ <recordContentSource authority="marcorg">DGPO</recordContentSource>
+ <recordCreationDate encoding="w3cdtf">2021-05-18</recordCreationDate>
+ <recordChangeDate encoding="w3cdtf">2021-05-18</recordChangeDate>
+ <recordIdentifier source="DGPO">BILLS-117hr2001ih</recordIdentifier>
+ <recordOrigin>machine generated</recordOrigin>
+ <languageOfCataloging>
+  <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</languageOfCataloging>
+</recordInfo>
+<name type="personal">
+ <namePart>Joyce Beatty</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm authority="marcrelator" type="text">sponsor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">spn</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <namePart>Committee on Financial Services</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">associated name</roleTerm>
+  <roleTerm authority="marcrelator" type="code">asn</roleTerm>
+</role>
+</name>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Code</title>
+  <partNumber>Title 12 Section 5452(b)</partNumber>
+</titleInfo>
+ <identifier type="USC citation">12 U.S.C. 5452(b)</identifier>
+</relatedItem>
+<extension>
+ <docClass>hr</docClass>
+ <accessId>BILLS-117hr2001ih</accessId>
+ <congress>117</congress>
+ <session>1</session>
+ <originChamber>HOUSE</originChamber>
+ <currentChamber>HOUSE</currentChamber>
+ <billNumber>2001</billNumber>
+ <billVersion reprint="false">ih</billVersion>
+ <fileSuffix>ih</fileSuffix>
+ <shortTitle type="measure">Diversity Data Accountability Act</shortTitle>
+ <officialTitle>To amend the Dodd-Frank Wall Street Reform and Consumer Protection Act to require regulated entities to provide information necessary for the Offices of Women and Minority Inclusion to carry out their duties, and for other purposes.</officialTitle>
+ <action date="2021-03-18">Mrs. Beatty introduced the following bill; which was referred to the Committee on Financial Services</action>
+ <congCommittee authorityId="hsba00" chamber="H" congress="117" type="S">
+                      <name type="authority-standard">Committee on Financial Services</name>
+                      <name type="authority-short">Financial Services</name>
+                </congCommittee>
+ <congMember authorityId="2153" bioGuideId="B001281" chamber="H" congress="117" party="D" role="SPONSOR" state="OH">
+                      <name type="parsed">Mrs. Beatty</name>
+                      <name type="authority-fnf">Joyce Beatty</name>
+                      <name type="authority-lnf">Beatty, Joyce</name>
+                </congMember>
+ <isPrivate>false</isPrivate>
+ <isAppropriation>false</isAppropriation>
+ <USCode title="12">
+                      <section detail="(b)" number="5452"></section>
+                </USCode>
+</extension>
+</mods>

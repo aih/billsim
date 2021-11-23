@@ -1,0 +1,205 @@
+<mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd" ID="P0b002ee1a04949d7">
+<name type="corporate">
+ <namePart>United States Government Publishing Office</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">publisher</roleTerm>
+  <roleTerm authority="marcrelator" type="code">pbl</roleTerm>
+</role>
+ <role>
+  <roleTerm authority="marcrelator" type="text">distributor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">dst</roleTerm>
+</role>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">author</roleTerm>
+  <roleTerm authority="marcrelator" type="code">aut</roleTerm>
+</role>
+ <description>Government Organization</description>
+</name>
+<typeOfResource>text</typeOfResource>
+<genre authority="marcgt">government publication</genre>
+<language>
+ <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</language>
+<extension>
+ <collectionCode>BILLS</collectionCode>
+ <searchTitle>To amend the Employee Retirement Income Security Act of 1974 to provide for greater spousal protection under defined contribution plans, and for other purposes.;Women’s Retirement Protection Act of 2019;H.R. 2005 (IH)
+    </searchTitle>
+ <category>Bills and Statutes</category>
+ <waisDatabaseName>116_cong_bills</waisDatabaseName>
+ <branch>legislative</branch>
+ <dateIngested>2019-04-09</dateIngested>
+</extension>
+<titleInfo>
+ <title>To amend the Employee Retirement Income Security Act of 1974 to provide for greater spousal protection under defined contribution plans, and for other purposes.</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>Women’s Retirement Protection Act of 2019</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>H.R. 2005 (IH)
+    </title>
+</titleInfo>
+<originInfo>
+ <publisher>U.S. Government Publishing Office</publisher>
+ <dateIssued encoding="w3cdtf">2019-04-01</dateIssued>
+ <issuance>monographic</issuance>
+</originInfo>
+<physicalDescription>
+ <note type="source content type">deposited</note>
+ <digitalOrigin>born digital</digitalOrigin>
+ <extent>22 p.</extent>
+</physicalDescription>
+<classification authority="sudocs">Y 1.6:</classification>
+<classification authority="sudocs">Y 1.4/6:</classification>
+<identifier type="local">P0b002ee1a04949d7</identifier>
+<identifier type="uri">https://www.govinfo.gov/app/details/BILLS-116hr2005ih</identifier>
+<identifier type="preferred citation">H.R. 2005</identifier>
+<identifier type="stock number">021-610-00252-9</identifier>
+<identifier type="Parent ILS system id">000501532</identifier>
+<identifier type="Child ILS system id">000325573</identifier>
+<identifier type="Parent ILS title">Congressional bills</identifier>
+<identifier type="Child ILS title">House bills</identifier>
+<identifier type="former package identifier">f:h2005_ih.txt</identifier>
+<location>
+ <url displayLabel="Content Detail" access="object in context">https://www.govinfo.gov/app/details/BILLS-116hr2005ih</url>
+ <url displayLabel="HTML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-116hr2005ih/html/BILLS-116hr2005ih.htm</url>
+ <url displayLabel="PDF rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-116hr2005ih/pdf/BILLS-116hr2005ih.pdf</url>
+ <url displayLabel="XML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-116hr2005ih/xml/BILLS-116hr2005ih.xml</url>
+</location>
+<accessCondition type="GPO scope determination">fdlp</accessCondition>
+<recordInfo>
+ <recordContentSource authority="marcorg">DGPO</recordContentSource>
+ <recordCreationDate encoding="w3cdtf">2019-04-09</recordCreationDate>
+ <recordChangeDate encoding="w3cdtf">2019-04-09</recordChangeDate>
+ <recordIdentifier source="DGPO">BILLS-116hr2005ih</recordIdentifier>
+ <recordOrigin>machine generated</recordOrigin>
+ <languageOfCataloging>
+  <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</languageOfCataloging>
+</recordInfo>
+<name type="personal">
+ <namePart>Lauren Underwood</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm authority="marcrelator" type="text">sponsor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">spn</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Janice D. Schakowsky</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Donald Norcross</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Suzanne Bonamici</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <namePart>Committee on Financial Services</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">associated name</roleTerm>
+  <roleTerm authority="marcrelator" type="code">asn</roleTerm>
+</role>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <namePart>Committee on Education and Labor</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">associated name</roleTerm>
+  <roleTerm authority="marcrelator" type="code">asn</roleTerm>
+</role>
+</name>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Code</title>
+  <partNumber>Title 29 Section 1051et seq.</partNumber>
+  <partNumber>Title 29 Section 1052</partNumber>
+  <partNumber>Title 29 Section 1053(a)</partNumber>
+  <partNumber>Title 29 Section 1055(c)(2)(B)</partNumber>
+  <partNumber>Title 29 Section 1132</partNumber>
+</titleInfo>
+ <identifier type="USC citation">29 U.S.C. 1051et seq.</identifier>
+ <identifier type="USC citation">29 U.S.C. 1052</identifier>
+ <identifier type="USC citation">29 U.S.C. 1053(a)</identifier>
+ <identifier type="USC citation">29 U.S.C. 1055(c)(2)(B)</identifier>
+ <identifier type="USC citation">29 U.S.C. 1132</identifier>
+</relatedItem>
+<extension>
+ <docClass>hr</docClass>
+ <accessId>BILLS-116hr2005ih</accessId>
+ <congress>116</congress>
+ <session>1</session>
+ <originChamber>HOUSE</originChamber>
+ <currentChamber>HOUSE</currentChamber>
+ <billNumber>2005</billNumber>
+ <billVersion reprint="false">ih</billVersion>
+ <fileSuffix>ih</fileSuffix>
+ <shortTitle type="measure">Women’s Retirement Protection Act of 2019</shortTitle>
+ <officialTitle>To amend the Employee Retirement Income Security Act of 1974 to provide for greater spousal protection under defined contribution plans, and for other purposes.</officialTitle>
+ <action date="2019-04-01">Ms. Underwood (for herself, Ms. Schakowsky, Mr. Norcross, and Ms. Bonamici) introduced the following bill; which was referred to the Committee on Education and Labor, and in addition to the Committee on Financial Services, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned</action>
+ <congCommittee authorityId="hsba00" chamber="H" congress="116" type="S">
+                      <name type="authority-standard">Committee on Financial Services</name>
+                      <name type="authority-short">Financial Services</name>
+                </congCommittee>
+ <congCommittee authorityId="hsed00" chamber="H" congress="116" type="S">
+                      <name type="authority-standard">Committee on Education and Labor</name>
+                      <name type="authority-short">Education and Labor</name>
+                </congCommittee>
+ <congMember authorityId="2399" bioGuideId="U000040" chamber="H" congress="116" party="D" role="SPONSOR" state="IL">
+                      <name type="parsed">Ms. Underwood</name>
+                      <name type="authority-fnf">Lauren Underwood</name>
+                      <name type="authority-lnf">Underwood, Lauren</name>
+                </congMember>
+ <congMember authorityId="1588" bioGuideId="S001145" chamber="H" congress="116" gpoId="7929" party="D" role="COSPONSOR" state="IL">
+                      <name type="parsed">Ms. Schakowsky</name>
+                      <name type="authority-fnf">Janice D. Schakowsky</name>
+                      <name type="authority-lnf">Schakowsky, Janice D.</name>
+                      <name type="authority-other">Janice Schakowsky</name>
+                </congMember>
+ <congMember authorityId="2202" bioGuideId="N000188" chamber="H" congress="116" party="D" role="COSPONSOR" state="NJ">
+                      <name type="parsed">Mr. Norcross</name>
+                      <name type="authority-fnf">Donald Norcross</name>
+                      <name type="authority-lnf">Norcross, Donald</name>
+                </congMember>
+ <congMember authorityId="2092" bioGuideId="B001278" chamber="H" congress="116" gpoId="8367" party="D" role="COSPONSOR" state="OR">
+                      <name type="parsed">Ms. Bonamici</name>
+                      <name type="authority-fnf">Suzanne Bonamici</name>
+                      <name type="authority-lnf">Bonamici, Suzanne</name>
+                </congMember>
+ <isPrivate>false</isPrivate>
+ <isAppropriation>false</isAppropriation>
+ <USCode title="29">
+                      <section detail="et seq." number="1051"></section>
+                      <section number="1052"></section>
+                      <section detail="(a)" number="1053"></section>
+                      <section detail="(c)(2)(B)" number="1055"></section>
+                      <section number="1132"></section>
+                </USCode>
+</extension>
+</mods>
