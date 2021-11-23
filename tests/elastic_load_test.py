@@ -3,7 +3,8 @@ import pytest
 from billsim.elastic_load import es, indexBill
 from tests import constants_test
 from billsim.constants import SAMPLE_MATCH_ALL_QUERY
-from billsim.bill_similarity import getHitsHits, getSimilarSections, moreLikeThis
+from billsim.bill_similarity import getSimilarSections
+from billsim.utils_es import getHitsHits, moreLikeThis
 
 
 def es_service_available() -> bool:
@@ -75,7 +76,7 @@ class TestBillSimilarity:
     @pytest.mark.skip(
         reason="Es query coming up empty when the first test deletes the index")
     def test_matchAllQuery(self):
-        from billsim.bill_similarity import runQuery
+        from billsim.utils_es import runQuery
         matchall_query = SAMPLE_MATCH_ALL_QUERY
         matchall_query["size"] = 2
         r = runQuery(index=constants_test.TEST_INDEX_SECTIONS,

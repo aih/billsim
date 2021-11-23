@@ -251,6 +251,14 @@ SAMPLE_MATCH_ID_QUERY = {
     }
 }
 
+SAMPLE_MATCH_BILLNUMBER_QUERY = {
+    "query": {
+        "match": {
+            "billnumber": "117hr2001"
+        }
+    }
+}
+
 SAMPLE_QUERY = {
     "size": RESULTS_DEFAULT,
     "min_score": MIN_SCORE_DEFAULT,

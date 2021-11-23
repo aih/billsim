@@ -5,6 +5,9 @@ data/
 .env
 .vscode
 
+# Data and backups
+*.gz
+
 # SQLITE DB
 *.db
 

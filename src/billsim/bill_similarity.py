@@ -12,63 +12,11 @@ es = Elasticsearch()
 from billsim import constants
 from billsim.utils import billNumberVersionToBillPath, deep_get, getBillLengthbyPath, getId, getHeader, getEnum
 from billsim.pymodels import SectionMeta, Section
+from billsim.utils_es import getHitsHits, moreLikeThis
 
 logging.basicConfig(filename='bill_similarity.log', filemode='w', level='INFO')
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
-
-
-def getHitsHits(res) -> list:
-    return res.get('hits').get('hits')
-
-
-def getMinScore(queryText: str) -> int:
-    """
-    Returns the minimum score for a queryText, based on the length.
-    If we scale the min_score by the length of the section, we may be able to use 'max' score_mode always.
-    
-    Minimum text length to get > 20 score in the 'max' score_mode is ~ 340 characters
-    See, e.g.  `constants.misc_civil_rights` (section 9 of 117hr5ih)
-    
-    Args:
-        queryText (str): The text of the query. 
-
-    Returns:
-        int: minimum score 
-    """
-    length = len(queryText)
-    if length < 500:
-        return 20
-    elif length < 1000:
-        return 40
-    elif length < 1500:
-        return 50
-    else:
-        return 60
-
-
-def runQuery(index: str = constants.INDEX_SECTIONS,
-             query: dict = constants.SAMPLE_QUERY_NESTED_MLT,
-             size: int = constants.MAX_BILLS_SECTION) -> dict:
-    """
-  See API documentation
-  https://elasticsearch-py.readthedocs.io/en/v7.10.1/api.html#elasticsearch.Elasticsearch.search
-  """
-    query = query
-    return es.search(index=index, body=query, size=size)
-
-
-def moreLikeThis(queryText: str,
-                 index: str = constants.INDEX_SECTIONS,
-                 score_mode: str = constants.SCORE_MODE_MAX,
-                 size: int = constants.MAX_BILLS_SECTION,
-                 min_score: int = constants.MIN_SCORE_DEFAULT) -> dict:
-    if min_score == constants.MIN_SCORE_DEFAULT:
-        min_score = getMinScore(queryText)
-    query = constants.makeMLTQuery(queryText,
-                                   min_score=min_score,
-                                   score_mode=score_mode)
-    return runQuery(index=index, query=query, size=size)
 
 
 def getSimilarSections(
