@@ -260,6 +260,8 @@ def initializeBillSectionsIndex(delete_index=False):
     logger.info('Indexing {0} bills'.format(len(billPaths)))
     for billPath in billPaths:
         try:
+            # TODO get number of sections and length
+            # and add bill to db
             indexBill(billPath)
         except Exception as e:
             logger.error('Failed to index bill {0}'.format(

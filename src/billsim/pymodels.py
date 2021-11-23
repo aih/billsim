@@ -50,6 +50,8 @@ class SimilarSectionHit(SQLModel):
 class Bill(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     length: Optional[int] = None
+    # TODO: when indexing/storing Bill initially, calculate number of sections
+    #sections_num: Optional[int] = None
     billnumber: str
     version: str
 
