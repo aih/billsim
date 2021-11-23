@@ -9,7 +9,7 @@ from billsim import pymodels, constants
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
-logging.basicConfig(level='DEBUG')
+logging.basicConfig(level='INFO')
 
 
 def getBillnumberversionParts(billnumber_version: str) -> dict:

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="billres.xsl"?>
+<!DOCTYPE bill PUBLIC "-//US Congress//DTDs/bill.dtd//EN" "bill.dtd">
+<bill bill-stage="Introduced-in-House" dms-id="H8020626A4762434BAD99C4624F385602" public-private="public" key="H" bill-type="olc"> 
+<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+<dublinCore>
+<dc:title>117 HR 2003 IH: Secure the Southern Border Act</dc:title>
+<dc:publisher>U.S. House of Representatives</dc:publisher>
+<dc:date>2021-03-18</dc:date>
+<dc:format>text/xml</dc:format>
+<dc:language>EN</dc:language>
+<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>
+</dublinCore>
+</metadata>
+<form>
+<distribution-code display="yes">I</distribution-code> 
+<congress display="yes">117th CONGRESS</congress><session display="yes">1st Session</session> 
+<legis-num display="yes">H. R. 2003</legis-num> 
+<current-chamber>IN THE HOUSE OF REPRESENTATIVES</current-chamber> 
+<action display="yes"> 
+<action-date date="20210318">March 18, 2021</action-date> 
+<action-desc><sponsor name-id="B000825">Mrs. Boebert</sponsor> (for herself, <cosponsor name-id="G000552">Mr. Gohmert</cosponsor>, <cosponsor name-id="B001291">Mr. Babin</cosponsor>, <cosponsor name-id="B001274">Mr. Brooks</cosponsor>, <cosponsor name-id="L000589">Mrs. Lesko</cosponsor>, <cosponsor name-id="R000103">Mr. Rosendale</cosponsor>, <cosponsor name-id="M001212">Mr. Moore of Alabama</cosponsor>, <cosponsor name-id="D000615">Mr. Duncan</cosponsor>, <cosponsor name-id="B001302">Mr. Biggs</cosponsor>, <cosponsor name-id="G000578">Mr. Gaetz</cosponsor>, and <cosponsor name-id="P000605">Mr. Perry</cosponsor>) introduced the following bill; which was referred to the <committee-name committee-id="HJU00">Committee on the Judiciary</committee-name>, and in addition to the Committees on <committee-name committee-id="HHM00">Homeland Security</committee-name>, <committee-name committee-id="HAS00">Armed Services</committee-name>, <committee-name committee-id="HGO00">Oversight and Reform</committee-name>, and <committee-name committee-id="HFA00">Foreign Affairs</committee-name>, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned</action-desc> 
+</action> 
+<legis-type>A BILL</legis-type> 
+<official-title display="yes">To enact into law certain executive orders related to immigration and border security, and for other purposes.</official-title> 
+</form> 
+<legis-body id="HA0EB601B9BC84D0585A3EEDC6ED59C3C" style="OLC"> 
+<section id="HCA7E60E6CEDC4CB3A2F4CDB61BDFC360" section-type="section-one"><enum>1.</enum><header>Short title</header><text display-inline="no-display-inline">This Act may be cited as the <quote><short-title>Secure the Southern Border Act</short-title></quote>.</text></section> <section id="HA50986397B92440E9A84C360B224E14E"><enum>2.</enum><header>Ending catch and release</header><text display-inline="no-display-inline">The provisions of the Presidential Memorandum, entitled <quote>Ending <quote>Catch and Release</quote> at the Border of the United States and Directing Other Enhancements to Immigration Enforcement</quote> (83 Fed. Reg. 16179, April 13, 2018) are enacted into law.</text></section> 
+<section id="H263AEFDE7522497B87466E8E1CD2D6E9"><enum>3.</enum><header>Building the wall and other border security improvements</header><text display-inline="no-display-inline">The provisions of Executive Order 13767, entitled <quote>Border Security and Immigration Enforcement Improvements</quote> (82 Fed. Reg. 8793, January 30, 2017) are enacted into law.</text></section> <section id="HBA269E39B2CA470BB9714524A063A715"><enum>4.</enum><header>Ending sanctuary cities and enforcing immigration laws in the interior</header><text display-inline="no-display-inline">The provisions of Executive Order 13768, entitled <quote>Enhancing Public Safety in the Interior of the United States</quote> (82 Fed. Reg. 8799, January 30, 2017) are enacted into law.</text></section> 
+<section id="HFA39DF069AE843BC9C400C9764A51DDA"><enum>5.</enum><header>Remain in mexico policy</header><text display-inline="no-display-inline">The provisions of the policy guidance entitled <quote>Policy Guidance for Implementation of the Migrant Protection Protocols</quote> (84 Fed. Reg. 6811, February 28, 2019) are enacted into law.</text></section> <section id="HD4330A6BC5C2445CBCECFE5F08632F0C"><enum>6.</enum><header>Suspension and limitation on entry</header><text display-inline="no-display-inline">The provisions of Proclamation 9880, entitled <quote>Addressing Mass Migration Through the Southern Border of the United States</quote> (84 Fed. Reg. 21229, May 13, 2019) are enacted into law.</text></section> 
+<section id="H23D07B4813D94235BDBA054273A3F4E1"><enum>7.</enum><header>Additonal measures to enhance border security</header><text display-inline="no-display-inline">The provisions of the Presidential Memorandum, entitled <quote>Additional Measures to Enhance Border Security and Restore Integrity to Our Immigration System</quote> (April 29, 2019) are enacted into law.</text></section> <section id="HFAA6B8072327480FAB38833181BE3D1C"><enum>8.</enum><header>Securing the southern border</header><text display-inline="no-display-inline">The provisions of the Presidential Memorandum, entitled <quote>Securing the Southern Border of the United States</quote> (April 4, 2018) are enacted into law.</text></section> 
+<section id="H97A5A2C1632E4D2CB8CC039B2A9CFBF7"><enum>9.</enum><header>Expedited removal</header><text display-inline="no-display-inline">The provisions of the Notice, entitled <quote>Designating Aliens for Expedited Removal</quote> (84 Fed. Reg. 35409, July 23, 2019) are enacted into law. </text></section> <section id="H9FC93054615E4C0C91E986F584EB9C60"><enum>10.</enum><header>Publication</header><text display-inline="no-display-inline">In publishing this Act in slip form and in the United States Statutes at Large pursuant to section 112 of title 1, United States Code, the Archivist of the United States shall include after the date of approval at the end an appendix setting forth the text of the Executive Orders, Memorandums, Policy Guidance and Notices referred to in this Act (as in effect on January 19, 2021).</text></section> 
+</legis-body> 
+</bill> 
+
+

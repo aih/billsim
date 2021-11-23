@@ -18,6 +18,8 @@ PATH_TO_DATA_DIR = os.getenv(
     'PATH_TO_DATA_DIR',
     os.path.join('/', *"/usr/local/share/billsim/public/data".split('/')))
 
+# Parent of the /115, /116, /117 directories
+# May be the same as the PATH_TO_DATA_DIR (e.g. for the `unitedstates` pathType)
 PATH_TO_CONGRESSDATA_DIR = os.getenv('PATH_TO_CONGRESS_DATA_DIR',
                                      default=os.path.join(
                                          PATH_TO_DATA_DIR, 'congress'))
@@ -67,7 +69,7 @@ except Exception as err:
 SAVE_ON_COUNT = 1000
 
 BILL_ID_REGEX = r'[a-z]+[1-9][0-9]*-[1-9][0-9]+'
-BILL_NUMBER_PART_REGEX = r'(?P<congress>[1-9][0-9]*)(?P<stage>[a-z]+)(?P<billnumber>[0-9]+)(?P<version>[a-z]+)?'
+BILL_NUMBER_PART_REGEX = r'(?P<congress>[1-9][0-9]*)(?P<stage>[a-z]+)(?P<number>[0-9]+)(?P<version>[a-z]+)?'
 BILL_NUMBER_PART_REGEX_COMPILED = re.compile(BILL_NUMBER_PART_REGEX)
 BILL_NUMBER_REGEX = BILL_NUMBER_PART_REGEX + '$'
 BILL_NUMBER_REGEX_COMPILED = re.compile(BILL_NUMBER_REGEX)
@@ -87,8 +89,8 @@ USCONGRESS_XML_FILE = 'document.xml'
 
 
 # CDG = congress.gov
-def billNumberVersionFromPath_CDG(path: str):
-    match = BILL_NUMBER_PART_REGEX_COMPILED.search(path)
+def billNumberVersionFromPath_CDG(billpath: str):
+    match = BILL_NUMBER_PART_REGEX_COMPILED.search(billpath)
     if match:
         return match.group(0)
     else:
@@ -98,26 +100,25 @@ def billNumberVersionFromPath_CDG(path: str):
 def billNumberVersionToPath_CDG(billnumber_version: str):
     match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
     if match:
-        return '{congress}/bills/{stage}{billnumber}/BILLS-{congress}{stage}{billnumber}{version}-uslm.xml'.format(
+        return '{congress}/bills/{stage}{number}/BILLS-{congress}{stage}{number}{version}-uslm.xml'.format(
             **match.groupdict())
     else:
         return ''
 
 
 # data/117/bills/hr200/
-def isFileParent_CDG(path: str):
-    match = BILL_DIR_REGEX_CDG_COMPILED.search(path)
+def isFileParent_CDG(billpath: str):
+    match = BILL_DIR_REGEX_CDG_COMPILED.search(billpath)
     if match:
         return True
     else:
         return False
 
 
-def billNumberVersionFromPath_USCONGRESS(path: str):
-    match = US_CONGRESS_PATH_REGEX_COMPILED.search(path)
+def billNumberVersionFromPath_USCONGRESS(billpath: str) -> str:
+    match = US_CONGRESS_PATH_REGEX_COMPILED.search(billpath)
     if match:
-        return '{congress}{stage}{billnumber}{version}'.format(
-            match.groupdict())
+        return '{congress}{billnumber}{version}'.format(**match.groupdict())
     else:
         return ''
 
@@ -125,7 +126,7 @@ def billNumberVersionFromPath_USCONGRESS(path: str):
 def billNumberVersionToPath_USCONGRESS(billnumber_version: str):
     match = BILL_NUMBER_PART_REGEX_COMPILED.search(billnumber_version)
     if match:
-        return '{congress}/bills/{stage}/{stage}{billnumber}/text-versions/{version}/document.xml'.format(
+        return '{congress}/bills/{stage}/{stage}{number}/text-versions/{version}/document.xml'.format(
             **match.groupdict())
     else:
         return ''

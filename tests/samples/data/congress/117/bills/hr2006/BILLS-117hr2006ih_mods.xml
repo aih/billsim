@@ -1,0 +1,153 @@
+<mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd" ID="P0b002ee1ae27e6f0">
+<name type="corporate">
+ <namePart>United States Government Publishing Office</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">publisher</roleTerm>
+  <roleTerm authority="marcrelator" type="code">pbl</roleTerm>
+</role>
+ <role>
+  <roleTerm authority="marcrelator" type="text">distributor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">dst</roleTerm>
+</role>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">author</roleTerm>
+  <roleTerm authority="marcrelator" type="code">aut</roleTerm>
+</role>
+ <description>Government Organization</description>
+</name>
+<typeOfResource>text</typeOfResource>
+<genre authority="marcgt">government publication</genre>
+<language>
+ <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</language>
+<extension>
+ <collectionCode>BILLS</collectionCode>
+ <searchTitle>To authorize the Secretary of Health and Human Services to award grants to States to expand or maintain a strategic stockpile of products deemed to be essential in the event of a public health emergency, and for other purposes.;State Stockpile Readiness Act of 2021;H.R. 2006 (IH)
+    </searchTitle>
+ <category>Bills and Statutes</category>
+ <waisDatabaseName>117_cong_bills</waisDatabaseName>
+ <branch>legislative</branch>
+ <dateIngested>2021-05-18</dateIngested>
+</extension>
+<titleInfo>
+ <title>To authorize the Secretary of Health and Human Services to award grants to States to expand or maintain a strategic stockpile of products deemed to be essential in the event of a public health emergency, and for other purposes.</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>State Stockpile Readiness Act of 2021</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>H.R. 2006 (IH)
+    </title>
+</titleInfo>
+<originInfo>
+ <publisher>U.S. Government Publishing Office</publisher>
+ <dateIssued encoding="w3cdtf">2021-03-18</dateIssued>
+ <issuance>monographic</issuance>
+</originInfo>
+<physicalDescription>
+ <note type="source content type">deposited</note>
+ <digitalOrigin>born digital</digitalOrigin>
+ <extent>4 p.</extent>
+</physicalDescription>
+<classification authority="sudocs">Y 1.6:</classification>
+<classification authority="sudocs">Y 1.4/6:</classification>
+<identifier type="local">P0b002ee1ae27e6f0</identifier>
+<identifier type="uri">https://www.govinfo.gov/app/details/BILLS-117hr2006ih</identifier>
+<identifier type="preferred citation">H.R. 2006</identifier>
+<identifier type="stock number">021-610-00252-9</identifier>
+<identifier type="Parent ILS system id">000501532</identifier>
+<identifier type="Child ILS system id">000325573</identifier>
+<identifier type="Parent ILS title">Congressional bills</identifier>
+<identifier type="Child ILS title">House bills</identifier>
+<identifier type="former package identifier">f:h2006_ih.txt</identifier>
+<location>
+ <url displayLabel="Content Detail" access="object in context">https://www.govinfo.gov/app/details/BILLS-117hr2006ih</url>
+ <url displayLabel="HTML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr2006ih/html/BILLS-117hr2006ih.htm</url>
+ <url displayLabel="PDF rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr2006ih/pdf/BILLS-117hr2006ih.pdf</url>
+ <url displayLabel="XML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr2006ih/xml/BILLS-117hr2006ih.xml</url>
+</location>
+<accessCondition type="GPO scope determination">fdlp</accessCondition>
+<recordInfo>
+ <recordContentSource authority="marcorg">DGPO</recordContentSource>
+ <recordCreationDate encoding="w3cdtf">2021-05-18</recordCreationDate>
+ <recordChangeDate encoding="w3cdtf">2021-05-18</recordChangeDate>
+ <recordIdentifier source="DGPO">BILLS-117hr2006ih</recordIdentifier>
+ <recordOrigin>machine generated</recordOrigin>
+ <languageOfCataloging>
+  <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</languageOfCataloging>
+</recordInfo>
+<name type="personal">
+ <namePart>Earl L. &quot;Buddy&quot; Carter</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm authority="marcrelator" type="text">sponsor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">spn</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Tom O&apos;Halleran</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <namePart>Committee on Energy and Commerce</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">associated name</roleTerm>
+  <roleTerm authority="marcrelator" type="code">asn</roleTerm>
+</role>
+</name>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Code</title>
+  <partNumber>Title 42 Section 247d-6e</partNumber>
+</titleInfo>
+ <identifier type="USC citation">42 U.S.C. 247d-6e</identifier>
+</relatedItem>
+<extension>
+ <docClass>hr</docClass>
+ <accessId>BILLS-117hr2006ih</accessId>
+ <congress>117</congress>
+ <session>1</session>
+ <originChamber>HOUSE</originChamber>
+ <currentChamber>HOUSE</currentChamber>
+ <billNumber>2006</billNumber>
+ <billVersion reprint="false">ih</billVersion>
+ <fileSuffix>ih</fileSuffix>
+ <shortTitle type="measure">State Stockpile Readiness Act of 2021</shortTitle>
+ <officialTitle>To authorize the Secretary of Health and Human Services to award grants to States to expand or maintain a strategic stockpile of products deemed to be essential in the event of a public health emergency, and for other purposes.</officialTitle>
+ <action date="2021-03-18">Mr. Carter of Georgia (for himself and Mr. O&apos;Halleran) introduced the following bill; which was referred to the Committee on Energy and Commerce</action>
+ <congCommittee authorityId="hsif00" chamber="H" congress="117" type="S">
+                      <name type="authority-standard">Committee on Energy and Commerce</name>
+                      <name type="authority-short">Energy and Commerce</name>
+                </congCommittee>
+ <congMember authorityId="2236" bioGuideId="C001103" chamber="H" congress="117" party="R" role="SPONSOR" state="GA">
+                      <name type="parsed">Mr. Carter of Georgia</name>
+                      <name type="authority-fnf">Earl L. &quot;Buddy&quot; Carter</name>
+                      <name type="authority-lnf">Carter, Earl L. &quot;Buddy&quot;</name>
+                      <name type="authority-other">Mr. Earl Carter</name>
+                </congMember>
+ <congMember authorityId="2306" bioGuideId="O000171" chamber="H" congress="117" party="D" role="COSPONSOR" state="AZ">
+                      <name type="parsed">Mr. O&apos;Halleran</name>
+                      <name type="authority-fnf">Tom O&apos;Halleran</name>
+                      <name type="authority-lnf">O&apos;Halleran, Tom</name>
+                </congMember>
+ <isPrivate>false</isPrivate>
+ <isAppropriation>false</isAppropriation>
+ <USCode title="42">
+                      <section number="247d-6e"></section>
+                </USCode>
+</extension>
+</mods>

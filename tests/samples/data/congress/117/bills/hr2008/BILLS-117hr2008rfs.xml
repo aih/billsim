@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="billres.xsl"?>
+<!DOCTYPE bill PUBLIC "-//US Congress//DTDs/bill.dtd//EN" "bill.dtd">
+<bill bill-stage="Referred-in-Senate" dms-id="H624C4C3DF5634D439C60937B73E0BCBE" public-private="public" key="G" bill-type="olc" stage-count="1"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+<dublinCore>
+<dc:title>117 HR 2008 : Local Water Protection Act</dc:title>
+<dc:publisher>U.S. House of Representatives</dc:publisher>
+<dc:date></dc:date>
+<dc:format>text/xml</dc:format>
+<dc:language>EN</dc:language>
+<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>
+</dublinCore>
+</metadata>
+<form>
+<distribution-code display="yes">IIB</distribution-code><congress display="yes">117th CONGRESS</congress><session display="yes">1st Session</session><legis-num display="yes">H. R. 2008</legis-num><current-chamber>IN THE SENATE OF THE UNITED STATES</current-chamber><action><action-date>June 16, 2021</action-date><action-desc>Received; read twice and referred to the <committee-name committee-id="SSEV00">Committee on Environment and Public Works</committee-name></action-desc></action><legis-type>AN ACT</legis-type><official-title display="yes">To amend the Federal Water Pollution Control Act to reauthorize certain programs relating to nonpoint source management, and for other purposes.</official-title></form><legis-body id="HCFE5BD4FB5424788816832649FA9676C" style="OLC"><section id="HF11DCBBCE2D540D69A009E9D088B3134" section-type="section-one"><enum>1.</enum><header>Short title</header><text display-inline="no-display-inline">This Act may be cited as the <quote><short-title>Local Water Protection Act</short-title></quote>.</text></section><section id="HBFF36D255B394EE2AD34A68674BA345F" section-type="subsequent-section"><enum>2.</enum><header>Nonpoint source management programs</header><text display-inline="no-display-inline">Section 319(j) of the Federal Water Pollution Control Act (<external-xref legal-doc="usc" parsable-cite="usc/33/1329">33 U.S.C. 1329(j)</external-xref>) is amended by striking <quote>subsections (h) and (i) not to exceed</quote> and all that follows through <quote>fiscal year 1991</quote> and inserting <quote>subsections (h) and (i) $200,000,000 for each of fiscal years 2022 through 2026</quote>.</text></section></legis-body><attestation><attestation-group><attestation-date date="20210615" chamber="House">Passed the House of Representatives June 15, 2021.</attestation-date><attestor display="yes">Cheryl L. Johnson,</attestor><role>Clerk.</role></attestation-group></attestation></bill> 
+

@@ -1,0 +1,175 @@
+<mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd" ID="P0b002ee1ae27e6c0">
+<name type="corporate">
+ <namePart>United States Government Publishing Office</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">publisher</roleTerm>
+  <roleTerm authority="marcrelator" type="code">pbl</roleTerm>
+</role>
+ <role>
+  <roleTerm authority="marcrelator" type="text">distributor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">dst</roleTerm>
+</role>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">author</roleTerm>
+  <roleTerm authority="marcrelator" type="code">aut</roleTerm>
+</role>
+ <description>Government Organization</description>
+</name>
+<typeOfResource>text</typeOfResource>
+<genre authority="marcgt">government publication</genre>
+<language>
+ <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</language>
+<extension>
+ <collectionCode>BILLS</collectionCode>
+ <searchTitle>To amend chapter 139 of title 10, United States Code, to require the Secretary of each military department to identify promising research programs of the Small Business Innovation Research Program or Small Business Technology Transfer Program for inclusion in the future budgets and plans of the Department of Defense, and for other purposes.;DOD Entrepreneurial Innovation Act;H.R. 2005 (IH)
+    </searchTitle>
+ <category>Bills and Statutes</category>
+ <waisDatabaseName>117_cong_bills</waisDatabaseName>
+ <branch>legislative</branch>
+ <dateIngested>2021-05-18</dateIngested>
+</extension>
+<titleInfo>
+ <title>To amend chapter 139 of title 10, United States Code, to require the Secretary of each military department to identify promising research programs of the Small Business Innovation Research Program or Small Business Technology Transfer Program for inclusion in the future budgets and plans of the Department of Defense, and for other purposes.</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>DOD Entrepreneurial Innovation Act</title>
+</titleInfo>
+<titleInfo type="alternative">
+ <title>H.R. 2005 (IH)
+    </title>
+</titleInfo>
+<originInfo>
+ <publisher>U.S. Government Publishing Office</publisher>
+ <dateIssued encoding="w3cdtf">2021-03-18</dateIssued>
+ <issuance>monographic</issuance>
+</originInfo>
+<physicalDescription>
+ <note type="source content type">deposited</note>
+ <digitalOrigin>born digital</digitalOrigin>
+ <extent>12 p.</extent>
+</physicalDescription>
+<classification authority="sudocs">Y 1.6:</classification>
+<classification authority="sudocs">Y 1.4/6:</classification>
+<identifier type="local">P0b002ee1ae27e6c0</identifier>
+<identifier type="uri">https://www.govinfo.gov/app/details/BILLS-117hr2005ih</identifier>
+<identifier type="preferred citation">H.R. 2005</identifier>
+<identifier type="stock number">021-610-00252-9</identifier>
+<identifier type="Parent ILS system id">000501532</identifier>
+<identifier type="Child ILS system id">000325573</identifier>
+<identifier type="Parent ILS title">Congressional bills</identifier>
+<identifier type="Child ILS title">House bills</identifier>
+<identifier type="former package identifier">f:h2005_ih.txt</identifier>
+<location>
+ <url displayLabel="Content Detail" access="object in context">https://www.govinfo.gov/app/details/BILLS-117hr2005ih</url>
+ <url displayLabel="HTML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr2005ih/html/BILLS-117hr2005ih.htm</url>
+ <url displayLabel="PDF rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr2005ih/pdf/BILLS-117hr2005ih.pdf</url>
+ <url displayLabel="XML rendition" access="raw object">https://www.govinfo.gov/content/pkg/BILLS-117hr2005ih/xml/BILLS-117hr2005ih.xml</url>
+</location>
+<accessCondition type="GPO scope determination">fdlp</accessCondition>
+<recordInfo>
+ <recordContentSource authority="marcorg">DGPO</recordContentSource>
+ <recordCreationDate encoding="w3cdtf">2021-05-18</recordCreationDate>
+ <recordChangeDate encoding="w3cdtf">2021-05-18</recordChangeDate>
+ <recordIdentifier source="DGPO">BILLS-117hr2005ih</recordIdentifier>
+ <recordOrigin>machine generated</recordOrigin>
+ <languageOfCataloging>
+  <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+</languageOfCataloging>
+</recordInfo>
+<name type="personal">
+ <namePart>Ken Calvert</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm authority="marcrelator" type="text">sponsor</roleTerm>
+  <roleTerm authority="marcrelator" type="code">spn</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="personal">
+ <namePart>Charlie Crist</namePart>
+ <affiliation>United States House of Representatives</affiliation>
+ <role>
+  <roleTerm type="text">cosponsor</roleTerm>
+</role>
+ <description>United States Congress Member</description>
+</name>
+<name type="corporate">
+ <namePart>United States</namePart>
+ <namePart>Congress</namePart>
+ <namePart>House of Representatives</namePart>
+ <namePart>Committee on Armed Services</namePart>
+ <role>
+  <roleTerm authority="marcrelator" type="text">associated name</roleTerm>
+  <roleTerm authority="marcrelator" type="code">asn</roleTerm>
+</role>
+</name>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Code</title>
+  <partNumber>Title 10 Section 2359c(e)</partNumber>
+  <partNumber>Title 10 Chapter 139</partNumber>
+  <partNumber>Title 10 Chapter 303</partNumber>
+</titleInfo>
+ <identifier type="USC citation">10 U.S.C. 2359c(e)</identifier>
+ <identifier type="USC citation">10 U.S.C. Chapter 139</identifier>
+ <identifier type="USC citation">10 U.S.C. Chapter 303</identifier>
+</relatedItem>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Code</title>
+  <partNumber>Title 15 Section 638(r)(2)</partNumber>
+</titleInfo>
+ <identifier type="USC citation">15 U.S.C. 638(r)(2)</identifier>
+</relatedItem>
+<relatedItem type="isReferencedBy">
+ <titleInfo>
+  <title>United States Public Law 283 (116th Congress)</title>
+</titleInfo>
+ <identifier type="public law citation">Public Law 116-283</identifier>
+</relatedItem>
+<extension>
+ <docClass>hr</docClass>
+ <accessId>BILLS-117hr2005ih</accessId>
+ <congress>117</congress>
+ <session>1</session>
+ <originChamber>HOUSE</originChamber>
+ <currentChamber>HOUSE</currentChamber>
+ <billNumber>2005</billNumber>
+ <billVersion reprint="false">ih</billVersion>
+ <fileSuffix>ih</fileSuffix>
+ <shortTitle type="measure">DOD Entrepreneurial Innovation Act</shortTitle>
+ <officialTitle>To amend chapter 139 of title 10, United States Code, to require the Secretary of each military department to identify promising research programs of the Small Business Innovation Research Program or Small Business Technology Transfer Program for inclusion in the future budgets and plans of the Department of Defense, and for other purposes.</officialTitle>
+ <action date="2021-03-18">Mr. Calvert (for himself and Mr. Crist) introduced the following bill; which was referred to the Committee on Armed Services</action>
+ <congCommittee authorityId="hsas00" chamber="H" congress="117" type="S">
+                      <name type="authority-standard">Committee on Armed Services</name>
+                      <name type="authority-short">Armed Services</name>
+                </congCommittee>
+ <congMember authorityId="165" bioGuideId="C000059" chamber="H" congress="117" gpoId="7849" party="R" role="SPONSOR" state="CA">
+                      <name type="parsed">Mr. Calvert</name>
+                      <name type="authority-fnf">Ken Calvert</name>
+                      <name type="authority-lnf">Calvert, Ken</name>
+                </congMember>
+ <congMember authorityId="2321" bioGuideId="C001111" chamber="H" congress="117" party="D" role="COSPONSOR" state="FL">
+                      <name type="parsed">Mr. Crist</name>
+                      <name type="authority-fnf">Charlie Crist</name>
+                      <name type="authority-lnf">Crist, Charlie</name>
+                </congMember>
+ <law congress="116" isPrivate="false" number="283"></law>
+ <isPrivate>false</isPrivate>
+ <isAppropriation>false</isAppropriation>
+ <USCode title="10">
+                      <section detail="(e)" number="2359c"></section>
+                      <chapter number="139"></chapter>
+                      <chapter number="303"></chapter>
+                </USCode>
+ <USCode title="15">
+                      <section detail="(r)(2)" number="638"></section>
+                </USCode>
+</extension>
+</mods>

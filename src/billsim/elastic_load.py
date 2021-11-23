@@ -12,6 +12,8 @@ from billsim.utils import getBillXmlPaths, getId, getHeader, getEnum, getText
 from billsim import constants
 from billsim.pymodels import Status, BillPath
 
+from billsim.utils import get_traceback
+
 logging.basicConfig(filename='elastic_load.log', filemode='w', level='INFO')
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -149,8 +151,7 @@ def indexBill(
     billnumber = ''
     if billmatch:
         billmatch_dict = billmatch.groupdict()
-        billnumber = billmatch_dict.get('congress', '') + billmatch_dict.get(
-            'stage', '') + billmatch_dict.get('billnumber', '')
+        billnumber = '{congress}{stage}{number}'.format(**billmatch_dict)
         billversion = billmatch_dict.get('version', '')
     from collections import OrderedDict
     headers_text = [header.text for header in headers]
@@ -183,9 +184,9 @@ def indexBill(
                 'section_id':
                     getId(section),
                 'section_number':
-                    getEnum(section, defaultNS=defaultNS),
+                    getEnum(section),
                 'section_header':
-                    getHeader(section, defaultNS=defaultNS),
+                    getHeader(section),
                 'section_text':
                     etree.tostring(section, method="text", encoding="unicode"),
                 'section_length':

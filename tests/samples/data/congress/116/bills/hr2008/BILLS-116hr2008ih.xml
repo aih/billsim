@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="billres.xsl"?>
+<!DOCTYPE bill PUBLIC "-//US Congress//DTDs/bill.dtd//EN" "bill.dtd">
+<bill bill-stage="Introduced-in-House" bill-type="olc" dms-id="H3CF41F8A1E7E4AE8A2E62DE5C609557D" key="H" public-private="public"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+<dublinCore>
+<dc:title>116 HR 2008 IH: No Art in Embassies Act</dc:title>
+<dc:publisher>U.S. House of Representatives</dc:publisher>
+<dc:date>2019-04-01</dc:date>
+<dc:format>text/xml</dc:format>
+<dc:language>EN</dc:language>
+<dc:rights>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</dc:rights>
+</dublinCore>
+</metadata>
+<form>
+<distribution-code display="yes">I</distribution-code><congress display="yes">116th CONGRESS</congress><session display="yes">1st Session</session><legis-num display="yes">H. R. 2008</legis-num><current-chamber>IN THE HOUSE OF REPRESENTATIVES</current-chamber><action display="yes"><action-date date="20190401">April 1, 2019</action-date><action-desc><sponsor name-id="B001309">Mr. Burchett</sponsor> introduced the following bill; which was referred to the <committee-name committee-id="HFA00">Committee on Foreign Affairs</committee-name></action-desc></action><legis-type>A BILL</legis-type><official-title display="yes">To prohibit the installation or display of art in any United States embassy, and for other
+			 purposes.</official-title></form>
+	<legis-body id="HBC7AA77559C04564B9D20DFB972F38CC" style="OLC">
+ <section id="H40E69FB082844651B7C4ABBC6DE07B55" section-type="section-one"><enum>1.</enum><header>Short title</header><text display-inline="no-display-inline">This Act may be cited as the <quote><short-title>No Art in Embassies Act</short-title></quote>.</text> </section><section id="HD04BCE8962A9431D8BCD4E198D853837"><enum>2.</enum><header>Prohibition</header> <subsection id="HE0748E1F7DA04712A0C827E4BBCCFDC9"><enum>(a)</enum><header>In general</header><text display-inline="yes-display-inline">No funds are authorized to be appropriated, and the Secretary of State may not obligate or expend any funds, for the purchase, installation, insurance, or transport of any art for the purposes of installation or display in any embassy, consulate, or other foreign mission of the United States.</text>
+ </subsection><subsection id="H3519ECD5E7734F838B9D97C3B4BAAD01"><enum>(b)</enum><header>Definition</header><text display-inline="yes-display-inline">In this section, the term <quote>art</quote> includes paintings, sculptures, photographs, industrial design, and craft art.</text> </subsection></section></legis-body></bill> 
+
