@@ -1,0 +1,86 @@
+:toc:
+
+# BillSim: Utilities to process similarity of bills
+
+This repository extracts the bill similarity functions from the BillMap project https://github.com/unitedstates/BillMap[here]. Both are open source, under the Public Domain License.  
+
+A separate repository (github.com/aih/bills) contains tools in Go to process bill data.
+
+## Processing bill XML files
+
+The default functions assume that the bill XML files are in a CONGRESS_DATA directory. The absolute path to CONGRESS_DATA must be defined as `PATH_TO_CONGRESS_DATA` in environment variables, or set in the `.env` file, inside the `billsim` directory. It should be a path to a directory of the form `[abspath]/data/congress/117` (for the 117th Congress). See `.env-sample` for an example.
+
+The 'PATHTYPE_DEFAULT' sets the expected hierarchy structure. The 'congressdotgov' structure is `/116/bills/hr1818/BILLS-116hr1818ih.xml`, while the `unitedstates` pathtype structure follows the hierarchy that is created by the scraper in `github.com/unitedstates/congress`: `116/bills/hr/hr1818/text-versions/ih/BILLS-116hr1818ih.xml`.
+
+Then you can run the following command to process all the bill XML files in the directory:
+
+```python
+>>> from billsim.utils import getBillXmlPaths
+>>> z=getBillXmlPaths()
+>>> z[30]
+BillPath(billnumber_version='116hr1818ih', path='[abspath]/billsim/data/congress/116/bills/hr1818/BILLS-116hr1818ih.xml', fileName='BILLS-116hr1818ih.xml')
+```
+
+## Creating Elasticsearch index of bill sections 
+
+Install Elasticsearch (>=7.0.0 and <7.10.2). This can be done from docker as follows:
+```
+$ docker pull docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+```
+
+NOTE: using `podman` instead of docker on MacOs works better for me. Note also that the docker container memory may be limited, slowing down elasticsearch processes. In production, the docker-compose should set enough memory to ensure performance (-m=4g sets the max memory to 4Gb).
+
+Memory settings for elasticsearch (set in Kibana). These are necessary or ES returns errors during high-volume indexing and processing of documents:
+
+```
+PUT _cluster/settings
+{
+   "transient": {
+       "cluster.routing.allocation.disk.watermark.low": "100gb",
+       "cluster.routing.allocation.disk.watermark.high": "50gb",
+       "cluster.routing.allocation.disk.watermark.flood_stage": "10gb",
+       "cluster.info.update.interval": "1m"
+   }
+}
+```
+
+```
+$ docker run -m=4g -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2 &
+```
+
+Then, in a virtualenv with all requirements installed, run the following commands in Python, from the `src` directory to create the index:
+
+```python
+>>> from billsim.elastic_load import initializeBillSectionsIndex
+>>> initializeBillSectionsIndex()
+```
+
+This will gather all of the bill paths in the directory specified in .env and create an Elasticsearch index with the name specified in .env (or the default in constants). Creating the index will take approximately 5 minutes per Congress directory on a reasonably fast server (e.g. 16GB ram, 3 GHz), without any concurrent processing or other optimizations.
+
+NOTE: This will not delete the index if it already exists. To do so, and start over, pass `delete=True` to `billsim.elastic_load.createIndex` or `delete_index=True` to billsim.elastic_load initializeBillSectionsIndex.
+
+NOTE: The Elasticsearch versions after 7.10.2 are forked between the full 'OSS' version and a more restrictive license (as a challenge to Cloud services like AWS). The python client library must match the version of the Elasticsearch server.
+
+## Find similar bills 
+
+The `bill_similarity.py` script includes functions to find similar bills by billnumber and version. The default functions assume that the bill XML files are in a directory three levels up from the `bill_similarity.py` file, of the form `congress/data/`. The default `data` directory can also be set in a `.env` file.
+
+Then you can run the following command to find similar bills (the bill itself should be found as the first result):
+```python
+>>> from billsim.bill_similarity import getSimilarBillSections, getBillToBill
+>>> from billsim.utils_db import save_bill_to_bill 
+>>> s = getSimilarBillSections('116hr200ih')
+>>> b2b = getBillToBill(s)
+>>> b2b
+{'116hr200ih': BillToBillModel(id=None, billnumber_version='116hr200ih', length=7313, length_to=None, score_es=190.614846, score=None, score_to=None, reasons=None, billnumber_version_to='116hr200ih', identified_by=None, title=None, title_to=None, sections=[Section(billnumber_version='116hr200ih', section_id='HE90F34DBB44149C6B9BBD6747EB6F645', label='2.', header='Border wall trust fund', length=None, similar_sections=[SimilarSection(billnumber_version='116hr200ih', section_id='HE90F34DBB44149C6B9BBD6747EB6F645', label='2.', header='Border wall trust fund', length=1264, score_es=97.936806, score=None, score_to=None)]), Section(bill...
+>>> for bill in b2b:
+>>>    save_bill_to_bill(b2b[bill]) 
+```
+
+To get similar bills starting with a bill stored in ES, use the `getSimilarBillSections_es` function.
+
+## Build and test
+
+Tests, built with `pytest` are found in the `tests` directory. To run the tests, run `make` (requires cmake and pytest installed) or run `pytest -rs tests` directly. 
+
+Uses the `pytest-order` plugin. See https://pytest-dev.github.io/pytest-order/dev/

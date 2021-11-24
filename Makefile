@@ -1,5 +1,9 @@
+.PHONY: docs 
+
 default: test
 
+docs:
+	./docs_generator.sh
 test:
 	pytest -rs tests 
 
