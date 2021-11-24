@@ -63,8 +63,9 @@ def getEnum(section, defaultNS=None) -> str:
                                  namespaces={'ns': defaultNS})
     else:
         enumpath = section.xpath('enum | num')
-    if len(enumpath) > 0:
-        return enumpath[0].text
+    if enumpath is not None and len(
+            enumpath) > 0 and enumpath[0].text is not None:
+        return enumpath[0].text.strip()
     return ''
 
 
@@ -75,8 +76,9 @@ def getHeader(section, defaultNS=None) -> str:
                                    namespaces={'ns': defaultNS})
     else:
         headerpath = section.xpath('header | heading')
-    if len(headerpath) > 0:
-        return headerpath[0].text
+    if headerpath is not None and len(
+            headerpath) > 0 and headerpath[0].text is not None:
+        return headerpath[0].text.strip()
     return ''
 
 

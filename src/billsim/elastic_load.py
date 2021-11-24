@@ -196,24 +196,12 @@ def indexBill(
                     etree.tostring(section, method="text", encoding="unicode"),
                 'section_length':
                     len(
-                        etree.tostring(
-                            section, method="text", encoding="unicode")),
+                        etree.tostring(section,
+                                       method="text",
+                                       encoding="unicode")),
                 'section_xml':
                     etree.tostring(section, method="xml", encoding="unicode")
-            } if (section.xpath('header') and len(section.xpath('header')) > 0
-                  and section.xpath('enum')
-                  and len(section.xpath('enum')) > 0) else {
-                      'section_number':
-                          '',
-                      'section_header':
-                          '',
-                      'section_text':
-                          etree.tostring(
-                              section, method="text", encoding="unicode"),
-                      'section_xml':
-                          etree.tostring(
-                              section, method="xml", encoding="unicode")
-                  } for section in sections]
+            } for section in sections]
         }
         if dublinCore:
             doc['dublinCore'] = dublinCore
@@ -244,15 +232,16 @@ def indexBill(
                        id=billPath.billnumber_version)
 
     # TODO: handle processing of bill section index separately from full bill
-    if res.get('result', None) == 'created':
-        return Status(success=True,
-                      message='Indexed bill {0}'.format(
-                          billPath.billnumber_version))
+    result_status = res.get('result', None)
+    if result_status == 'created' or result_status == 'updated':
+        return Status(
+            success=True,
+            message=
+            f'Indexed ({result_status}) bill: {billPath.billnumber_version}')
     else:
-        print(res)
-        return Status(success=False,
-                      message='Failed to index bill {0}'.format(
-                          billPath.billnumber_version))
+        return Status(
+            success=False,
+            message=f'Failed to index bill: {billPath.billnumber_version}')
 
     # billRoot = billTree.getroot()
     # nsmap = {k if k is not None else '':v for k,v in billRoot.nsmap.items()}
@@ -268,7 +257,7 @@ def initializeBillSectionsIndex(delete_index=False):
     logger.info('Indexing {0} bills'.format(len(billPaths)))
     for billPath in billPaths:
         try:
-            indexBill(billPath)
+            logger.debug(indexBill(billPath))
         except Exception as e:
             logger.error('Failed to index bill {0}'.format(
                 billPath.billnumber_version))
