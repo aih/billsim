@@ -189,9 +189,9 @@ def indexBill(
                 'section_id':
                     getId(section),
                 'section_number':
-                    getEnum(section),
+                    getEnum(section, defaultNS),
                 'section_header':
-                    getHeader(section),
+                    getHeader(section, defaultNS),
                 'section_text':
                     etree.tostring(section, method="text", encoding="unicode"),
                 'section_length':

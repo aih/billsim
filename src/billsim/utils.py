@@ -56,21 +56,25 @@ def getId(section) -> str:
     return section.get('id', '')
 
 
+# NOTE: USLM uses 'num', bill dtd uses 'enum'
 def getEnum(section, defaultNS=None) -> str:
-    if defaultNS is not None:
-        enumpath = section.xpath('ns:enum', namespaces={'ns': defaultNS})
+    if defaultNS is not None and len(defaultNS) > 0:
+        enumpath = section.xpath('ns:enum | ns:num',
+                                 namespaces={'ns': defaultNS})
     else:
-        enumpath = section.xpath('enum')
+        enumpath = section.xpath('enum | num')
     if len(enumpath) > 0:
         return enumpath[0].text
     return ''
 
 
+# NOTE: USLM uses 'heading', bill dtd uses 'header'
 def getHeader(section, defaultNS=None) -> str:
-    if defaultNS is not None:
-        headerpath = section.xpath('header', namespaces={'ns': defaultNS})
+    if defaultNS is not None and len(defaultNS) > 0:
+        headerpath = section.xpath('ns:header | ns:heading',
+                                   namespaces={'ns': defaultNS})
     else:
-        headerpath = section.xpath('header')
+        headerpath = section.xpath('header | heading')
     if len(headerpath) > 0:
         return headerpath[0].text
     return ''
