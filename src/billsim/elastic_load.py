@@ -107,7 +107,7 @@ def indexBill(
                            }))
         sections = billTree.xpath('//uslm:section',
                                   namespaces={'uslm': defaultNS})
-        headers = billTree.xpath('//uslm:header',
+        headers = billTree.xpath('//uslm:heading',
                                  namespaces={'uslm': defaultNS})
     else:
         logger.debug('NO NAMESPACE')
