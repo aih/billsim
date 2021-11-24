@@ -8,11 +8,10 @@ from lxml import etree
 from elasticsearch import exceptions, Elasticsearch
 
 es = Elasticsearch()
-from billsim.utils import getBillXmlPaths, getBillLengthbyPath, getId, getHeader, getEnum, getText
 from billsim import constants
+from billsim.utils import getBillnumberversionParts, getBillXmlPaths, getBillLengthbyPath, getId, getHeader, getEnum, getText
+from billsim.utils_es import getBill_es
 from billsim.pymodels import Status, BillPath
-
-from billsim.utils import get_traceback
 
 logging.basicConfig(filename='elastic_load.log', filemode='w', level='INFO')
 logger = logging.getLogger(__name__)
@@ -44,9 +43,9 @@ def createIndex(index: str = constants.INDEX_SECTIONS,
     es.indices.create(index=index, ignore=400, body=body)
 
 
-def indexBill(
-        billPath: BillPath,
-        index_types: dict = {'sections': constants.INDEX_SECTIONS}) -> Status:
+def indexBill(billPath: BillPath,
+              index_types: dict = {'sections': constants.INDEX_SECTIONS},
+              reindex=True) -> Status:
     """
   Index bill with Elasticsearch
 
@@ -54,6 +53,7 @@ def indexBill(
       bill_path (str): location of the bill xml file.
       billnumber_version (str): bill number and version, of the form 117hr200ih.
       index_types (dict, optional): Index by 'sections', 'bill_full' or both. Defaults to ['sections'].
+      reindex (bool, optional): Whether to reindex the bill if it already is in ES. Defaults to True.
 
   Raises:
       Exception: Could not parse bill xml file. 
@@ -61,6 +61,12 @@ def indexBill(
   Returns:
       Status: status of the indexing of the form {success: True/False, message: 'message'}} 
   """
+    if not reindex:
+        bnv = getBillnumberversionParts(billPath.billnumber_version)
+        for index in index_types:
+            billres = getBill_es(bnv.get('billnumber', ''),
+                                 bnv.get('version', ''), index)
+
     try:
         billTree = etree.parse(billPath.filePath, parser=etree.XMLParser())
     except Exception as e:
@@ -255,6 +261,21 @@ def initializeBillSectionsIndex(delete_index=False):
     createIndex(delete=delete_index)
     billPaths = getBillXmlPaths()
     logger.info('Indexing {0} bills'.format(len(billPaths)))
+    for billPath in billPaths:
+        try:
+            logger.debug(indexBill(billPath))
+        except Exception as e:
+            logger.error('Failed to index bill {0}'.format(
+                billPath.billnumber_version))
+            logger.error(e)
+
+
+def updateBillSectionsIndex():
+    """
+    Updates the bill sections index. Finds all bills, checks whether a bill is already in the index, and indexes it if it is not.
+    """
+    billPaths = getBillXmlPaths()
+    logger.info('Found {0} total bills'.format(len(billPaths)))
     for billPath in billPaths:
         try:
             logger.debug(indexBill(billPath))
