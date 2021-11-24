@@ -6,41 +6,12 @@ from sqlalchemy.orm import Session
 from billsim.utils import getBillLength
 from billsim.database import SessionLocal
 from billsim import pymodels, constants
+from billsim
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 logging.basicConfig(level='INFO')
 
-
-def getBillnumberversionParts(billnumber_version: str) -> dict:
-    """
-    Split a billnumber_version string into its parts.
-
-    Args:
-        billnumber_version (str): billnumber_version string of the form '117hr2222enr' 
-
-    Raises:
-        ValueError: if the billnumber_version does not match the BILL_NUMBER_PART_REGEX_COMPILED format.
-
-    Returns:
-        dict: {'billnumber': xxx, 'version': xxx}} 
-    """
-    billmatch = constants.BILL_NUMBER_PART_REGEX_COMPILED.match(
-        billnumber_version)
-    if billmatch is None:
-        raise ValueError(
-            'Billnumber version not of the correct form: {}'.format(
-                billnumber_version))
-    else:
-        billmatch_dict = billmatch.groupdict()
-        return {
-            'billnumber':
-                '{0}{1}{2}'.format(billmatch_dict.get('congress'),
-                                   billmatch_dict.get('stage'),
-                                   billmatch_dict.get('billnumber', '')),
-            'version':
-                billmatch_dict.get('version', '')
-        }
 
 
 def save_bill(bill: pymodels.Bill, db: Session = SessionLocal()):
