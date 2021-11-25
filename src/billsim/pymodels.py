@@ -80,7 +80,7 @@ class BillToBillModel(SQLModel):
     score_es: Optional[float] = None
     score: Optional[float] = None
     score_to: Optional[float] = None
-    reasons: Optional[list[str]] = None
+    reasons: Optional[list[str]] = []
     identified_by: Optional[str] = None
     sections_num: Optional[int] = None
     sections_match: Optional[int] = None

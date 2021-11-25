@@ -66,6 +66,8 @@ def indexBill(billPath: BillPath,
         for index in index_types:
             billres = getBill_es(bnv.get('billnumber', ''),
                                  bnv.get('version', ''), index)
+            if billres:
+                return Status(success=False, message='Bill already indexed')
 
     try:
         billTree = etree.parse(billPath.filePath, parser=etree.XMLParser())
