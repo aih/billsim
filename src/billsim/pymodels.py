@@ -107,6 +107,28 @@ class BillToBillLite(SQLModel, table=True):
     #    str] = None
 
 
+class SectionItem(SQLModel, table=True):
+    bill_id: Optional[int] = Field(default=None,
+                                   foreign_key="bill.id",
+                                   primary_key=True)
+    section_id: Optional[str] = Field(default=None, primary_key=True)
+    label: str
+    header: str
+    length: int
+
+
+class SectionToSection(SQLModel, table=True):
+    section_id: Optional[str] = Field(default=None,
+                                      foreign_key="sectionitem.id",
+                                      primary_key=True)
+    section_id_to: Optional[str] = Field(default=None,
+                                         foreign_key="sectionitem.id",
+                                         primary_key=True)
+    score_es: Optional[float] = None
+    score: Optional[float] = None
+    score_to: Optional[float] = None
+
+
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
