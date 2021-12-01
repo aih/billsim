@@ -2,6 +2,7 @@
 
 import sys
 import logging
+from typing import Optional
 from sqlalchemy.orm import Session
 from billsim.utils import getBillLength
 from billsim.database import SessionLocal
@@ -14,7 +15,24 @@ logging.basicConfig(level='INFO')
 
 
 
-def save_bill(bill: pymodels.Bill, db: Session = SessionLocal()):
+def save_section_item(section_item: pymodels.SectionItem, db: Session = SessionLocal()) -> Optional[int]:
+    """
+    Save a SectionItem to the database.
+    """
+    sectionitemid = None
+    with db as session:
+        session.add(section_item)
+        session.commit()
+        sectionitem_saved = session.query(pymodels.SectionItem).filter(
+            pymodels.SectionItem.section_id == section_item.section_id,
+            pymodels.SectionItem.bill_id == section_item.bill_id).first()
+        if sectionitem_saved is not None:
+            sectionitemid = sectionitem_saved.id
+        else:
+            logger.error('SectionItem not saved to db')
+    return sectionitemid
+    
+def save_bill(bill: pymodels.Bill, db: Session = SessionLocal()) -> Optional[int]:
     """
     Save a bill to the database.
     """
@@ -27,6 +45,8 @@ def save_bill(bill: pymodels.Bill, db: Session = SessionLocal()):
             pymodels.Bill.version == bill.version).first()
         if bill_saved is not None:
             billid = bill_saved.id
+        else:
+            logger.error('Bill not saved to db')
     return billid
 
 
