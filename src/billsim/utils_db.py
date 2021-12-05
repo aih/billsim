@@ -4,7 +4,7 @@ import sys
 import logging
 from typing import Optional
 from sqlalchemy.orm import Session
-from billsim.utils import getBillLength
+from billsim.utils import getBillLength, getBillnumberversionParts
 from billsim.database import SessionLocal
 from billsim import pymodels, constants
 from billsim
@@ -14,6 +14,22 @@ logger.addHandler(logging.StreamHandler(sys.stdout))
 logging.basicConfig(level='INFO')
 
 
+
+def get_section_item(section_meta: pymodels.SectionMeta, db: Session = SessionLocal()) -> pymodels.SectionItem:
+    """
+    Get a section item from the database.
+    """
+    if section_meta.billnumber_version is None:
+        raise ValueError('billnumber_version not set')
+    bnv = getBillnumberversionParts(section_meta.billnumber_version)
+    billnumber = bnv.get('billnumber', '')
+    version = bnv.get('version', '')
+    section_item = db.query(pymodels.Bill).filter(
+        pymodels.Bill.billnumber == billnumber,
+        pymodels.Bill.version == version).first()
+    if section_item is None:
+        raise ValueError('Section item not found')
+    return section_item
 
 def save_section_item(section_item: pymodels.SectionItem, db: Session = SessionLocal()) -> Optional[int]:
     """
@@ -31,7 +47,16 @@ def save_section_item(section_item: pymodels.SectionItem, db: Session = SessionL
         else:
             logger.error('SectionItem not saved to db')
     return sectionitemid
+
+def save_section_item_to_section_item(section_to_section_model: pymodels.BillToBillModel,
+                      db: Session = SessionLocal()):(
     
+   """
+    Populates the `SectionToSection` table with the similarity scores between sections of the same bill.
+    First checks if the row exists, and if it does, updates the row, otherwise creates it.
+   """ 
+   pass
+   
 def save_bill(bill: pymodels.Bill, db: Session = SessionLocal()) -> Optional[int]:
     """
     Save a bill to the database.

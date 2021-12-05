@@ -118,6 +118,9 @@ class SectionItem(SQLModel, table=True):
 
 
 class SectionToSection(SQLModel, table=True):
+    """
+    This is a self-join of the SectionItem table.
+    """
     section_id: Optional[str] = Field(default=None,
                                       foreign_key="sectionitem.id",
                                       primary_key=True)
