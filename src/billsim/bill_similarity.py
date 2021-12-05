@@ -154,6 +154,9 @@ def getSimilarBillSections(
                         sections=sectionsList)
 
 
+# Returns a dict with
+# key: billnumber_version
+# value: BillToBillModel object
 def getBillToBill(billsections: BillSections) -> dict:
     billToBills = {}
     if len(billsections.sections) == 0:

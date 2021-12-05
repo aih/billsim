@@ -107,6 +107,8 @@ class BillToBillLite(SQLModel, table=True):
     #    str] = None
 
 
+# NOTE: section_id is the id attribute from the XML. It may not be unique.
+# However, the SQL bill_id + section_id is unique.
 class SectionItem(SQLModel, table=True):
     bill_id: Optional[int] = Field(default=None,
                                    foreign_key="bill.id",

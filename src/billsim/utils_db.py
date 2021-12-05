@@ -7,57 +7,29 @@ from sqlalchemy.orm import Session
 from billsim.utils import getBillLength, getBillnumberversionParts
 from billsim.database import SessionLocal
 from billsim import pymodels, constants
-from billsim
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 logging.basicConfig(level='INFO')
 
+# TODO take the Section object (which consists of the from Section Meta and a list of similar sections)
+# returned in bill_similarity.getBillToBill()
+# Save a) the from section and each similar section, in the SectionItem table if it does not exist,
+# and b) the similarity score between the sections in the SectionToSection table
 
 
-def get_section_item(section_meta: pymodels.SectionMeta, db: Session = SessionLocal()) -> pymodels.SectionItem:
-    """
-    Get a section item from the database.
-    """
-    if section_meta.billnumber_version is None:
-        raise ValueError('billnumber_version not set')
-    bnv = getBillnumberversionParts(section_meta.billnumber_version)
-    billnumber = bnv.get('billnumber', '')
-    version = bnv.get('version', '')
-    section_item = db.query(pymodels.Bill).filter(
-        pymodels.Bill.billnumber == billnumber,
-        pymodels.Bill.version == version).first()
-    if section_item is None:
-        raise ValueError('Section item not found')
-    return section_item
+def save_section(
+    section: pymodels.Section, db: Session = SessionLocal()) -> Optional[int]:
+    # Get the sectionMeta from the section
+    # check if a SectionItem row exists for this sectionMeta
+    # if not, create one
+    # Then do the same for each similar_section
+    # Then save the section to section between the from and to
+    pass
 
-def save_section_item(section_item: pymodels.SectionItem, db: Session = SessionLocal()) -> Optional[int]:
-    """
-    Save a SectionItem to the database.
-    """
-    sectionitemid = None
-    with db as session:
-        session.add(section_item)
-        session.commit()
-        sectionitem_saved = session.query(pymodels.SectionItem).filter(
-            pymodels.SectionItem.section_id == section_item.section_id,
-            pymodels.SectionItem.bill_id == section_item.bill_id).first()
-        if sectionitem_saved is not None:
-            sectionitemid = sectionitem_saved.id
-        else:
-            logger.error('SectionItem not saved to db')
-    return sectionitemid
 
-def save_section_item_to_section_item(section_to_section_model: pymodels.BillToBillModel,
-                      db: Session = SessionLocal()):(
-    
-   """
-    Populates the `SectionToSection` table with the similarity scores between sections of the same bill.
-    First checks if the row exists, and if it does, updates the row, otherwise creates it.
-   """ 
-   pass
-   
-def save_bill(bill: pymodels.Bill, db: Session = SessionLocal()) -> Optional[int]:
+def save_bill(
+    bill: pymodels.Bill, db: Session = SessionLocal()) -> Optional[int]:
     """
     Save a bill to the database.
     """
@@ -76,7 +48,8 @@ def save_bill(bill: pymodels.Bill, db: Session = SessionLocal()) -> Optional[int
 
 
 def get_bill_by_billnumber_version(
-    billnumber_version: str, db: Session = SessionLocal()) -> pymodels.Bill:
+    billnumber_version: str, db: Session = SessionLocal()
+) -> Optional[pymodels.Bill]:
     billnumber_version_dict = getBillnumberversionParts(billnumber_version)
     logger.debug('billnumber_version_dict: {}'.format(
         str(billnumber_version_dict)))
@@ -85,8 +58,33 @@ def get_bill_by_billnumber_version(
         pymodels.Bill.version == billnumber_version_dict.get(
             'version')).first()
     if bill is None:
-        raise ValueError('Bill not found')
+        return None
     return bill
+
+
+def get_or_create_sectionitem(section_meta: pymodels.SectionMeta,
+                              db: Session = SessionLocal()):
+    if section_meta.billnumber_version is None:
+        return None
+    bill = get_bill_by_billnumber_version(section_meta.billnumber_version)
+    if bill is None:
+        return None
+    sectionItem = db.query(pymodels.SectionItem).filter(
+        pymodels.SectionItem.bill_id == bill.id,
+        pymodels.SectionItem.section_id == section_meta.section_id).first()
+    if sectionItem is None:
+        if section_meta.label is None or section_meta.header is None or section_meta.length is None:
+            raise Exception('Section meta is missing label, header or length')
+        sectionItem = pymodels.SectionItem(bill_id=bill.id,
+                                           section_id=section_meta.section_id,
+                                           label=section_meta.label,
+                                           header=section_meta.header,
+                                           length=section_meta.length)
+        db.add(sectionItem)
+        db.commit()
+    else:
+        logger.debug('SectionItem already exists')
+        return sectionItem
 
 
 def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
@@ -97,6 +95,8 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
     try:
         bill = get_bill_by_billnumber_version(
             bill_to_bill_model.billnumber_version)
+        if bill is None:
+            raise Exception('Bill not found in db')
         bill_id = bill.id
     except Exception as e:
         logger.error('No bill found in db for {}'.format(
