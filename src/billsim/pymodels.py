@@ -110,13 +110,15 @@ class BillToBillLite(SQLModel, table=True):
 # NOTE: section_id is the id attribute from the XML. It may not be unique.
 # However, the SQL bill_id + section_id is unique.
 class SectionItem(SQLModel, table=True):
-    bill_id: Optional[int] = Field(default=None,
-                                   foreign_key="bill.id",
-                                   primary_key=True)
-    section_id: Optional[str] = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
+    bill_id: Optional[int] = Field(default=None, foreign_key="bill.id")
+    section_id: Optional[str] = Field(default=None)
     label: str
     header: str
     length: int
+    UniqueConstraint('bill_id',
+                     'section_id',
+                     name='billnumber_version_section_id')
 
 
 class SectionToSection(SQLModel, table=True):
