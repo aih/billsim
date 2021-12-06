@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 logging.basicConfig(level='INFO')
 
-# TODO take the Section object (which consists of the from Section Meta and a list of similar sections)
+# TODO: take the Section object (which consists of the from Section Meta and a list of similar sections)
 # returned in bill_similarity.getBillToBill()
 # Save a) the from section and each similar section, in the SectionItem table if it does not exist,
 # and b) the similarity score between the sections in the SectionToSection table
@@ -97,28 +97,35 @@ def save_section_to_section(section_meta: pymodels.SectionMeta,
         # TODO: raise exception?
         return None
     similar_section_item = get_or_create_sectionitem(
-        # TODO: confirm that this works
         pymodels.SectionMeta(**dict(similar_section)), db)
     if similar_section_item is None:
         # TODO: raise exception?
         return None
     section_to_section = db.query(pymodels.SectionToSection).filter(
         pymodels.SectionToSection.id == sectionItem.id,
-        pymodels.SectionToSection.id_to ==
-        similar_section_item.id).first()
+        pymodels.SectionToSection.id_to == similar_section_item.id).first()
     if section_to_section is None:
         section_to_section = pymodels.SectionToSection(
-            id = sectionItem.id,
-            id_to = similar_section_item.id,
-            score = similar_section.score
-            score_to = similar_section.score_to)
+            id=sectionItem.id,
+            id_to=similar_section_item.id,
+            score_es=similar_section.score_es,
+            score=similar_section.score,
+            score_to=similar_section.score_to)
         db.add(section_to_section)
-        db.commit()
-        return section_to_section
     else:
-        logger.debug('SectionToSection already exists')
-        # TODO: update just the scores?
-        return section_to_section
+        logger.info('SectionToSection already exists')
+        # Update the scores that we have
+        if similar_section.score_es:
+            logger.info('SectionToSection adding/updating score_es')
+            setattr(section_to_section, 'score_es', similar_section.score_es)
+        if similar_section.score:
+            logger.info('SectionToSection adding/updating score')
+            setattr(section_to_section, 'score', similar_section.score)
+        if similar_section.score_to:
+            logger.info('SectionToSection adding/updating score_to')
+            setattr(section_to_section, 'score_to', similar_section.score_to)
+    db.commit()
+    return section_to_section
 
 
 def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,

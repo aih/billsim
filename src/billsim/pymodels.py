@@ -125,12 +125,12 @@ class SectionToSection(SQLModel, table=True):
     """
     This is a self-join of the SectionItem table.
     """
-    section_id: Optional[str] = Field(default=None,
-                                      foreign_key="sectionitem.id",
-                                      primary_key=True)
-    section_id_to: Optional[str] = Field(default=None,
-                                         foreign_key="sectionitem.id",
-                                         primary_key=True)
+    id: Optional[int] = Field(default=None,
+                              foreign_key="sectionitem.id",
+                              primary_key=True)
+    id_to: Optional[int] = Field(default=None,
+                                 foreign_key="sectionitem.id",
+                                 primary_key=True)
     score_es: Optional[float] = None
     score: Optional[float] = None
     score_to: Optional[float] = None
