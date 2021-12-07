@@ -18,18 +18,9 @@ logging.basicConfig(level='INFO')
 # and b) the similarity score between the sections in the SectionToSection table
 
 
-def save_section(
-    section: pymodels.Section, db: Session = SessionLocal()) -> Optional[int]:
-    # Get the sectionMeta from the section
-    # check if a SectionItem row exists for this sectionMeta
-    # if not, create one
-    # Then do the same for each similar_section
-    # Then save the section to section between the from and to
-    pass
-
-
 def save_bill(
-    bill: pymodels.Bill, db: Session = SessionLocal()) -> Optional[int]:
+    bill: pymodels.Bill,
+    db: Session = SessionLocal()) -> Optional[pymodels.Bill]:
     """
     Save a bill to the database.
     """
@@ -41,11 +32,10 @@ def save_bill(
         bill_saved = session.query(pymodels.Bill).filter(
             pymodels.Bill.billnumber == bill.billnumber,
             pymodels.Bill.version == bill.version).first()
-        if bill_saved is not None:
-            billid = bill_saved.id
-        else:
+        if bill_saved is None:
             logger.error('Bill not saved to db')
-    return billid
+        else:
+            return bill_saved
 
 
 def get_bill_by_billnumber_version(
@@ -131,6 +121,23 @@ def save_section_to_section(section_meta: pymodels.SectionMeta,
     return section_to_section
 
 
+def save_section(
+    section: pymodels.Section, db: Session = SessionLocal()) -> Optional[int]:
+    """
+   Get the sectionMeta from the section
+   check if a SectionItem row exists for this sectionMeta
+   if not, create one
+   Then do the same for each similar_section
+   Then save the section to section between the from and to
+   """
+    section_meta = pymodels.SectionMeta(**dict(section))
+    section_item = get_or_create_sectionitem(section_meta)
+    if not section_item:
+        raise Exception('Could not create or get sectionItem from section')
+    for similar_section in section.similar_sections:
+        save_section_to_section(section_meta, similar_section, db)
+
+
 def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
                       db: Session = SessionLocal()):
     """
@@ -157,19 +164,19 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
         billnumber = str(billnumber_version_dict.get('billnumber'))
         version = str(billnumber_version_dict.get('version'))
 
-        bill_id = save_bill(
+        bill = save_bill(
             pymodels.Bill(billnumber=billnumber,
                           version=version,
                           length=bill_to_bill_model.length))
 
-    try:
-        bill_to = get_bill_by_billnumber_version(
-            bill_to_bill_model.billnumber_version_to)
-        bill_to_id = bill_to.id
-    except Exception as e:
+    bill_to = get_bill_by_billnumber_version(
+        bill_to_bill_model.billnumber_version_to)
+    if bill_to is None:
+        raise Exception('Bill not found in db')
         logger.error('No bill found in db for {}'.format(
             bill_to_bill_model.billnumber_version_to))
-        logger.error('Error: {}'.format(e))
+    else:
+        bill_to_id = bill_to.id
         try:
             billnumber_version_to_dict = getBillnumberversionParts(
                 bill_to_bill_model.billnumber_version_to)
@@ -181,22 +188,20 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
         billnumber = str(billnumber_version_to_dict.get('billnumber'))
         version = str(billnumber_version_to_dict.get('version'))
         length = getBillLength(bill_to_bill_model.billnumber_version_to)
-        bill_to_id = save_bill(
+        bill_to = save_bill(
             pymodels.Bill(billnumber=billnumber, version=version,
                           length=length))
-    if bill_id is None or bill_to_id is None:
-        logger.error('bill_id: {}'.format(bill_id))
-        logger.error('bill_to_id: {}'.format(bill_to_id))
+    if bill is None or bill_to is None:
         raise Exception(
             'Could not create bill item for one or both of: {0}, {1}.'.format(
                 bill_to_bill_model.billnumber_version,
                 bill_to_bill_model.billnumber_version_to))
     #sections = json.dumps(bill_to_bill_model.sections)
     logger.info('Saving bill to bill join: {0} & {1}'.format(
-        bill_id, bill_to_id))
+        bill.id, bill_to.id))
     bill_to_bill = pymodels.BillToBillLite(
-        bill_id=bill_id,
-        bill_to_id=bill_to_id,
+        bill_id=bill.id,
+        bill_to_id=bill_to.id,
         score_es=bill_to_bill_model.score_es,
         score=bill_to_bill_model.score,
         score_to=bill_to_bill_model.score_to,
