@@ -9,4 +9,7 @@ sqlite_url = f"sqlite:///{sqlite_file_name}"
 
 engine = create_engine(sqlite_url, echo=True)
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False,
+                            autoflush=False,
+                            expire_on_commit=False,
+                            bind=engine)

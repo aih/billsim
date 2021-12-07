@@ -107,6 +107,35 @@ class BillToBillLite(SQLModel, table=True):
     #    str] = None
 
 
+# NOTE: section_id is the id attribute from the XML. It may not be unique.
+# However, the SQL bill_id + section_id is unique.
+class SectionItem(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    bill_id: Optional[int] = Field(default=None, foreign_key="bill.id")
+    section_id: Optional[str] = Field(default=None)
+    label: Optional[str]
+    header: Optional[str]
+    length: Optional[int]
+    UniqueConstraint('bill_id',
+                     'section_id',
+                     name='billnumber_version_section_id')
+
+
+class SectionToSection(SQLModel, table=True):
+    """
+    This is a self-join of the SectionItem table.
+    """
+    id: Optional[int] = Field(default=None,
+                              foreign_key="sectionitem.id",
+                              primary_key=True)
+    id_to: Optional[int] = Field(default=None,
+                                 foreign_key="sectionitem.id",
+                                 primary_key=True)
+    score_es: Optional[float] = None
+    score: Optional[float] = None
+    score_to: Optional[float] = None
+
+
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
