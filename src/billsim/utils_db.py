@@ -24,16 +24,19 @@ def save_bill(
     """
     Save a bill to the database.
     """
-    billid = None
     with db as session:
         session.add(bill)
         session.flush()
         session.commit()
+        logger.info(
+            f'Flush and Commit to save bill {bill.billnumber} {bill.version}')
         bill_saved = session.query(pymodels.Bill).filter(
             pymodels.Bill.billnumber == bill.billnumber,
             pymodels.Bill.version == bill.version).first()
         if bill_saved is None:
-            logger.error('Bill not saved to db')
+            logger.error(
+                f'Bill not saved to db: {bill.billnumber} {bill.version}')
+            return None
         else:
             return bill_saved
 
@@ -55,9 +58,17 @@ def get_bill_by_billnumber_version(
 
 def get_or_create_sectionitem(section_meta: pymodels.SectionMeta,
                               db: Session = SessionLocal()):
+    logger.info("section_meta: {}".format(section_meta))
     if section_meta.billnumber_version is None:
         return None
     bill = get_bill_by_billnumber_version(section_meta.billnumber_version)
+    if bill is None:
+        billnumber_version_dict = getBillnumberversionParts(
+            section_meta.billnumber_version)
+        billnumber = str(billnumber_version_dict.get('billnumber'))
+        version = str(billnumber_version_dict.get('version'))
+        bill = save_bill(pymodels.Bill(billnumber=billnumber, version=version),
+                         db)
     if bill is None:
         return None
     sectionItem = db.query(pymodels.SectionItem).filter(
@@ -65,7 +76,9 @@ def get_or_create_sectionitem(section_meta: pymodels.SectionMeta,
         pymodels.SectionItem.section_id == section_meta.section_id).first()
     if sectionItem is None:
         if section_meta.label is None or section_meta.header is None or section_meta.length is None:
-            raise Exception('Section meta is missing label, header or length')
+            logger.warning(
+                'Section meta is missing label, header or length: {section_meta}'
+            )
         sectionItem = pymodels.SectionItem(bill_id=bill.id,
                                            section_id=section_meta.section_id,
                                            label=section_meta.label,
@@ -207,3 +220,16 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
         session.add(bill_to_bill)
         db.flush()
         session.commit()
+
+
+def save_bill_to_bill_sections(bill_to_bill_model: pymodels.BillToBillModel,
+                               db: Session = SessionLocal()):
+    """
+    For each bill to bill, save the 'sections' object, which includes the sections of the 'from'
+    bill in order, along with the top similar section of the 'to' bill.
+    """
+    sections = bill_to_bill_model.sections
+    if sections is None:
+        return None
+    for section in sections:
+        save_section(section, db)
