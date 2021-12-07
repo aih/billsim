@@ -143,26 +143,20 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
     """
     Save bill to bill join to the database.
     """
-    try:
-        bill = get_bill_by_billnumber_version(
-            bill_to_bill_model.billnumber_version)
-        if bill is None:
-            raise Exception('Bill not found in db')
-        bill_id = bill.id
-    except Exception as e:
-        logger.error('No bill found in db for {}'.format(
+    bill = get_bill_by_billnumber_version(bill_to_bill_model.billnumber_version)
+    if bill is None:
+        logger.warning('No bill found in db for {}'.format(
             bill_to_bill_model.billnumber_version))
-        logger.error('Error: {}'.format(e))
         try:
             billnumber_version_dict = getBillnumberversionParts(
                 bill_to_bill_model.billnumber_version)
+            billnumber = str(billnumber_version_dict.get('billnumber'))
+            version = str(billnumber_version_dict.get('version'))
         except:
             logger.error(
                 'Billnumber version not of the correct form: {}'.format(
                     bill_to_bill_model.billnumber_version))
             return
-        billnumber = str(billnumber_version_dict.get('billnumber'))
-        version = str(billnumber_version_dict.get('version'))
 
         bill = save_bill(
             pymodels.Bill(billnumber=billnumber,
@@ -174,10 +168,8 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
     if bill_to is None:
         err_msg = 'No bill found in db for {}'.format(
             bill_to_bill_model.billnumber_version_to)
-        logger.error(err_msg)
-        raise Exception(err_msg)
+        logger.warning(err_msg)
     else:
-        bill_to_id = bill_to.id
         try:
             billnumber_version_to_dict = getBillnumberversionParts(
                 bill_to_bill_model.billnumber_version_to)
@@ -186,12 +178,13 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
                 'Billnumber version (to bill) not of the correct form: {}'.
                 format(bill_to_bill_model.billnumber_version_to))
             return
-        billnumber = str(billnumber_version_to_dict.get('billnumber'))
-        version = str(billnumber_version_to_dict.get('version'))
-        length = getBillLength(bill_to_bill_model.billnumber_version_to)
+        billnumber_to = str(billnumber_version_to_dict.get('billnumber'))
+        version_to = str(billnumber_version_to_dict.get('version'))
+        length_to = getBillLength(bill_to_bill_model.billnumber_version_to)
         bill_to = save_bill(
-            pymodels.Bill(billnumber=billnumber, version=version,
-                          length=length))
+            pymodels.Bill(billnumber=billnumber_to,
+                          version=version_to,
+                          length=length_to))
     if bill is None or bill_to is None:
         raise Exception(
             'Could not create bill item for one or both of: {0}, {1}.'.format(
