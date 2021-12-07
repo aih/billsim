@@ -172,9 +172,10 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
     bill_to = get_bill_by_billnumber_version(
         bill_to_bill_model.billnumber_version_to)
     if bill_to is None:
-        raise Exception('Bill not found in db')
-        logger.error('No bill found in db for {}'.format(
-            bill_to_bill_model.billnumber_version_to))
+        err_msg = 'No bill found in db for {}'.format(
+            bill_to_bill_model.billnumber_version_to)
+        logger.error(err_msg)
+        raise Exception(err_msg)
     else:
         bill_to_id = bill_to.id
         try:
