@@ -28,7 +28,7 @@ def save_bill(
         session.add(bill)
         session.flush()
         session.commit()
-        logger.info(
+        logger.debug(
             f'Flush and Commit to save bill {bill.billnumber} {bill.version}')
         bill_saved = session.query(pymodels.Bill).filter(
             pymodels.Bill.billnumber == bill.billnumber,
@@ -58,7 +58,7 @@ def get_bill_by_billnumber_version(
 
 def get_or_create_sectionitem(section_meta: pymodels.SectionMeta,
                               db: Session = SessionLocal()):
-    logger.info("section_meta: {}".format(section_meta))
+    logger.debug("section_meta: {}".format(section_meta))
     if section_meta.billnumber_version is None:
         return None
     bill = get_bill_by_billnumber_version(section_meta.billnumber_version)
@@ -121,13 +121,13 @@ def save_section_to_section(section_meta: pymodels.SectionMeta,
         logger.info('SectionToSection already exists')
         # Update the scores that we have
         if similar_section.score_es:
-            logger.info('SectionToSection adding/updating score_es')
+            logger.debug('SectionToSection adding/updating score_es')
             setattr(section_to_section, 'score_es', similar_section.score_es)
         if similar_section.score:
-            logger.info('SectionToSection adding/updating score')
+            logger.debug('SectionToSection adding/updating score')
             setattr(section_to_section, 'score', similar_section.score)
         if similar_section.score_to:
-            logger.info('SectionToSection adding/updating score_to')
+            logger.debug('SectionToSection adding/updating score_to')
             setattr(section_to_section, 'score_to', similar_section.score_to)
     db.flush()
     db.commit()

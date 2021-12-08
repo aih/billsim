@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys, os
+import sys
 import logging
 from elasticsearch import Elasticsearch
 
@@ -78,7 +78,7 @@ def getSimilarDocSections(filePath: str, docId: str) -> list[Section]:
     try:
         billTree = etree.parse(filePath, etree.XMLParser())
 
-    except:
+    except Exception as e:
         logger.error("Error parsing file: {}; {} ", filePath, e)
         raise Exception('Could not parse bill: {}', filePath)
     defaultNS = getDefaultNamespace(billTree)
@@ -94,6 +94,7 @@ def getSimilarDocSections(filePath: str, docId: str) -> list[Section]:
                                       method="text",
                                       encoding="unicode")
         length = len(section_text)
+        logger.info("Section text length: {}".format(length))
         header = getHeader(section, defaultNS)
         enum = getEnum(section, defaultNS)
         if (len(header) > 0 and len(enum) > 0):
@@ -185,6 +186,7 @@ def getBillToBill(billsections: BillSections) -> dict:
                                     section_id=section.section_id,
                                     label=section.label,
                                     header=section.header,
+                                    length=section.length,
                                     similar_sections=[similar_section])
                         ])
             else:
@@ -193,6 +195,7 @@ def getBillToBill(billsections: BillSections) -> dict:
                             section_id=section.section_id,
                             label=section.label,
                             header=section.header,
+                            length=section.length,
                             similar_sections=[similar_section]))
                 billToBills[
                     similar_section.

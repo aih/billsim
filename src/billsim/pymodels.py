@@ -115,7 +115,7 @@ class SectionItem(SQLModel, table=True):
     section_id: Optional[str] = Field(default=None)
     label: Optional[str]
     header: Optional[str]
-    length: Optional[int]
+    length: int
     UniqueConstraint('bill_id',
                      'section_id',
                      name='billnumber_version_section_id')
