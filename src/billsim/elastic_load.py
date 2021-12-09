@@ -4,6 +4,7 @@ import re
 import json
 import logging
 import sys
+from billsim.utils_db import get_or_create_sectionitem, save_bill, save_section
 from lxml import etree
 from elasticsearch import exceptions, Elasticsearch
 
@@ -11,7 +12,7 @@ es = Elasticsearch()
 from billsim import constants
 from billsim.utils import getBillnumberversionParts, getBillXmlPaths, getBillLengthbyPath, getId, getHeader, getEnum, getText
 from billsim.utils_es import getBill_es
-from billsim.pymodels import Status, BillPath
+from billsim.pymodels import SectionMeta, Status, BillPath, Bill, SectionItem
 
 logging.basicConfig(filename='elastic_load.log', filemode='w', level='INFO')
 logger = logging.getLogger(__name__)
@@ -43,9 +44,12 @@ def createIndex(index: str = constants.INDEX_SECTIONS,
     es.indices.create(index=index, ignore=400, body=body)
 
 
+# TODO: if withDb is true, then we should also add the bill to the Bill table in the database
+# and its sections to the sectionItem table
 def indexBill(billPath: BillPath,
               index_types: dict = {'sections': constants.INDEX_SECTIONS},
-              reindex=True) -> Status:
+              reindex=True,
+              withDb=True) -> Status:
     """
   Index bill with Elasticsearch
 
@@ -165,51 +169,68 @@ def indexBill(billPath: BillPath,
     from collections import OrderedDict
     headers_text = [header.text for header in headers]
 
+    if withDb:
+        try:
+            bill = Bill(billnumber=billnumber,
+                        version=billversion,
+                        length=length)
+            save_bill(bill)
+        except Exception as e:
+            logger.error('Could not add bill to database: {}'.format(e))
     res = {}
 
     # Uses an OrderedDict to deduplicate headers
     # TODO handle missing header and enum separately
     if 'sections' in index_types.keys():
+        sectionData = [{
+            'section_id':
+                getId(section),
+            'section_number':
+                getEnum(section, defaultNS),
+            'section_header':
+                getHeader(section, defaultNS),
+            'section_text':
+                etree.tostring(section, method="text", encoding="unicode"),
+            'section_length':
+                len(etree.tostring(section, method="text", encoding="unicode")),
+            'section_xml':
+                etree.tostring(section, method="xml", encoding="unicode")
+        } for section in sections]
+
+        if withDb:
+            try:
+                # Add sectionItems to db here
+                for sectionDataItem in sectionData:
+                    if sectionDataItem.get('section_id') is None:
+                        continue
+                    try:
+                        section_meta = SectionMeta(
+                            billnumber_version=f'{billnumber}{billversion}',
+                            section_id=sectionDataItem.get('section_id'),
+                            label=sectionDataItem.get('section_number', ''),
+                            length=sectionDataItem.get('length', 0))
+                        get_or_create_sectionitem(section_meta)
+                    except Exception as e:
+                        logger.error(
+                            f'Could not add section in {billnumber}{billversion} to database: {e}'
+                        )
+                        logger.error(f'{sectionDataItem}')
+            except Exception as e:
+                logger.error('Could not add sections to database: {}'.format(e))
+
         doc = {
-            'id':
-                billPath.billnumber_version,
-            'congress':
-                congress_text,
-            'session':
-                session_text,
-            'length':
-                length,
-            'dctitle':
-                dctitle,
-            'date':
-                dcdate,
-            'legisnum':
-                legisnum_text,
-            'billnumber':
-                billnumber,
-            'billversion':
-                billversion,
-            'headers':
-                list(OrderedDict.fromkeys(headers_text)),
-            'sections_num':
-                len(sections),
-            'sections': [{
-                'section_id':
-                    getId(section),
-                'section_number':
-                    getEnum(section, defaultNS),
-                'section_header':
-                    getHeader(section, defaultNS),
-                'section_text':
-                    etree.tostring(section, method="text", encoding="unicode"),
-                'section_length':
-                    len(
-                        etree.tostring(section,
-                                       method="text",
-                                       encoding="unicode")),
-                'section_xml':
-                    etree.tostring(section, method="xml", encoding="unicode")
-            } for section in sections]
+            'id': billPath.billnumber_version,
+            'congress': congress_text,
+            'session': session_text,
+            'length': length,
+            'dctitle': dctitle,
+            'date': dcdate,
+            'legisnum': legisnum_text,
+            'billnumber': billnumber,
+            'billversion': billversion,
+            'headers': list(OrderedDict.fromkeys(headers_text)),
+            'sections_num': len(sections),
+            'sections': sectionData
         }
         if dublinCore:
             doc['dublinCore'] = dublinCore

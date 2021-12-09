@@ -11,11 +11,19 @@ from billsim import pymodels, constants
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 logging.basicConfig(level='INFO')
-
-# TODO: take the Section object (which consists of the from Section Meta and a list of similar sections)
-# returned in bill_similarity.getBillToBill()
-# Save a) the from section and each similar section, in the SectionItem table if it does not exist,
-# and b) the similarity score between the sections in the SectionToSection table
+""" 
+Take the Section object (which consists of the from Section Meta and a list of similar sections)
+ returned in bill_similarity.getBillToBill()
+ Save a) the from section and each similar section, in the SectionItem table if it does not exist,
+ and b) the similarity score between the sections in the SectionToSection table
+>>> from billsim.bill_similarity import getSimilarBillSections, getBillToBill
+>>> from billsim.utils_db import save_bill_to_bill 
+>>> s = getSimilarBillSections('116hr200ih')
+>>> b2b = getBillToBill(s)
+>>> for bill in b2b:
+>>>    save_bill_to_bill(b2b[bill]) 
+>>>    save_bill_to_bill_sections(b2b[bill]) # This should save the individual sections and the se
+"""
 
 
 def save_bill(
