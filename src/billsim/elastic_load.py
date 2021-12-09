@@ -4,23 +4,20 @@ import re
 import json
 import logging
 import sys
-from billsim.utils_db import get_or_create_sectionitem, save_bill, save_section
+from billsim.utils_db import get_or_create_sectionitem, save_bill
 from lxml import etree
 from elasticsearch import exceptions, Elasticsearch
+from collections import OrderedDict
 
 es = Elasticsearch()
 from billsim import constants
-from billsim.utils import getBillnumberversionParts, getBillXmlPaths, getBillLengthbyPath, getId, getHeader, getEnum, getText
+from billsim.utils import getBillnumberversionParts, getBillXmlPaths, getBillLengthbyPath, getDefaultNamespace, getId, getHeader, getEnum, getText
 from billsim.utils_es import getBill_es
 from billsim.pymodels import SectionMeta, Status, BillPath, Bill, SectionItem
 
 logging.basicConfig(filename='elastic_load.log', filemode='w', level='INFO')
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
-
-
-def getDefaultNamespace(billTree) -> str:
-    return billTree.getroot().nsmap.get(None, '')
 
 
 def getMapping(map_path: str) -> dict:
@@ -44,12 +41,10 @@ def createIndex(index: str = constants.INDEX_SECTIONS,
     es.indices.create(index=index, ignore=400, body=body)
 
 
-# TODO: if withDb is true, then we should also add the bill to the Bill table in the database
-# and its sections to the sectionItem table
 def indexBill(billPath: BillPath,
               index_types: dict = {'sections': constants.INDEX_SECTIONS},
               reindex=True,
-              withDb=True) -> Status:
+              withDb=False) -> Status:
     """
   Index bill with Elasticsearch
 
@@ -58,6 +53,7 @@ def indexBill(billPath: BillPath,
       billnumber_version (str): bill number and version, of the form 117hr200ih.
       index_types (dict, optional): Index by 'sections', 'bill_full' or both. Defaults to ['sections'].
       reindex (bool, optional): Whether to reindex the bill if it already is in ES. Defaults to True.
+      withDb (bool, optional): Whether to save the bill and sections to the database. Defaults to False.
 
   Raises:
       Exception: Could not parse bill xml file. 
@@ -166,7 +162,6 @@ def indexBill(billPath: BillPath,
         billmatch_dict = billmatch.groupdict()
         billnumber = '{congress}{stage}{number}'.format(**billmatch_dict)
         billversion = billmatch_dict.get('version', '')
-    from collections import OrderedDict
     headers_text = [header.text for header in headers]
 
     if withDb:

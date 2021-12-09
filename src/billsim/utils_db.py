@@ -3,8 +3,9 @@
 import sys
 import logging
 from typing import Optional
+from lxml import etree
 from sqlalchemy.orm import Session
-from billsim.utils import getBillLength, getBillnumberversionParts
+from billsim.utils import getDefaultNamespace, getBillLength, getBillLengthbyPath, getBillnumberversionParts, getId, getEnum, getText
 from billsim.database import SessionLocal
 from billsim import pymodels, constants
 
@@ -241,3 +242,97 @@ def save_bill_to_bill_sections(bill_to_bill_model: pymodels.BillToBillModel,
         return None
     for section in sections:
         save_section(section, db)
+
+
+def save_bill_and_sections(billPath: pymodels.BillPath,
+                           replace=False) -> pymodels.Status:
+    """
+    Parse bill (from path) and save it, and its sections to the Bill and SectionItem
+    tables, respectively.
+    The same as saving bill and sections within elastic_load.indexBill
+    Args:
+        billPath (pymodels.BillPath): absolute path to the bill XML 
+        replace (bool, optional): replace the bill or section if it already exists. Defaults to False.
+
+    Returns:
+        pymodels.Status: status of save to db, of the form {success: True/False, message: 'message'}} 
+    """
+    status = pymodels.Status(
+            success=True,
+            message=
+            f'Indexed bill: {billPath.billnumber_version};')
+
+    try:
+        billTree = etree.parse(billPath.filePath, parser=etree.XMLParser())
+    except Exception as e:
+        logger.error('Exception: '.format(e))
+        raise Exception('Could not parse bill: {}'.format(billPath.filePath))
+    length = getBillLengthbyPath(billPath.filePath)
+    defaultNS = getDefaultNamespace(billTree)
+    if defaultNS and defaultNS == constants.NAMESPACE_USLM2:
+        logger.debug('Parsing bill WITH USLM2')
+        logger.debug('defaultNS: {}'.format(defaultNS))
+        sections = billTree.xpath('//uslm:section',
+                                  namespaces={'uslm': defaultNS})
+    else:
+        logger.debug('NO NAMESPACE')
+
+        sections = billTree.xpath('//section')
+
+    billmatch = constants.BILL_NUMBER_REGEX_COMPILED.match(
+        billPath.billnumber_version)
+    billversion = ''
+    billnumber = ''
+    if billmatch:
+        billmatch_dict = billmatch.groupdict()
+        billnumber = '{congress}{stage}{number}'.format(**billmatch_dict)
+        billversion = billmatch_dict.get('version', '')
+    try:
+        bill = pymodels.Bill(billnumber=billnumber,
+                             version=billversion,
+                             length=length)
+        savedbill = save_bill(bill)
+        if savedbill:
+            status.message = status.message + f'; id={bill.id}'
+        else:
+            status.success = False
+            status.message = status.message + f'; Could not save bill'
+            return status
+    except Exception as e:
+        logger.error('Could not add bill to database: {}'.format(e))
+        status.success=False
+        status.message='Could not add bill to database: {}'.format(e))
+
+    sectionData = [{
+            'section_id':
+                getId(section),
+            'section_number':
+                getEnum(section, defaultNS),
+            'section_text':
+                etree.tostring(section, method="text", encoding="unicode"),
+            'section_length':
+                len(etree.tostring(section, method="text", encoding="unicode")),
+        } for section in sections]
+    try:
+        # Add sectionItems to db here
+        for sectionDataItem in sectionData:
+            if sectionDataItem.get('section_id') is None:
+                continue
+            try:
+                section_meta = pymodels.SectionMeta(
+                    billnumber_version=f'{billnumber}{billversion}',
+                    section_id=sectionDataItem.get('section_id'),
+                    label=sectionDataItem.get('section_number', ''),
+                    length=sectionDataItem.get('length', 0))
+                get_or_create_sectionitem(section_meta)
+            except Exception as e:
+                logger.error(
+                    f'Could not add section in {billnumber}{billversion} to database: {e}'
+                )
+                logger.error(f'{sectionDataItem}')
+        status.message = status.message + f'; saved {len(sectionData)} sections'
+    except Exception as e:
+        logger.error('Could not add sections to database: {}'.format(e))
+        status.success=False
+        status.message=f'Failed to index sections for : {billPath.billnumber_version}; {e}'
+    return status
