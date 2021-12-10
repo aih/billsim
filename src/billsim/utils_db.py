@@ -34,6 +34,14 @@ def save_bill(
     Save a bill to the database.
     """
     with db as session:
+        billitem = session.query(pymodels.Bill).filter(
+            pymodels.Bill.billnumber == bill.billnumber,
+            pymodels.Bill.version == bill.version).first()
+        if billitem:
+            logger.info('Bill already exists: {}'.format(str(bill)))
+            return billitem
+        else:
+            logger.info('Saving bill: {}'.format(str(bill)))
         session.add(bill)
         session.flush()
         session.commit()
@@ -155,7 +163,9 @@ def save_section(
     section_meta = pymodels.SectionMeta(**dict(section))
     section_item = get_or_create_sectionitem(section_meta)
     if not section_item:
-        raise Exception('Could not create or get sectionItem from section')
+        raise Exception(
+            'Could not create or get sectionItem from section: {}'.format(
+                str(section_meta)))
     for similar_section in section.similar_sections:
         save_section_to_section(section_meta, similar_section, db)
 
@@ -191,7 +201,6 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
         err_msg = 'No bill found in db for {}'.format(
             bill_to_bill_model.billnumber_version_to)
         logger.warning(err_msg)
-    else:
         try:
             billnumber_version_to_dict = getBillnumberversionParts(
                 bill_to_bill_model.billnumber_version_to)
@@ -258,9 +267,7 @@ def save_bill_and_sections(billPath: pymodels.BillPath,
         pymodels.Status: status of save to db, of the form {success: True/False, message: 'message'}} 
     """
     status = pymodels.Status(
-            success=True,
-            message=
-            f'Indexed bill: {billPath.billnumber_version};')
+        success=True, message=f'Indexed bill: {billPath.billnumber_version};')
 
     try:
         billTree = etree.parse(billPath.filePath, parser=etree.XMLParser())
@@ -300,19 +307,19 @@ def save_bill_and_sections(billPath: pymodels.BillPath,
             return status
     except Exception as e:
         logger.error('Could not add bill to database: {}'.format(e))
-        status.success=False
-        status.message='Could not add bill to database: {}'.format(e))
+        status.success = False
+        status.message = 'Could not add bill to database: {}'.format(e)
 
     sectionData = [{
-            'section_id':
-                getId(section),
-            'section_number':
-                getEnum(section, defaultNS),
-            'section_text':
-                etree.tostring(section, method="text", encoding="unicode"),
-            'section_length':
-                len(etree.tostring(section, method="text", encoding="unicode")),
-        } for section in sections]
+        'section_id':
+            getId(section),
+        'section_number':
+            getEnum(section, defaultNS),
+        'section_text':
+            etree.tostring(section, method="text", encoding="unicode"),
+        'section_length':
+            len(etree.tostring(section, method="text", encoding="unicode")),
+    } for section in sections]
     try:
         # Add sectionItems to db here
         for sectionDataItem in sectionData:
@@ -333,6 +340,6 @@ def save_bill_and_sections(billPath: pymodels.BillPath,
         status.message = status.message + f'; saved {len(sectionData)} sections'
     except Exception as e:
         logger.error('Could not add sections to database: {}'.format(e))
-        status.success=False
-        status.message=f'Failed to index sections for : {billPath.billnumber_version}; {e}'
+        status.success = False
+        status.message = f'Failed to index sections for : {billPath.billnumber_version}; {e}'
     return status

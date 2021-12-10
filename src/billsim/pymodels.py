@@ -53,6 +53,9 @@ class SimilarSectionHit(SQLModel):
 
 
 class Bill(SQLModel, table=True):
+    __table_args__ = (UniqueConstraint('billnumber',
+                                       'version',
+                                       name='billnumber_version'),)
     id: Optional[int] = Field(default=None, primary_key=True)
     length: Optional[int] = None
     # TODO: when indexing/storing Bill initially, calculate number of sections
@@ -63,8 +66,6 @@ class Bill(SQLModel, table=True):
     @classmethod
     def getBillnumberversion(cls):
         return "{cls.billnumber}{cls.version}".format(cls=cls)
-
-    UniqueConstraint('billnumber', 'version', name='billnumber_version')
 
 
 class BillToBillModel(SQLModel):
@@ -80,7 +81,7 @@ class BillToBillModel(SQLModel):
     score_es: Optional[float] = None
     score: Optional[float] = None
     score_to: Optional[float] = None
-    reasons: Optional[list[str]] = []
+    reasons: Optional[list[str]] = None
     identified_by: Optional[str] = None
     sections_num: Optional[int] = None
     sections_match: Optional[int] = None
@@ -110,15 +111,15 @@ class BillToBillLite(SQLModel, table=True):
 # NOTE: section_id is the id attribute from the XML. It may not be unique.
 # However, the SQL bill_id + section_id is unique.
 class SectionItem(SQLModel, table=True):
+    __table_args__ = (UniqueConstraint('bill_id',
+                                       'section_id',
+                                       name='billnumber_version_section_id'),)
     id: Optional[int] = Field(default=None, primary_key=True)
     bill_id: Optional[int] = Field(default=None, foreign_key="bill.id")
     section_id: Optional[str] = Field(default=None)
     label: Optional[str]
     header: Optional[str]
     length: int
-    UniqueConstraint('bill_id',
-                     'section_id',
-                     name='billnumber_version_section_id')
 
 
 class SectionToSection(SQLModel, table=True):
