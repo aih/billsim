@@ -47,6 +47,8 @@ MAX_BILLS_SECTION = int(os.getenv('MAX_BILLS_SECTIONS', default=100))
 
 BILLMETA_GO_CMD = 'billmeta'
 ESQUERY_GO_CMD = 'esquery'
+
+# NOTE: This requires installing `comparematrix` on the path
 COMPAREMATRIX_GO_CMD = 'comparematrix'
 
 RESULTS_DEFAULT = 20

@@ -4,8 +4,6 @@ from billsim import pymodels
 from billsim.constants import COMPAREMATRIX_GO_CMD
 from billsim.utils import billNumberVersionToBillPath
 
-COMPAREMATRIX_GO_CMD = '../../bin/comparematrix'
-
 
 def getComparisonMatrix(billnumbers: list[str]) -> list[list]:
     billPaths = [
