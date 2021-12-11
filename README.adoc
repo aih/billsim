@@ -79,16 +79,14 @@ Then you can run the following command to find similar bills (the bill itself sh
 
 # Get similarity scores for bill-to-bill
 >>> similar_bills=b2b.keys()
->>> from billsim.utils import billNumberVersionToBillPath
->>> billPaths = [billNumberVersionToBillPath(similar_bill).filePath for similar_bill in similar_bills]
->>> billPathsString = ",".join(billPaths)
->>> import subprocess
->>> import json
 // Calls comparematrix from bills (Golang);
 // The compiled executable is in the `bin` directory.
->>> result = subprocess.run(['../bin/comparematrix', '-abspaths', billPathsString,  capture_output=True, text=True)
->>> m = json.loads(result.stdout.split('compareMatrix:\n')[1])
-Out[4]: '[[{1 identical} {0.63 incorporates}] [{0.79 incorporated by} {1 identical}]]'
+>>> from billsim.compare import getCompareMatrix
+>>> c = getCompareMatrix(similar_bills)
+>>> c[0][0]
+{'Score': 1, 'ScoreOther': 1, 'Explanation': 'bills-identical', 'ComparedDocs': '-'}
+>>> c[0][1]
+{'Score': 0.86, 'ScoreOther': 0.86, 'Explanation': 'bills-nearly_identical', 'ComparedDocs': '-'}
 ```
 
 To get similar bills starting with a bill stored in ES, use the `getSimilarBillSections_es` function.
