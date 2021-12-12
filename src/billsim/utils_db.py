@@ -38,10 +38,10 @@ def save_bill(
             pymodels.Bill.billnumber == bill.billnumber,
             pymodels.Bill.version == bill.version).first()
         if billitem:
-            logger.info('Bill already exists: {}'.format(str(bill)))
+            logger.debug('Bill already exists: {}'.format(str(bill)))
             return billitem
         else:
-            logger.info('Saving bill: {}'.format(str(bill)))
+            logger.debug('Saving bill: {}'.format(str(bill)))
         session.add(bill)
         session.flush()
         session.commit()
@@ -64,10 +64,11 @@ def get_bill_by_billnumber_version(
     billnumber_version_dict = getBillnumberversionParts(billnumber_version)
     logger.debug('billnumber_version_dict: {}'.format(
         str(billnumber_version_dict)))
-    bill = db.query(pymodels.Bill).filter(
-        pymodels.Bill.billnumber == billnumber_version_dict.get('billnumber'),
-        pymodels.Bill.version == billnumber_version_dict.get(
-            'version')).first()
+    with db as session:
+        bill = db.query(pymodels.Bill).filter(
+            pymodels.Bill.billnumber == billnumber_version_dict.get(
+                'billnumber'), pymodels.Bill.version ==
+            billnumber_version_dict.get('version')).first()
     if bill is None:
         return None
     return bill
@@ -95,16 +96,17 @@ def get_bill_ids(
 
 
 def get_bill_to_bill(
-    bill_id: int, bill_to_id: int, db: Session = SessionLocal()
-) -> Optional[pymodels.BillToBillLite]:
+    bill_id: int, bill_to_id: int,
+    db: Session = SessionLocal()) -> Optional[pymodels.BillToBill]:
     """
-    Return the BillToBillLite object for the bill_id and bill_to_id
+    Return the BillToBill object for the bill_id and bill_to_id
     """
-    bill_to_bill = db.query(pymodels.BillToBillLite).filter(
-        pymodels.BillToBillLite.bill_id == bill_id,
-        pymodels.BillToBillLite.bill_to_id == bill_to_id).first()
-    if bill_to_bill is None:
-        return None
+    with db as session:
+        bill_to_bill = session.query(pymodels.BillToBill).filter(
+            pymodels.BillToBill.bill_id == bill_id,
+            pymodels.BillToBill.bill_to_id == bill_to_id).first()
+        if bill_to_bill is None:
+            return None
     return bill_to_bill
 
 
@@ -171,7 +173,7 @@ def save_section_to_section(section_meta: pymodels.SectionMeta,
             score_to=similar_section.score_to)
         db.add(section_to_section)
     else:
-        logger.info('SectionToSection already exists')
+        logger.debug('SectionToSection already exists')
         # Update the scores that we have
         if similar_section.score_es:
             logger.debug('SectionToSection adding/updating score_es')
@@ -259,7 +261,7 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
                 bill_to_bill_model.billnumber_version,
                 bill_to_bill_model.billnumber_version_to))
     #sections = json.dumps(bill_to_bill_model.sections)
-    logger.info('Saving bill to bill join: {0} & {1}'.format(
+    logger.debug('Saving bill to bill join: {0} & {1}'.format(
         bill.id, bill_to.id))
     if bill.id and bill_to.id:
         bill_to_bill = get_bill_to_bill(bill_id=bill.id, bill_to_id=bill_to.id)
@@ -268,7 +270,7 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
             bill_to_bill_model.billnumber_version,
             bill_to_bill_model.billnumber_version_to))
 
-    bill_to_bill_new = pymodels.BillToBillLite(
+    bill_to_bill_new = pymodels.BillToBill(
         bill_id=bill.id,
         bill_to_id=bill_to.id,
         score_es=bill_to_bill_model.score_es,
@@ -277,39 +279,58 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
         reasons=bill_to_bill_model.reasons,
         identified_by=bill_to_bill_model.identified_by,
         sections_num=bill_to_bill_model.sections_num,
-        sections_matched=bill_to_bill_model.sections_match)
+        sections_match=bill_to_bill_model.sections_match)
     if bill_to_bill is None:
+        logger.debug(
+            "********** NO Bill-to-bill yet for: {0}, {1} ********".format(
+                bill.id, bill_to.id))
         with db as session:
             session.add(bill_to_bill_new)
             session.flush()
             session.commit()
     else:
+        logger.debug("********** UPDATING BILLS: {0}, {1} ********".format(
+            bill.id, bill_to.id))
         # Use the passed-in values if they exist, otherwise use the values from the db
         if bill_to_bill_new.score_es:
-            bill_to_bill.score_es = bill_to_bill_new.score_es
+            logger.debug("********* UPDATING score_es")
+            setattr(bill_to_bill, 'score_es', bill_to_bill_new.score_es)
 
         if bill_to_bill_new.score:
-            bill_to_bill.score = bill_to_bill_new.score
+            logger.debug("********* UPDATING score")
+            setattr(bill_to_bill, 'score', bill_to_bill_new.score)
 
         if bill_to_bill_new.score_to:
-            bill_to_bill.score_to = bill_to_bill_new.score_to
+            logger.debug("********* UPDATING score_to")
+            setattr(bill_to_bill, 'score_to', bill_to_bill_new.score_to)
 
         if bill_to_bill_new.reasons:
+            logger.debug("********* UPDATING reasons")
             if not bill_to_bill.reasons:
-                bill_to_bill.reasons = bill_to_bill_new.reasons
-            else:
-                bill_to_bill.reasons = list(
-                    set(bill_to_bill.reasons) | set(bill_to_bill_new.reasons))
+                setattr(bill_to_bill, 'reasons', bill_to_bill_new.reasons)
+            # For some reason this considers one entry as a list, e.g. 'b,i,l,l,s,-...'
+            #else:
+            #    setattr(
+            #        bill_to_bill, 'reasons',
+            #        list(
+            #            set(bill_to_bill.reasons) |
+            #            set(bill_to_bill_new.reasons)))
 
         if bill_to_bill_new.identified_by:
-            bill_to_bill.identified_by = bill_to_bill_new.identified_by
+            logger.debug("********* UPDATING identified_by")
+            setattr(bill_to_bill, 'identified_by',
+                    bill_to_bill_new.identified_by)
 
         if bill_to_bill_new.sections_num:
-            bill_to_bill.sections_num = bill_to_bill_new.sections_num
+            logger.debug("********* UPDATING sections_num")
+            setattr(bill_to_bill, 'sections_num', bill_to_bill_new.sections_num)
 
-        if bill_to_bill_new.sections_matched:
-            bill_to_bill_new.sections_matched = bill_to_bill_new.sections_matched
+        if bill_to_bill_new.sections_match:
+            logger.debug("********* UPDATING sections_match")
+            setattr(bill_to_bill, 'sections_match',
+                    bill_to_bill_new.sections_match)
         with db as session:
+            session.add(bill_to_bill)
             session.flush()
             session.commit()
 

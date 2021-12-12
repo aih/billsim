@@ -89,6 +89,8 @@ US_CONGRESS_PATH_REGEX_COMPILED = re.compile(
 )
 USCONGRESS_XML_FILE = 'document.xml'
 
+POSTGRES_PW = os.getenv('POSTGRES_PW', default='1234')
+
 
 # CDG = congress.gov
 def billNumberVersionFromPath_CDG(billpath: str):
