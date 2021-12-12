@@ -63,6 +63,13 @@ NOTE: The Elasticsearch versions after 7.10.2 are forked between the full 'OSS' 
 
 ## Find similar bills 
 
+To run the Elasticsearch similarity algorithm, followed by a function to calculate similarity scores between pairs of bills, run the following command from the command line:
+
+`$ python compare.py $MAX_BILLS_TO_COMPARE`
+
+Where $MAX_BILLS_TO_COMPARE is the maximum number of bills to compare (chosen randomly from the bill XML files). If no value is passed, the default is all bills.
+### Bill similarity functions with Elasticsearch
+
 The `bill_similarity.py` script includes functions to find similar bills by billnumber and version. The default functions assume that the bill XML files are in a directory three levels up from the `bill_similarity.py` file, of the form `congress/data/`. The default `data` directory can also be set in a `.env` file.
 
 Then you can run the following command to find and save similar bills (the bill itself should be found as the first result):
