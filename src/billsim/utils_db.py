@@ -132,7 +132,7 @@ def get_or_create_sectionitem(section_meta: pymodels.SectionMeta,
     if sectionItem is None:
         if section_meta.label is None or section_meta.header is None or section_meta.length is None:
             logger.warning(
-                'Section meta is missing label, header or length: {section_meta}'
+                f'Section meta is missing label, header or length: {section_meta}'
             )
         sectionItem = pymodels.SectionItem(bill_id=bill.id,
                                            section_id=section_meta.section_id,
