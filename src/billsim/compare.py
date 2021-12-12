@@ -33,6 +33,7 @@ def getCompareMatrix(billnumbers: list[str]) -> list[list]:
 
 
 def processSimilarBills(billnumber_version: str) -> list[str]:
+    logger.info(f'Processing similar bills for bill {billnumber_version}')
     try:
         getBillnumberversionParts(billnumber_version)
     except ValueError:
@@ -81,7 +82,7 @@ def compareBills(maxBills: int = -1):
             )
         except Exception as e:
             logger.error(
-                f'Error processing similarbills for bill {billPath.billnumber_version}'
+                f'Error processing similarbills for bill {billPath.billnumber_version}: {e}'
             )
     end_time = time.time()
     logger.info("It took {0} ms to process {1} bills.".format(
