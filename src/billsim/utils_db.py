@@ -33,6 +33,7 @@ def save_bill(
     """
     Save a bill to the database.
     """
+    logger.info('Saving bill: {}'.format(bill))
     with db as session:
         billitem = session.query(pymodels.Bill).filter(
             pymodels.Bill.billnumber == bill.billnumber,

@@ -74,7 +74,9 @@ def compareBills(maxBills: int = -1):
         logger.info(f'Sampled {len(billPaths)} bills to process')
     else:
         maxBills = len(billPaths)
-    for billPath in billPaths:
+    for i, billPath in enumerate(billPaths):
+        if i % 100 == 0:
+            logger.info(f'Processed {i} bills')
         try:
             similar_bills = processSimilarBills(billPath.billnumber_version)
             logger.debug(
