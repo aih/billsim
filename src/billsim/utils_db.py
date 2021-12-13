@@ -277,7 +277,7 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
         score_es=bill_to_bill_model.score_es,
         score=bill_to_bill_model.score,
         score_to=bill_to_bill_model.score_to,
-        reasonsString=bill_to_bill_model.reasonsString,
+        reasonsstring=bill_to_bill_model.reasonsstring,
         identified_by=bill_to_bill_model.identified_by,
         sections_num=bill_to_bill_model.sections_num,
         sections_match=bill_to_bill_model.sections_match)
@@ -305,24 +305,24 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
             logger.debug("********* UPDATING score_to")
             setattr(bill_to_bill, 'score_to', bill_to_bill_new.score_to)
 
-        if bill_to_bill_new.reasonsString:
-            logger.debug("********* UPDATING reasonsString:")
-            if not bill_to_bill.reasonsString:
-                setattr(bill_to_bill, 'reasonsString',
-                        bill_to_bill_new.reasonsString)
-                reasonsString = bill_to_bill_new.reasonsString
+        if bill_to_bill_new.reasonsstring:
+            logger.debug("********* UPDATING reasonsstring:")
+            if not bill_to_bill.reasonsstring:
+                setattr(bill_to_bill, 'reasonsstring',
+                        bill_to_bill_new.reasonsstring)
+                reasonsstring = bill_to_bill_new.reasonsstring
             else:
-                reasonsString = ", ".join(
+                reasonsstring = ", ".join(
                     list(
                         set([
                             reason.strip()
-                            for reason in bill_to_bill.reasonsString.split(',')
+                            for reason in bill_to_bill.reasonsstring.split(',')
                         ] + [
                             reason.strip() for reason in
-                            bill_to_bill_new.reasonsString.split(',')
+                            bill_to_bill_new.reasonsstring.split(',')
                         ])))
-                setattr(bill_to_bill, 'reasonsString', reasonsString)
-            logger.debug(reasonsString)
+                setattr(bill_to_bill, 'reasonsstring', reasonsstring)
+            logger.debug(reasonsstring)
 
         if bill_to_bill_new.identified_by:
             logger.debug("********* UPDATING identified_by")

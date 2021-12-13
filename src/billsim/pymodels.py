@@ -84,7 +84,7 @@ class BillToBillModel(SQLModel):
     score_to: Optional[float] = None
     #reasons: Optional[List[str]] = Field(default=None,
     #                                     sa_column=Column(ARRAY(String)))
-    reasonsString: Optional[str] = Field(default=None,
+    reasonsstring: Optional[str] = Field(default=None,
                                          sa_column=Column(VARCHAR(100)))
     identified_by: Optional[str] = None
     sections_num: Optional[int] = None
@@ -106,7 +106,7 @@ class BillToBill(SQLModel, table=True):
     score_to: Optional[float] = None
     #reasons: Optional[List[str]] = Field(default=None,
     #                                         sa_column=Column(ARRAY(String)))
-    reasonsString: Optional[str] = Field(default=None,
+    reasonsstring: Optional[str] = Field(default=None,
                                          sa_column=Column(VARCHAR(100)))
     identified_by: Optional[str] = None
     sections_num: Optional[int] = None
