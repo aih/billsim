@@ -1,6 +1,7 @@
 # Billsim specific
 *-bk.py
 data/
+bin
 !tests/samples/data
 .env
 .vscode

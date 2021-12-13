@@ -445,8 +445,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_processing_bill_xml_files">Processing bill XML files</a></li>
 <li><a href="#_creating_elasticsearch_index_of_bill_sections">Creating Elasticsearch index of bill sections</a></li>
-<li><a href="#_find_similar_bills">Find similar bills</a></li>
+<li><a href="#_find_similar_bills">Find similar bills</a>
+<ul class="sectlevel2">
+<li><a href="#_bill_similarity_functions_with_elasticsearch">Bill similarity functions with Elasticsearch</a></li>
+</ul>
+</li>
 <li><a href="#_build_and_test">Build and test</a></li>
+<li><a href="#_run_with_postgres_docker">Run with Postgres (docker)</a></li>
 </ul>
 </div>
 </div>
@@ -569,25 +574,88 @@ The Elasticsearch versions after 7.10.2 are forked between the full 'OSS' versio
 <h2 id="_find_similar_bills">Find similar bills</h2>
 <div class="sectionbody">
 <div class="paragraph">
+<p>To run the Elasticsearch similarity algorithm, followed by a function to calculate similarity scores between pairs of bills, run the following command from the command line:</p>
+</div>
+<div class="paragraph">
+<p><code>$ python compare.py $MAX_BILLS_TO_COMPARE</code></p>
+</div>
+<div class="paragraph">
+<p>Where $MAX_BILLS_TO_COMPARE is the maximum number of bills to compare (chosen randomly from the bill XML files). If no value is passed, the default is all bills.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Running 995 bills this way took ~700 minutes on my machine (16GB ram, 2.9 GHz) (average 41.7 seconds per bill).
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_bill_similarity_functions_with_elasticsearch">Bill similarity functions with Elasticsearch</h3>
+<div class="paragraph">
 <p>The <code>bill_similarity.py</code> script includes functions to find similar bills by billnumber and version. The default functions assume that the bill XML files are in a directory three levels up from the <code>bill_similarity.py</code> file, of the form <code>congress/data/</code>. The default <code>data</code> directory can also be set in a <code>.env</code> file.</p>
 </div>
 <div class="paragraph">
-<p>Then you can run the following command to find similar bills (the bill itself should be found as the first result):</p>
+<p>Then you can run the following command to find and save similar bills (the bill itself should be found as the first result):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">&gt;&gt;&gt; from billsim.compare import processSimilarBills
+&gt;&gt;&gt; processSimilarBills('116hr1818ih')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>OR for many bills:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">&gt;&gt;&gt; from billsim.compare import processSimilarBills`
+&gt;&gt;&gt; billnumber_versions=['116hr133enr', '115hr4275ih', '117s235is', '117hr4459ih', '117hr4350ih', '117s2766is', '117hr5466ih', '116hr8939ih', '116s160is', '117s2685is', '117hr4041ih', '116hr2812ih', '116hr2709ih', '117s2812is', '116sres178is', '116hres391ih']
+&gt;&gt;&gt; for billnumber_version in billnumber_versions:
+&gt;&gt;&gt;     processSimilarBills(billnumber_version)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is the equivalent of the following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-python" data-lang="python">&gt;&gt;&gt; from billsim.bill_similarity import getSimilarBillSections, getBillToBill
-&gt;&gt;&gt; from billsim.utils_db import save_bill_to_bill
+&gt;&gt;&gt; from billsim.utils_db import save_bill_to_bill, save_bill_to_bill_sections
 &gt;&gt;&gt; s = getSimilarBillSections('116hr200ih')
 &gt;&gt;&gt; b2b = getBillToBill(s)
 &gt;&gt;&gt; b2b
 {'116hr200ih': BillToBillModel(id=None, billnumber_version='116hr200ih', length=7313, length_to=None, score_es=190.614846, score=None, score_to=None, reasons=None, billnumber_version_to='116hr200ih', identified_by=None, title=None, title_to=None, sections=[Section(billnumber_version='116hr200ih', section_id='HE90F34DBB44149C6B9BBD6747EB6F645', label='2.', header='Border wall trust fund', length=None, similar_sections=[SimilarSection(billnumber_version='116hr200ih', section_id='HE90F34DBB44149C6B9BBD6747EB6F645', label='2.', header='Border wall trust fund', length=1264, score_es=97.936806, score=None, score_to=None)]), Section(bill...
 &gt;&gt;&gt; for bill in b2b:
-&gt;&gt;&gt;    save_bill_to_bill(b2b[bill])</code></pre>
+&gt;&gt;&gt;    save_bill_to_bill(b2b[bill])
+&gt;&gt;&gt;    save_bill_to_bill_sections(b2b[bill]) # This should save the individual sections and the sections to section mapping
+
+# Get similarity scores for bill-to-bill
+&gt;&gt;&gt; similar_bills=b2b.keys()
+// Calls comparematrix from bills (Golang);
+// The compiled executable is in the `bin` directory.
+&gt;&gt;&gt; from billsim.compare import getCompareMatrix
+&gt;&gt;&gt; c = getCompareMatrix(similar_bills)
+&gt;&gt;&gt; c[0][0]
+{'Score': 1, 'ScoreOther': 1, 'Explanation': 'bills-identical', 'ComparedDocs': '116hr222ih-116hr222ih'}
+&gt;&gt;&gt; c[0][1] {'Score': 0.86, 'ScoreOther': 0.86, 'Explanation': 'bills-nearly_identical', 'ComparedDocs': '116hr222ih-115hr198ih'}
+
+&gt;&gt;&gt; from billsim.pymodels import BillToBillModel
+&gt;&gt;&gt; for row in c:
+&gt;&gt;&gt;   for column in row:
+&gt;&gt;&gt;     bill, bill_to = column['ComparedDocs'].split('-')
+&gt;&gt;&gt;     if bill and bill_to:
+&gt;&gt;&gt;         b2bModel = BillToBillModel(billnumber_version=bill, billnumber_version_to=bill_to, score=column['Score'], score_to=column['ScoreOther'], reasons=[column['Explanation']])
+&gt;&gt;&gt;         save_bill_to_bill(b2bModel)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To get similar bills starting with a bill stored in ES, use the <code>getSimilarBillSections_es</code> function.</p>
+<p>To find similar bills from ES, without reference to the file system, use the <code>getSimilarBillSections_es</code> function.</p>
+</div>
 </div>
 </div>
 </div>
@@ -602,10 +670,55 @@ The Elasticsearch versions after 7.10.2 are forked between the full 'OSS' versio
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_run_with_postgres_docker">Run with Postgres (docker)</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ mkdir -p $HOME/docker/volumes/postgres
+$ docker run --rm   --name pg-docker -e POSTGRES_PASSWORD=$POSTGRES_PW -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data  postgres:alpine</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create a local postgres user:app-name:
+<code>createuser -s postgres</code></p>
+</div>
+<div class="paragraph">
+<p>Install the tables:app-name:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$python pymodels.py
+2021-12-11 15:48:29,657 INFO sqlalchemy.engine.Engine select pg_catalog.version()
+...
+CREATE TABLE bill (
+        id SERIAL,
+        length INTEGER,
+        billnumber VARCHAR NOT NULL,
+        version VARCHAR NOT NULL,
+        PRIMARY KEY (id),
+        CONSTRAINT billnumber_version UNIQUE (billnumber, version)
+)
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To access the database from the command line:author:
+<code>psql postgresql://postgres:$POSTGRES_PW@localhost:5432/postgres</code></p>
+</div>
+<div class="paragraph">
+<p>To run pgadmin4 from docker:app-name:
+<code>docker run -p 5050:80 -e "PGADMIN_DEFAULT_EMAIL=<a href="mailto:myemail@gmail.com">myemail@gmail.com</a>" -e "PGADMIN_DEFAULT_PASSWORD=a12345678" -d  dpage/pgadmin4</code></p>
+</div>
+<div class="paragraph">
+<p>The admin panel is available at <a href="http://localhost:5050/" class="bare">http://localhost:5050/</a></p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-11-24 00:03:08 -0800
+Last updated 2021-12-13 10:21:20 -0800
 </div>
 </div>
 </body>

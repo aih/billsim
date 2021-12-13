@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-from billsim.constants import POSTGRES_PW
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import create_engine
 
-postgres_url = f"postgresql://postgres:{POSTGRES_PW}@localhost/billsim"
+sqlite_file_name = "./billsim.db"
+sqlite_url = f"sqlite:///{sqlite_file_name}"
 
-engine = create_engine(postgres_url, echo=False)
+engine = create_engine(sqlite_url, echo=True)
 
 SessionLocal = sessionmaker(autocommit=False,
                             autoflush=False,

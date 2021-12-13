@@ -202,6 +202,10 @@ def walkBillDirs(rootDir=PATH_TO_CONGRESSDATA_DIR,
     return accumulator
 
 
+def getDefaultNamespace(billTree) -> str:
+    return billTree.getroot().nsmap.get(None, '')
+
+
 # Get bill XML paths depending on the pathType
 # Uses walkBillDirs with a filter
 def getBillXmlPaths(

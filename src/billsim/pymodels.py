@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 from sqlalchemy.sql.schema import UniqueConstraint
-from sqlmodel import Field, SQLModel, Session, create_engine
-from typing import Optional
+from sqlalchemy.sql.sqltypes import String
+from sqlmodel import Field, SQLModel, ARRAY, Column
+from typing import List, Optional
 from billsim.database import engine
 
 
@@ -53,6 +54,9 @@ class SimilarSectionHit(SQLModel):
 
 
 class Bill(SQLModel, table=True):
+    __table_args__ = (UniqueConstraint('billnumber',
+                                       'version',
+                                       name='billnumber_version'),)
     id: Optional[int] = Field(default=None, primary_key=True)
     length: Optional[int] = None
     # TODO: when indexing/storing Bill initially, calculate number of sections
@@ -63,8 +67,6 @@ class Bill(SQLModel, table=True):
     @classmethod
     def getBillnumberversion(cls):
         return "{cls.billnumber}{cls.version}".format(cls=cls)
-
-    UniqueConstraint('billnumber', 'version', name='billnumber_version')
 
 
 class BillToBillModel(SQLModel):
@@ -80,16 +82,17 @@ class BillToBillModel(SQLModel):
     score_es: Optional[float] = None
     score: Optional[float] = None
     score_to: Optional[float] = None
-    reasons: Optional[list[str]] = []
+    reasons: Optional[List[str]] = Field(default=None,
+                                         sa_column=Column(ARRAY(String)))
     identified_by: Optional[str] = None
     sections_num: Optional[int] = None
     sections_match: Optional[int] = None
-    sections: list[
-        Section]    # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
+    sections: Optional[list[
+        Section]] = None    # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
 
 
-# Model used to store in SQLite
-class BillToBillLite(SQLModel, table=True):
+# Model used to store in db
+class BillToBill(SQLModel, table=True):
     bill_id: Optional[int] = Field(default=None,
                                    foreign_key="bill.id",
                                    primary_key=True)
@@ -99,26 +102,25 @@ class BillToBillLite(SQLModel, table=True):
     score_es: Optional[float] = None
     score: Optional[float] = None
     score_to: Optional[float] = None
-    reasons: Optional[list[str]] = None
+    reasons: Optional[List[str]] = Field(default=None,
+                                         sa_column=Column(ARRAY(String)))
     identified_by: Optional[str] = None
     sections_num: Optional[int] = None
-    sections_matched: Optional[int] = None
-    #sections: Optional[
-    #    str] = None
+    sections_match: Optional[int] = None
 
 
 # NOTE: section_id is the id attribute from the XML. It may not be unique.
 # However, the SQL bill_id + section_id is unique.
 class SectionItem(SQLModel, table=True):
+    __table_args__ = (UniqueConstraint('bill_id',
+                                       'section_id',
+                                       name='billnumber_version_section_id'),)
     id: Optional[int] = Field(default=None, primary_key=True)
     bill_id: Optional[int] = Field(default=None, foreign_key="bill.id")
     section_id: Optional[str] = Field(default=None)
     label: Optional[str]
     header: Optional[str]
     length: int
-    UniqueConstraint('bill_id',
-                     'section_id',
-                     name='billnumber_version_section_id')
 
 
 class SectionToSection(SQLModel, table=True):

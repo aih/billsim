@@ -115,7 +115,7 @@ def getBill_es(billnumber: str,
         else:
             return [item['_source'] for item in getHitsHits(res)]
     except exceptions.NotFoundError:
-        logger.error(f'No bill found in db for {billnumber}')
+        logger.error(f'No bill found in Elasticsearch index for {billnumber}')
         return None
 
 

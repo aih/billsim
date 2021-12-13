@@ -47,6 +47,8 @@ MAX_BILLS_SECTION = int(os.getenv('MAX_BILLS_SECTIONS', default=100))
 
 BILLMETA_GO_CMD = 'billmeta'
 ESQUERY_GO_CMD = 'esquery'
+
+# NOTE: This requires installing `comparematrix` on the path
 COMPAREMATRIX_GO_CMD = 'comparematrix'
 
 RESULTS_DEFAULT = 20
@@ -86,6 +88,8 @@ US_CONGRESS_PATH_REGEX_COMPILED = re.compile(
     r'\/(?P<congress>[1-9][0-9]*)\/(?P<doctype>[a-z]+)\/(?P<stage>[a-z]{1,8})\/(?P<billnumber>[a-z]{1,8}[1-9][0-9]*)\/?(text-versions\/)?(?P<version>[a-z]+)?'
 )
 USCONGRESS_XML_FILE = 'document.xml'
+
+POSTGRES_PW = os.getenv('POSTGRES_PW', default='1234')
 
 
 # CDG = congress.gov
