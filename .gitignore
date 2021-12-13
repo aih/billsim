@@ -1,5 +1,6 @@
 # Billsim specific
 *-bk.py
+*-bk.sql
 data/
 bin
 !tests/samples/data

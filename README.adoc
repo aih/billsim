@@ -161,3 +161,8 @@ To run pgadmin4 from docker:app-name:
 `docker run -p 5050:80 -e "PGADMIN_DEFAULT_EMAIL=myemail@gmail.com" -e "PGADMIN_DEFAULT_PASSWORD=a12345678" -d  dpage/pgadmin4`
 
 The admin panel is available at http://localhost:5050/
+
+
+## Postgres back-up
+The database is backed up with:
+`pg_dump billsim > billsim-bk.sql`
