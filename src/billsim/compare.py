@@ -61,7 +61,7 @@ def processSimilarBills(billnumber_version: str) -> list[str]:
                     billnumber_version_to=compare_bill_to,
                     score=column['Score'],
                     score_to=column['ScoreOther'],
-                    reasons=[column['Explanation']])
+                    reasonsString=column['Explanation']]
                 save_bill_to_bill(b2bModel)
     return similar_bills
 

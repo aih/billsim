@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from sqlalchemy.sql.schema import UniqueConstraint
-from sqlalchemy.sql.sqltypes import String
+from sqlalchemy.sql.sqltypes import VARCHAR, String
 from sqlmodel import Field, SQLModel, ARRAY, Column
 from typing import List, Optional
 from billsim.database import engine
@@ -82,8 +82,10 @@ class BillToBillModel(SQLModel):
     score_es: Optional[float] = None
     score: Optional[float] = None
     score_to: Optional[float] = None
-    reasons: Optional[List[str]] = Field(default=None,
-                                         sa_column=Column(ARRAY(String)))
+    #reasons: Optional[List[str]] = Field(default=None,
+    #                                     sa_column=Column(ARRAY(String)))
+    reasonsString: Optional[str] = Field(default=None,
+                                         sa_column=Column(VARCHAR(100)))
     identified_by: Optional[str] = None
     sections_num: Optional[int] = None
     sections_match: Optional[int] = None
@@ -102,8 +104,10 @@ class BillToBill(SQLModel, table=True):
     score_es: Optional[float] = None
     score: Optional[float] = None
     score_to: Optional[float] = None
-    reasons: Optional[List[str]] = Field(default=None,
-                                         sa_column=Column(ARRAY(String)))
+    #reasons: Optional[List[str]] = Field(default=None,
+    #                                         sa_column=Column(ARRAY(String)))
+    reasonsString: Optional[str] = Field(default=None,
+                                         sa_column=Column(VARCHAR(100)))
     identified_by: Optional[str] = None
     sections_num: Optional[int] = None
     sections_match: Optional[int] = None
