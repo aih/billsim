@@ -68,6 +68,9 @@ To run the Elasticsearch similarity algorithm, followed by a function to calcula
 `$ python compare.py $MAX_BILLS_TO_COMPARE`
 
 Where $MAX_BILLS_TO_COMPARE is the maximum number of bills to compare (chosen randomly from the bill XML files). If no value is passed, the default is all bills.
+
+NOTE: Running 995 bills this way took ~700 minutes on my machine (16GB ram, 2.9 GHz) (average 41.7 seconds per bill).
+
 ### Bill similarity functions with Elasticsearch
 
 The `bill_similarity.py` script includes functions to find similar bills by billnumber and version. The default functions assume that the bill XML files are in a directory three levels up from the `bill_similarity.py` file, of the form `congress/data/`. The default `data` directory can also be set in a `.env` file.
@@ -77,6 +80,13 @@ Then you can run the following command to find and save similar bills (the bill 
 ```python
 >>> from billsim.compare import processSimilarBills 
 >>> processSimilarBills('116hr1818ih')
+```  
+OR for many bills:
+```python
+>>> from billsim.compare import processSimilarBills`
+>>> billnumber_versions=['116hr133enr', '115hr4275ih', '117s235is', '117hr4459ih', '117hr4350ih', '117s2766is', '117hr5466ih', '116hr8939ih', '116s160is', '117s2685is', '117hr4041ih', '116hr2812ih', '116hr2709ih', '117s2812is', '116sres178is', '116hres391ih']
+>>> for billnumber_version in billnumber_versions:
+>>>     processSimilarBills(billnumber_version)
 ```
 
 This is the equivalent of the following:
@@ -120,9 +130,6 @@ Uses the `pytest-order` plugin. See https://pytest-dev.github.io/pytest-order/de
 
 
 ## Run with Postgres (docker)
-
-
-
 
 ```bash
 $ mkdir -p $HOME/docker/volumes/postgres

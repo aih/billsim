@@ -87,7 +87,7 @@ def compareBills(maxBills: int = -1):
                 f'Error processing similarbills for bill {billPath.billnumber_version}: {e}'
             )
     end_time = time.time()
-    logger.info("It took {0} ms to process {1} bills.".format(
+    logger.info("It took {0} seconds to process {1} bills.".format(
         end_time - start_time, maxBills))
 
 

@@ -4,7 +4,7 @@ from billsim.constants import POSTGRES_PW
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import create_engine
 
-postgres_url = f"postgresql://postgres:{POSTGRES_PW}@localhost"
+postgres_url = f"postgresql://postgres:{POSTGRES_PW}@localhost/billsim"
 
 engine = create_engine(postgres_url, echo=False)
 

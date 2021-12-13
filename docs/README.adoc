@@ -63,24 +63,101 @@ NOTE: The Elasticsearch versions after 7.10.2 are forked between the full 'OSS' 
 
 ## Find similar bills 
 
+To run the Elasticsearch similarity algorithm, followed by a function to calculate similarity scores between pairs of bills, run the following command from the command line:
+
+`$ python compare.py $MAX_BILLS_TO_COMPARE`
+
+Where $MAX_BILLS_TO_COMPARE is the maximum number of bills to compare (chosen randomly from the bill XML files). If no value is passed, the default is all bills.
+
+NOTE: Running 995 bills this way took ~700 minutes on my machine (16GB ram, 2.9 GHz) (average 41.7 seconds per bill).
+
+### Bill similarity functions with Elasticsearch
+
 The `bill_similarity.py` script includes functions to find similar bills by billnumber and version. The default functions assume that the bill XML files are in a directory three levels up from the `bill_similarity.py` file, of the form `congress/data/`. The default `data` directory can also be set in a `.env` file.
 
-Then you can run the following command to find similar bills (the bill itself should be found as the first result):
+Then you can run the following command to find and save similar bills (the bill itself should be found as the first result):
+
+```python
+>>> from billsim.compare import processSimilarBills 
+>>> processSimilarBills('116hr1818ih')
+```  
+OR for many bills:
+```python
+>>> from billsim.compare import processSimilarBills`
+>>> billnumber_versions=['116hr133enr', '115hr4275ih', '117s235is', '117hr4459ih', '117hr4350ih', '117s2766is', '117hr5466ih', '116hr8939ih', '116s160is', '117s2685is', '117hr4041ih', '116hr2812ih', '116hr2709ih', '117s2812is', '116sres178is', '116hres391ih']
+>>> for billnumber_version in billnumber_versions:
+>>>     processSimilarBills(billnumber_version)
+```
+
+This is the equivalent of the following:
 ```python
 >>> from billsim.bill_similarity import getSimilarBillSections, getBillToBill
->>> from billsim.utils_db import save_bill_to_bill 
+>>> from billsim.utils_db import save_bill_to_bill, save_bill_to_bill_sections 
 >>> s = getSimilarBillSections('116hr200ih')
 >>> b2b = getBillToBill(s)
 >>> b2b
 {'116hr200ih': BillToBillModel(id=None, billnumber_version='116hr200ih', length=7313, length_to=None, score_es=190.614846, score=None, score_to=None, reasons=None, billnumber_version_to='116hr200ih', identified_by=None, title=None, title_to=None, sections=[Section(billnumber_version='116hr200ih', section_id='HE90F34DBB44149C6B9BBD6747EB6F645', label='2.', header='Border wall trust fund', length=None, similar_sections=[SimilarSection(billnumber_version='116hr200ih', section_id='HE90F34DBB44149C6B9BBD6747EB6F645', label='2.', header='Border wall trust fund', length=1264, score_es=97.936806, score=None, score_to=None)]), Section(bill...
 >>> for bill in b2b:
 >>>    save_bill_to_bill(b2b[bill]) 
+>>>    save_bill_to_bill_sections(b2b[bill]) # This should save the individual sections and the sections to section mapping
+
+# Get similarity scores for bill-to-bill
+>>> similar_bills=b2b.keys()
+// Calls comparematrix from bills (Golang);
+// The compiled executable is in the `bin` directory.
+>>> from billsim.compare import getCompareMatrix
+>>> c = getCompareMatrix(similar_bills)
+>>> c[0][0]
+{'Score': 1, 'ScoreOther': 1, 'Explanation': 'bills-identical', 'ComparedDocs': '116hr222ih-116hr222ih'}
+>>> c[0][1] {'Score': 0.86, 'ScoreOther': 0.86, 'Explanation': 'bills-nearly_identical', 'ComparedDocs': '116hr222ih-115hr198ih'}
+
+>>> from billsim.pymodels import BillToBillModel
+>>> for row in c:
+>>>   for column in row:
+>>>     bill, bill_to = column['ComparedDocs'].split('-')
+>>>     if bill and bill_to:
+>>>         b2bModel = BillToBillModel(billnumber_version=bill, billnumber_version_to=bill_to, score=column['Score'], score_to=column['ScoreOther'], reasons=[column['Explanation']])
+>>>         save_bill_to_bill(b2bModel)
 ```
 
-To get similar bills starting with a bill stored in ES, use the `getSimilarBillSections_es` function.
+To find similar bills from ES, without reference to the file system, use the `getSimilarBillSections_es` function.
 
 ## Build and test
 
 Tests, built with `pytest` are found in the `tests` directory. To run the tests, run `make` (requires cmake and pytest installed) or run `pytest -rs tests` directly. 
 
 Uses the `pytest-order` plugin. See https://pytest-dev.github.io/pytest-order/dev/
+
+
+## Run with Postgres (docker)
+
+```bash
+$ mkdir -p $HOME/docker/volumes/postgres
+$ docker run --rm   --name pg-docker -e POSTGRES_PASSWORD=$POSTGRES_PW -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data  postgres:alpine
+```
+Create a local postgres user:app-name:
+`createuser -s postgres`
+
+Install the tables:app-name:
+```bash
+$python pymodels.py
+2021-12-11 15:48:29,657 INFO sqlalchemy.engine.Engine select pg_catalog.version()
+...
+CREATE TABLE bill (
+        id SERIAL, 
+        length INTEGER, 
+        billnumber VARCHAR NOT NULL, 
+        version VARCHAR NOT NULL, 
+        PRIMARY KEY (id), 
+        CONSTRAINT billnumber_version UNIQUE (billnumber, version)
+)
+...
+```
+
+To access the database from the command line:author:
+`psql postgresql://postgres:$POSTGRES_PW@localhost:5432/postgres`
+
+To run pgadmin4 from docker:app-name:
+`docker run -p 5050:80 -e "PGADMIN_DEFAULT_EMAIL=myemail@gmail.com" -e "PGADMIN_DEFAULT_PASSWORD=a12345678" -d  dpage/pgadmin4`
+
+The admin panel is available at http://localhost:5050/
