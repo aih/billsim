@@ -1,3 +1,5 @@
+import sys
+import logging
 from elasticsearch import exceptions
 import pytest
 from billsim.elastic_load import es, indexBill
@@ -6,11 +8,17 @@ from billsim.constants import SAMPLE_MATCH_ALL_QUERY
 from billsim.bill_similarity import getSimilarSections
 from billsim.utils_es import getHitsHits, moreLikeThis
 
+logging.basicConfig(filename='elastic_load_test.log',
+                    filemode='w',
+                    level='INFO')
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.StreamHandler(sys.stdout))
+
 
 def es_service_available() -> bool:
     service_available = es.ping()
     if not service_available:
-        print('Elasticsearch service not available')
+        logger.error(msg='Elasticsearch service not available')
     return service_available
 
 
@@ -53,7 +61,7 @@ class TestBillSimilarity:
 
     @classmethod
     def setup_class(cls):
-        print('setup_class')
+        logger.debug('elastic_load test setup_class')
         billPath = constants_test.SAMPLE_BILL_PATH_117HR2001
         r = indexBill(billPath=billPath,
                       index_types={
@@ -63,7 +71,7 @@ class TestBillSimilarity:
     @classmethod
     def teardown_class(cls):
         pass
-        #print('teardown_class')
+        #logger.debug('elastic_load test teardown class')
         #for index in [
         #        constants_test.TEST_INDEX_SECTIONS,
         #        constants_test.TEST_INDEX_BILL_FULL
@@ -71,7 +79,7 @@ class TestBillSimilarity:
         #    try:
         #        es.indices.delete(index=index)
         #    except exceptions.NotFoundError:
-        #        print('No index to delete: {0}'.format(index))
+        #        logger.warn('No index to delete: {0}'.format(index))
 
     @pytest.mark.skip(
         reason="Es query coming up empty when the first test deletes the index")
