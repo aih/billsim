@@ -9,3 +9,7 @@ test:
 
 test-debug:
 	pytest --log-cli-level=DEBUG -s tests
+
+build: 
+	make test
+	pip install -e .
