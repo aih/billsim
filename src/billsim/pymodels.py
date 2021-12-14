@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 from sqlalchemy.sql.schema import UniqueConstraint
-from sqlalchemy.sql.sqltypes import VARCHAR, String
-from sqlmodel import Field, SQLModel, ARRAY, Column
-from typing import List, Optional
+from sqlalchemy.sql.sqltypes import VARCHAR
+from sqlmodel import Field, SQLModel, Column
+from typing import Optional
 from billsim.database import engine
 
 
