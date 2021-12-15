@@ -3,7 +3,7 @@
 from sqlalchemy.sql.schema import UniqueConstraint
 from sqlalchemy.sql.sqltypes import VARCHAR
 from sqlmodel import Field, SQLModel, Column
-from typing import Optional
+from typing import List, Optional
 from billsim.database import engine
 
 
@@ -140,6 +140,54 @@ class SectionToSection(SQLModel, table=True):
     score_es: Optional[float] = None
     score: Optional[float] = None
     score_to: Optional[float] = None
+
+
+# From billtitles-py
+class Title(SQLModel, table=True):
+    __tablename__ = "titles"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    title: str = Field(index=True)
+
+
+class BillTitle(SQLModel, table=True):
+    __tablename__ = "bill_titles"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    bill_id: Optional[int] = Field(default=None,
+                                   foreign_key="bill.id",
+                                   primary_key=True)
+    is_for_whole_bill: bool = Field(default=False)
+
+
+# For display (from billtitles-py)
+class BillTitlePlus(SQLModel):
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    billnumber: str = Field(index=True)
+    titles: str
+    is_for_whole_bill: bool = Field(default=False)
+
+
+class TitlesItem(SQLModel):
+    whole: List[str]
+    all: List[str]
+
+
+class BillTitleResponse(SQLModel):
+    billnumber: str
+    titles: TitlesItem
+
+
+class TitleBillsResponseItem(SQLModel):
+    id: int
+    title: str
+    billnumbers: List[str]
+
+
+class TitleBillsResponse(SQLModel):
+    titles: List[TitleBillsResponseItem]
+    titles_whole: List[TitleBillsResponseItem]
 
 
 def create_db_and_tables():
