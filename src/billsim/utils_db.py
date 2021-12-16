@@ -271,13 +271,16 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
             bill_to_bill_model.billnumber_version,
             bill_to_bill_model.billnumber_version_to))
 
+    reasonsstring = ""
+    if bill_to_bill_model.reasons:
+        ", ".join(bill_to_bill_model.reasons),
     bill_to_bill_new = pymodels.BillToBill(
         bill_id=bill.id,
         bill_to_id=bill_to.id,
         score_es=bill_to_bill_model.score_es,
         score=bill_to_bill_model.score,
         score_to=bill_to_bill_model.score_to,
-        reasonsstring=bill_to_bill_model.reasonsstring,
+        reasonsstring=reasonsstring,
         identified_by=bill_to_bill_model.identified_by,
         sections_num=bill_to_bill_model.sections_num,
         sections_match=bill_to_bill_model.sections_match)

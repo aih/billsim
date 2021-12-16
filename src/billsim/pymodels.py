@@ -84,8 +84,6 @@ class BillToBillModel(SQLModel):
     score_to: Optional[float] = None
     reasons: Optional[List[str]] = Field(default=None,
                                          sa_column=Column(ARRAY(String)))
-    reasonsstring: Optional[str] = Field(default=None,
-                                         sa_column=Column(VARCHAR(100)))
     identified_by: Optional[str] = None
     sections_num: Optional[int] = None
     sections_match: Optional[int] = None
