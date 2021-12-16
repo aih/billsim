@@ -62,7 +62,7 @@ class Bill(SQLModel, table=True):
     # TODO: when indexing/storing Bill initially, calculate number of sections
     #sections_num: Optional[int] = None
     billnumber: str = Field(index=True)
-    version: str
+    version: str = Field(index=True)
 
     @classmethod
     def getBillnumberversion(cls):
@@ -77,9 +77,17 @@ class BillToBillModel(SQLModel):
                                       foreign_key="bill.id",
                                       primary_key=True)
     billnumber_version: str = Field(index=True)
+    billnumber_version_to: str = Field(index=True)
+    billnumber: Optional[str] = Field(index=True)
+    version: Optional[str] = Field(index=True)
+    billnumber_to: Optional[str] = Field(index=True)
+    version_to: Optional[str] = Field(index=True)
+    titles: Optional[dict] = None
+    titles_to: Optional[dict] = None
+    title: Optional[str] = None
+    title_to: Optional[str] = None
     length: Optional[int] = None
     length_to: Optional[int] = None
-    billnumber_version_to: str = Field(index=True)
     score_es: Optional[float] = None
     score: Optional[float] = None
     score_to: Optional[float] = None
@@ -103,8 +111,6 @@ class BillToBill(SQLModel, table=True):
     score_es: Optional[float] = None
     score: Optional[float] = None
     score_to: Optional[float] = None
-    #reasons: Optional[List[str]] = Field(default=None,
-    #                                         sa_column=Column(ARRAY(String)))
     reasonsstring: Optional[str] = Field(default=None,
                                          sa_column=Column(VARCHAR(100)))
     identified_by: Optional[str] = None
