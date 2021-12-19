@@ -166,3 +166,8 @@ The admin panel is available at http://localhost:5050/
 ## Postgres back-up
 The database is backed up with:
 `pg_dump billsim > billsim-bk.sql`
+
+Or, without user/pw, and gzipped:
+`pg_dump billsim -O -x | gzip -9 > billsim-bk.sql.gz`
+
+(See https://jer-k.github.io/docker-postgres-image-with-seeded-data)
