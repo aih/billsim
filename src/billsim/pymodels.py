@@ -100,6 +100,39 @@ class BillToBillModel(SQLModel):
         Section]] = None    # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
 
 
+class BillModelDeep(SQLModel):
+    bill_id: Optional[int] = Field(default=None,
+                                   foreign_key="bill.id",
+                                   primary_key=True)
+    billnumber_version: Optional[str] = Field(index=True)
+    billnumber: Optional[str] = Field(index=True)
+    version: Optional[str] = Field(index=True)
+    titles: Optional[dict] = None
+    title: Optional[str] = None
+    length: Optional[int] = None
+    score_es: Optional[float] = None
+    score: Optional[float] = None
+    score_to: Optional[float] = None
+    reasons: Optional[List[str]] = Field(default=None,
+                                         sa_column=Column(ARRAY(String)))
+    identified_by: Optional[str] = None
+    sections_num: Optional[int] = None
+    sections_match: Optional[int] = None
+    sections: Optional[list[Section]] = None    #
+
+
+class BillToBillModelDeep(SQLModel):
+    bill: BillModelDeep
+    bill_to: BillModelDeep
+    reasons: Optional[List[str]] = Field(default=None,
+                                         sa_column=Column(ARRAY(String)))
+    identified_by: Optional[str] = None
+    sections_num: Optional[int] = None
+    sections_match: Optional[int] = None
+    sections: Optional[list[
+        Section]] = None    # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
+
+
 # Model used to store in db
 class BillToBill(SQLModel, table=True):
     bill_id: Optional[int] = Field(default=None,
