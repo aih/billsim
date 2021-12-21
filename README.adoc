@@ -61,6 +61,40 @@ NOTE: This will not delete the index if it already exists. To do so, and start o
 
 NOTE: The Elasticsearch versions after 7.10.2 are forked between the full 'OSS' version and a more restrictive license (as a challenge to Cloud services like AWS). The python client library must match the version of the Elasticsearch server.
 
+### Elasticsearch backup
+See https://github.com/elasticsearch-dump/elasticsearch-dump
+
+* Install `elasticdump` command-line application with npm
+
+`npm install -g elasticdump`
+
+* Store `billsim` and `bill_full` indices to .gz files
+
+`elasticdump --input=http://localhost:9200/billsim --output=$   | gzip > ./elasticdump.billsim.json.gz`
+
+`elasticdump --input=http://localhost:9200/bill_full --output=$   | gzip > ./elasticdump.bill_full.json.gz`
+
+* Import data from `.json`
+
+** Unzip the `.json.gz`
+
+`gzip -d elasticdump.billsim.json.gz`
+`gzip -d elasticdump.bill_full.json.gz`
+
+** Restore data to Elasticsearch
+
+```
+elasticdump \
+  --input "elasticdump.billsim.json" \
+  --output=http://localhost:9200/billsim --limit=50 \
+  --ignore-errors true
+
+elasticdump \
+  --input "elasticdump.bill_full.json" \
+  --output=http://localhost:9200/bill_full --limit=50 \
+  --ignore-errors true
+```
+
 ## Find similar bills 
 
 To run the Elasticsearch similarity algorithm, followed by a function to calculate similarity scores between pairs of bills, run the following command from the command line:
