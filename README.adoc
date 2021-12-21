@@ -172,7 +172,7 @@ $ docker run --rm   --name pg-docker -e POSTGRES_PASSWORD=$POSTGRES_PW -d -p 543
 Create a local postgres user:app-name:
 `createuser -s postgres`
 
-Install the tables:app-name:
+Install the tables:
 ```bash
 $python pymodels.py
 2021-12-11 15:48:29,657 INFO sqlalchemy.engine.Engine select pg_catalog.version()
@@ -188,10 +188,10 @@ CREATE TABLE bill (
 ...
 ```
 
-To access the database from the command line:author:
+To access the database from the command line:
 `psql postgresql://postgres:$POSTGRES_PW@localhost:5432/postgres`
 
-To run pgadmin4 from docker:app-name:
+To run pgadmin4 from docker:
 `docker run -p 5050:80 -e "PGADMIN_DEFAULT_EMAIL=myemail@gmail.com" -e "PGADMIN_DEFAULT_PASSWORD=a12345678" -d  dpage/pgadmin4`
 
 The admin panel is available at http://localhost:5050/
