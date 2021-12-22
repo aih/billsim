@@ -6,6 +6,11 @@ This repository extracts the bill similarity functions from the BillMap project 
 
 A separate repository (github.com/aih/bills) contains tools in Go to process bill data.
 
+This repository can be installed as a Python package directly from Github:
+`pip install -e git+https://github.com/aih/billsim.git#egg=billsim-aih`
+
+Then it can be imported as `import billsim`
+
 ## Processing bill XML files
 
 The default functions assume that the bill XML files are in a CONGRESS_DATA directory. The absolute path to CONGRESS_DATA must be defined as `PATH_TO_CONGRESS_DATA` in environment variables, or set in the `.env` file, inside the `billsim` directory. It should be a path to a directory of the form `[abspath]/data/congress/117` (for the 117th Congress). See `.env-sample` for an example.
