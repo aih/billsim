@@ -1,6 +1,7 @@
 # Billsim specific
 *-bk.py
 *-bk.sql
+elasticdump*
 data/
 bin
 !tests/samples/data

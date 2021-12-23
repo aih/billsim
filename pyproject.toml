@@ -3,4 +3,7 @@ requires = [
     "setuptools>=42",
     "wheel"
 ]
+packages = [
+    { include = "billsim", from = "src" },
+]
 build-backend = "setuptools.build_meta"
