@@ -23,11 +23,17 @@ def getCompareMatrix(billnumbers: list[str]) -> list[list]:
         for billnumber in billnumbers
     ]
     billPathsString = ",".join(billPaths)
+    logger.debug(billPathsString)
     result = subprocess.run(
         [COMPAREMATRIX_GO_CMD, '-abspaths', billPathsString],
         capture_output=True,
         text=True)
-    comparematrix = json.loads(result.stdout.split(':compareMatrix:')[1])
+    logger.debug(result.stdout)
+    comparematrixContents = result.stdout.split(':compareMatrix:')
+    if len(comparematrixContents) == 3 and comparematrixContents[1] != '':
+        comparematrix = json.loads(comparematrixContents[1])
+    else:
+        comparematrix = json.loads('{}')
     # matrix of the form '[[{1 identical} {0.63 incorporates}] [{0.79 incorporated by} {1 identical}]]'
     return comparematrix
 
