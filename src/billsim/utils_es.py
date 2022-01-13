@@ -31,6 +31,12 @@ def getMinScore(queryText: str) -> int:
         int: minimum score 
     """
     length = len(queryText)
+    if length < 200:
+        return 5
+    if length < 300:
+        return 10
+    if length < 400:
+        return 15
     if length < 500:
         return 20
     elif length < 1000:
