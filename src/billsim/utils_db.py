@@ -273,7 +273,7 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
 
     reasonsstring = ""
     if bill_to_bill_model.reasons:
-        ", ".join(bill_to_bill_model.reasons),
+        reasonsstring = ", ".join(bill_to_bill_model.reasons)
     bill_to_bill_new = pymodels.BillToBill(
         bill_id=bill.id,
         bill_to_id=bill_to.id,

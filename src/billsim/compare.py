@@ -28,7 +28,7 @@ def getCompareMatrix(billnumbers: list[str]) -> list[list]:
         [COMPAREMATRIX_GO_CMD, '-abspaths', billPathsString],
         capture_output=True,
         text=True)
-    logger.debug(result.stdout)
+    logger.info(result.stdout)
     comparematrixContents = result.stdout.split(':compareMatrix:')
     if len(comparematrixContents) == 3 and comparematrixContents[1] != '':
         comparematrix = json.loads(comparematrixContents[1])
