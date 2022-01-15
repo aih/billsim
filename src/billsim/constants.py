@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+TIMEOUT_SECONDS = 300
 PATHTYPE_DEFAULT = os.getenv('PATHTYPE_DEFAULT', default='congressdotgov')
 
 PATH_TO_DATA_DIR = os.getenv(
