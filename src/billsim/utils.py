@@ -102,9 +102,12 @@ def getBillnumberversionParts(billnumber_version: str) -> dict:
                 billnumber_version))
     else:
         billmatch_dict = billmatch.groupdict()
+        version = billmatch_dict.get('version', '')
+        if version and version.lower() == 'none':
+            version = 'ih'
         return {
             'billnumber': '{congress}{stage}{number}'.format(**billmatch_dict),
-            'version': billmatch_dict.get('version', '')
+            'version': version
         }
 
 

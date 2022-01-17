@@ -135,7 +135,8 @@ def getSimilarBillSections(
   Returns:
       BillSections: a BillSections object, with similar sections for the bill 
   """
-    if bill_path is not None and billnumber_version is not None:
+    if bill_path is not None and billnumber_version is not None and len(
+            billnumber_version) > 0 and billnumber_version.lower() != 'none':
         raise Exception(
             "bill_path and billnumber_version cannot be specified together")
 
