@@ -68,8 +68,13 @@ def processSimilarBills(billnumber_version: str,
         )
         return []
 
-    s = getSimilarBillSections(billnumber_version)
-    b2b = getBillToBill(s)
+    try:
+        s = getSimilarBillSections(billnumber_version)
+        b2b = getBillToBill(s)
+    except Exception as e:
+        logger.error(
+            f'Error getting similar bill sections for {billnumber_version}')
+        return []
     for bill in b2b:
         save_bill_to_bill(b2b[bill])
         save_bill_to_bill_sections(b2b[bill])
