@@ -212,4 +212,7 @@ The database is backed up with:
 Or, without user/pw, and gzipped:
 `pg_dump billsim -O -x | gzip -9 > billsim-bk.sql.gz`
 
+Or, from the url:
+`pg_dump postgresql://postgres:postgres@localhost -O -x | gzip -9 > billsim-bk.sql.gz`
+
 (See https://jer-k.github.io/docker-postgres-image-with-seeded-data)

@@ -112,9 +112,10 @@ def indexBill(billPath: BillPath,
                            namespaces={
                                'uslm': defaultNS,
                                'dc': constants.NAMESPACE_DC
-                           }))
-        sections = billTree.xpath('//uslm:section',
-                                  namespaces={'uslm': defaultNS})
+                           })),
+        sections = billTree.xpath(
+            '//uslm:section[not(ancestor::uslm:section) and not(@status="withdrawn")]',
+            namespaces={'uslm': defaultNS})
         headers = billTree.xpath('//uslm:heading',
                                  namespaces={'uslm': defaultNS})
     else:
@@ -151,7 +152,8 @@ def indexBill(billPath: BillPath,
         dctitle = getText(
             billTree.xpath('//dublinCore/dc:title',
                            namespaces={'dc': constants.NAMESPACE_DC}))
-        sections = billTree.xpath('//section')
+        sections = billTree.xpath(
+            '//section[not(ancestor::section) and not(@status="withdrawn")]'),
         headers = billTree.xpath('//header')
 
     billmatch = constants.BILL_NUMBER_REGEX_COMPILED.match(
