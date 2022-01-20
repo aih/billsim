@@ -385,12 +385,14 @@ def save_bill_and_sections(billPath: pymodels.BillPath,
     if defaultNS and defaultNS == constants.NAMESPACE_USLM2:
         logger.debug('Parsing bill WITH USLM2')
         logger.debug('defaultNS: {}'.format(defaultNS))
-        sections = billTree.xpath('//uslm:section',
-                                  namespaces={'uslm': defaultNS})
+        sections = billTree.xpath(
+            '//uslm:section[not(ancestor::uslm:section) and not(@status="withdrawn")]',
+            namespaces={'uslm': defaultNS})
     else:
         logger.debug('NO NAMESPACE')
 
-        sections = billTree.xpath('//section')
+        sections = billTree.xpath(
+            '//section[not(ancestor::section) and not(@status="withdrawn")]')
 
     billmatch = constants.BILL_NUMBER_REGEX_COMPILED.match(
         billPath.billnumber_version)

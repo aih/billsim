@@ -83,10 +83,12 @@ def getSimilarDocSections(filePath: str, docId: str) -> list[Section]:
         raise Exception('Could not parse bill: {}', filePath)
     defaultNS = getDefaultNamespace(billTree)
     if defaultNS is None:
-        sections = billTree.xpath('//section[not(ancestor::section)]')
+        sections = billTree.xpath(
+            '//section[not(ancestor::section) and not(@status="withdrawn")]')
     else:
-        sections = billTree.xpath('//ns:section[not(ancestor::ns:section)]',
-                                  namespaces={'ns': defaultNS})
+        sections = billTree.xpath(
+            '//ns:section[not(ancestor::ns:section) and not(@status="withdrawn")]',
+            namespaces={'ns': defaultNS})
 
     sectionsList = []
     for section in sections:
