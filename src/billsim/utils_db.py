@@ -5,7 +5,7 @@ import logging
 from typing import Optional
 from lxml import etree
 from sqlalchemy.orm import Session
-from billsim.utils import getDefaultNamespace, getBillLength, getBillLengthbyPath, getBillnumberversionParts, getId, getEnum, getText
+from billsim.utils import getDefaultNamespace, getBillLength, getBillLengthbyPath, getBillnumberversionParts, getId, getEnum, getSections, parseFilePath
 from billsim.database import SessionLocal
 from billsim import pymodels, constants
 
@@ -375,24 +375,15 @@ def save_bill_and_sections(billPath: pymodels.BillPath,
     status = pymodels.Status(
         success=True, message=f'Indexed bill: {billPath.billnumber_version};')
 
-    try:
-        billTree = etree.parse(billPath.filePath, parser=etree.XMLParser())
-    except Exception as e:
-        logger.error('Exception: '.format(e))
-        raise Exception('Could not parse bill: {}'.format(billPath.filePath))
+    billTree = parseFilePath(billPath.filePath)
     length = getBillLengthbyPath(billPath.filePath)
     defaultNS = getDefaultNamespace(billTree)
     if defaultNS and defaultNS == constants.NAMESPACE_USLM2:
         logger.debug('Parsing bill WITH USLM2')
         logger.debug('defaultNS: {}'.format(defaultNS))
-        sections = billTree.xpath(
-            '//uslm:section[not(ancestor::uslm:section) and not(@status="withdrawn")]',
-            namespaces={'uslm': defaultNS})
     else:
         logger.debug('NO NAMESPACE')
-
-        sections = billTree.xpath(
-            '//section[not(ancestor::section) and not(@status="withdrawn")]')
+    sections = getSections(billTree, defaultNS)
 
     billmatch = constants.BILL_NUMBER_REGEX_COMPILED.match(
         billPath.billnumber_version)

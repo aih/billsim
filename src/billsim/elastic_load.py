@@ -11,7 +11,7 @@ from collections import OrderedDict
 
 es = Elasticsearch()
 from billsim import constants
-from billsim.utils import getBillnumberversionParts, getBillXmlPaths, getBillLengthbyPath, getDefaultNamespace, getId, getHeader, getEnum, getText
+from billsim.utils import getBillnumberversionParts, getBillXmlPaths, getBillLengthbyPath, getDefaultNamespace, getId, getHeader, getEnum, getSections, getText, parseFilePath
 from billsim.utils_es import getBill_es
 from billsim.pymodels import SectionMeta, Status, BillPath, Bill, SectionItem
 
@@ -69,11 +69,7 @@ def indexBill(billPath: BillPath,
             if billres:
                 return Status(success=False, message='Bill already indexed')
 
-    try:
-        billTree = etree.parse(billPath.filePath, parser=etree.XMLParser())
-    except Exception as e:
-        logger.error('Exception: '.format(e))
-        raise Exception('Could not parse bill: {}'.format(billPath.filePath))
+    billTree = parseFilePath(billPath.filePath)
     length = getBillLengthbyPath(billPath.filePath)
     dublinCore = None
     defaultNS = getDefaultNamespace(billTree)
@@ -113,9 +109,7 @@ def indexBill(billPath: BillPath,
                                'uslm': defaultNS,
                                'dc': constants.NAMESPACE_DC
                            })),
-        sections = billTree.xpath(
-            '//uslm:section[not(ancestor::uslm:section) and not(@status="withdrawn")]',
-            namespaces={'uslm': defaultNS})
+        sections = getSections(billTree, defaultNS)
         headers = billTree.xpath('//uslm:heading',
                                  namespaces={'uslm': defaultNS})
     else:
@@ -152,8 +146,7 @@ def indexBill(billPath: BillPath,
         dctitle = getText(
             billTree.xpath('//dublinCore/dc:title',
                            namespaces={'dc': constants.NAMESPACE_DC}))
-        sections = billTree.xpath(
-            '//section[not(ancestor::section) and not(@status="withdrawn")]'),
+        sections = getSections(billTree),
         headers = billTree.xpath('//header')
 
     billmatch = constants.BILL_NUMBER_REGEX_COMPILED.match(
