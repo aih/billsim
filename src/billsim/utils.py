@@ -5,6 +5,8 @@ import os, sys
 import re
 import logging
 from typing import List
+from lxml import etree
+from xml.etree import ElementTree
 
 from billsim.constants import PATHTYPE_DEFAULT, PATHTYPE_OBJ, CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS, BILL_NUMBER_PART_REGEX_COMPILED
 from billsim.pymodels import BillPath
@@ -38,6 +40,14 @@ def deep_get(d, keys, default=None):
     if type(d) is list and type(keys[0]) is int:
         return deep_get(d[keys[0]], keys[1:], default)
     return deep_get(d.get(keys[0]), keys[1:], default)
+
+
+def parseFilePath(filePath):
+    try:
+        return etree.parse(filePath, parser=etree.XMLParser())
+    except Exception as e:
+        logger.error('Exception: '.format(e))
+        raise Exception('Could not parse bill: {}'.format(filePath))
 
 
 def getText(item) -> str:
@@ -80,6 +90,17 @@ def getHeader(section, defaultNS=None) -> str:
             headerpath) > 0 and headerpath[0].text is not None:
         return headerpath[0].text.strip()
     return ''
+
+
+def getSections(billTree, namespace=None) -> List:
+    if namespace is not None and len(namespace) > 0:
+        sections = billTree.xpath(
+            '//ns:section[not(ancestor::ns:section) and not(@status="withdrawn")]',
+            namespaces={'ns': namespace})
+    else:
+        sections = billTree.xpath(
+            '//section[not(ancestor::section) and not(@status="withdrawn")]')
+    return sections
 
 
 def getBillnumberversionParts(billnumber_version: str) -> dict:

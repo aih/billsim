@@ -6,7 +6,7 @@ from elasticsearch import Elasticsearch
 
 from billsim.pymodels import BillPath, BillSections, SimilarSection, BillToBillModel, QuerySection
 from billsim.elastic_load import getDefaultNamespace
-from billsim.utils import getBillnumberversionParts
+from billsim.utils import getBillnumberversionParts, getSections
 from billsim.utils_es import getBill_es, esSourceToQueryData
 from lxml import etree
 
@@ -82,13 +82,7 @@ def getSimilarDocSections(filePath: str, docId: str) -> list[Section]:
         logger.error("Error parsing file: {}; {} ", filePath, e)
         raise Exception('Could not parse bill: {}', filePath)
     defaultNS = getDefaultNamespace(billTree)
-    if defaultNS is None:
-        sections = billTree.xpath(
-            '//section[not(ancestor::section) and not(@status="withdrawn")]')
-    else:
-        sections = billTree.xpath(
-            '//ns:section[not(ancestor::ns:section) and not(@status="withdrawn")]',
-            namespaces={'ns': defaultNS})
+    sections = getSections(billTree, defaultNS)
 
     sectionsList = []
     for section in sections:
@@ -210,7 +204,7 @@ def getBillToBill(billsections: BillSections) -> dict:
 
 
 # *****************************************************************************
-# *****************************  Use ES document to get similar bills  ******************************
+# *****************************  Use ES document to get similar bills  ********
 # *****************************************************************************
 # Steps:
 # 1. Get bill by billnumber and version (utils_es.getBill_es)

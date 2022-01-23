@@ -1,9 +1,11 @@
+from re import T
 import sys
 import logging
 import subprocess
 import json
 import argparse
 import random
+from typing import List
 from billsim import pymodels
 from billsim.constants import COMPAREMATRIX_GO_CMD, TIMEOUT_SECONDS
 from billsim.utils import billNumberVersionToBillPath, getBillXmlPaths, getBillnumberversionParts
@@ -55,8 +57,52 @@ def getCompareMatrix(billnumbers: list[str]) -> list[list]:
     return comparematrix
 
 
+def scoreBillToBills(billnumber_version: str,
+                     similar_bills: list[str],
+                     timeout_secs: int = TIMEOUT_SECONDS) -> list[str]:
+    # Get similarity scores for bill-to-bill
+    # Calls comparematrix from bills (Golang);
+    # Saves bill-to-bill with scores for bill + similar bills
+    # This function can be expanded, or replaced to use another scoring method (e.g. vector similarity)
+    try:
+        with timeout(timeout_secs):
+            c = getCompareMatrix(similar_bills)
+    except Exception as e:
+        logger.error(
+            f'Timed out getting Compare Matrix for bill {billnumber_version}: {e}'
+        )
+        return []
+    try:
+        with timeout(timeout_secs):
+            for row in c:
+                for column in row:
+                    compare_bill, compare_bill_to = column[
+                        'ComparedDocs'].split('-')
+
+                    # Only stores the first row of the matrix
+                    # Where the 'from' bill is the bill to compare
+                    if compare_bill and compare_bill_to and compare_bill == billnumber_version:
+                        b2bModel = BillToBillModel(
+                            billnumber_version=compare_bill,
+                            billnumber_version_to=compare_bill_to,
+                            score=column['Score'],
+                            score_to=column['ScoreOther'],
+                            reasons=[
+                                reason.strip()
+                                for reason in column['Explanation'].split(', ')
+                            ])
+                        save_bill_to_bill(b2bModel)
+    except Exception as e:
+        logger.error(
+            f'Timed out processing bill-to-bill for bill {billnumber_version}: {e}'
+        )
+        return []
+    return similar_bills
+
+
 def processSimilarBills(billnumber_version: str,
-                        timeout_secs: int = TIMEOUT_SECONDS) -> list[str]:
+                        timeout_secs: int = TIMEOUT_SECONDS,
+                        add_similarity_scores=False) -> list[str]:
     logger.info(
         f'Processing similar bills for bill {billnumber_version} with timeout of {timeout_secs} seconds'
     )
@@ -78,40 +124,12 @@ def processSimilarBills(billnumber_version: str,
     for bill in b2b:
         save_bill_to_bill(b2b[bill])
         save_bill_to_bill_sections(b2b[bill])
-
-    # Get similarity scores for bill-to-bill
-    # Calls comparematrix from bills (Golang);
     similar_bills = list(b2b.keys())
-    try:
-        with timeout(timeout_secs):
-            c = getCompareMatrix(similar_bills)
-    except Exception as e:
-        logger.error(
-            f'Timed out getting Compare Matrix for bill {billnumber_version}: {e}'
-        )
-        return []
-    try:
-        with timeout(timeout_secs):
-            for row in c:
-                for column in row:
-                    compare_bill, compare_bill_to = column[
-                        'ComparedDocs'].split('-')
-                    if compare_bill and compare_bill_to:
-                        b2bModel = BillToBillModel(
-                            billnumber_version=compare_bill,
-                            billnumber_version_to=compare_bill_to,
-                            score=column['Score'],
-                            score_to=column['ScoreOther'],
-                            reasons=[
-                                reason.strip()
-                                for reason in column['Explanation'].split(', ')
-                            ])
-                        save_bill_to_bill(b2bModel)
-    except Exception as e:
-        logger.error(
-            f'Timed out processing bill-to-bill for bill {billnumber_version}: {e}'
-        )
-        return []
+
+    if add_similarity_scores:
+        similar_bills = scoreBillToBills(billnumber_version,
+                                         similar_bills=similar_bills,
+                                         timeout_secs=timeout_secs)
     return similar_bills
 
 

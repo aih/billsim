@@ -131,7 +131,16 @@ OR for many bills:
 # ['117hres158ih', '117hr1768ih', '117hres318ih','117sres356is', '117s2563is', '117s1816is', '117s1588is', '117hr1992ih', '117s2685is', '116sres178is']
 ```
 
-This is the equivalent of the following:
+or for all bills in one Congress:
+
+```
+>>> from billsim.utils import getBillXmlPaths
+>>> billnumberversions117 = [billPath.billnumber_version for billPath in getBillXmlPaths(congresses=[117])]
+>>> for billnumber_version in billnumber_versions:
+>>>     processSimilarBills(billnumber_version)
+```
+
+The processSimilarBills function is the equivalent of the following:
 ```python
 >>> from billsim.bill_similarity import getSimilarBillSections, getBillToBill
 >>> from billsim.utils_db import save_bill_to_bill, save_bill_to_bill_sections 
