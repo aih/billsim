@@ -4,10 +4,13 @@ import sys
 import logging
 from typing import Optional
 from lxml import etree
+from sqlalchemy import tuple_
 from sqlalchemy.orm import Session
+from sqlalchemy.dialects.postgresql import insert
 from billsim.utils import getDefaultNamespace, getBillLength, getBillLengthbyPath, getBillnumberversionParts, getId, getEnum, getSections, parseFilePath
 from billsim.database import SessionLocal
 from billsim import pymodels, constants
+
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -95,6 +98,38 @@ def get_bill_ids(
             billdict[billnumber_version] = bill.id
     return billdict
 
+
+def batch_get_bill_ids(billnumber_versions: list, db: Session = SessionLocal()) -> dict:
+    """
+    Return a dictionary of bill_id's for the billnumber_versions
+     { billnumber_version: bill_id }
+
+    Args:
+        billnumber_versions (list[str]): list of billnumber_versions of the form '116hr200ih' 
+        db (Session, optional): db session. Defaults to SessionLocal().
+
+    Returns:
+        billdict (dict): dictionary of the form { billnumber_version: bill_id }
+    """
+    billdict = {}
+    split_number_versions = []
+    for billnumber_version in billnumber_versions:
+        billdict[billnumber_version] = None
+        billnumber_version_dict = getBillnumberversionParts(billnumber_version)
+        billnumber = str(billnumber_version_dict.get('billnumber'))
+        version = str(billnumber_version_dict.get('version'))
+        split_number_versions.append((billnumber, version))
+
+    with db as session:
+        query = session.query(pymodels.Bill.id, pymodels.Bill.billnumber, pymodels.Bill.version).filter(
+            tuple_(pymodels.Bill.billnumber, pymodels.Bill.version).in_(split_number_versions)
+        )
+        results = query.all()
+
+    for result in results:
+        billdict[f'{result[1]}{result[2]}'] = result.id
+        
+    return billdict
 
 def get_bill_to_bill(
     bill_id: int, bill_to_id: int,
@@ -344,6 +379,44 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
             session.add(bill_to_bill)
             session.flush()
             session.commit()
+
+def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel],
+                      db: Session = SessionLocal()):
+    """
+    Save bill to bill join to the database.
+    Requires a list of BillToBillModel objects with bill_id and bill_to_id set.
+    """
+
+    bill_to_bills = []
+    for model in b2b_models:
+        if (model.bill_id is None) or (model.bill_to_id is None):
+            raise ValueError('bill_id and bill_to_id must be set')
+
+        bill_to_bills.append({
+            'bill_id': model.bill_id,
+            'bill_to_id': model.bill_to_id,
+            'score': model.score,
+            'score_to': model.score_to,
+            'reasonsstring': ','.join(model.reasons),
+            'sections_num': model.sections_num,
+            'sections_match': model.sections_match
+        })
+
+    insert_stmt = insert(pymodels.BillToBill).values(bill_to_bills)
+    update_values = { 
+        'score': insert_stmt.excluded.score, 
+        'score_to': insert_stmt.excluded.score_to, 
+        'reasonsstring': insert_stmt.excluded.reasonsstring, 
+        'sections_match': insert_stmt.excluded.sections_match, 
+        'sections_num': insert_stmt.excluded.sections_num 
+    }
+    do_update_stmt = insert_stmt.on_conflict_do_update(
+        constraint='billtobill_pkey',
+        set_= update_values
+    )
+    with db as session:
+        session.execute(do_update_stmt)
+        session.commit()
 
 
 def save_bill_to_bill_sections(bill_to_bill_model: pymodels.BillToBillModel,
