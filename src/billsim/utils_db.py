@@ -386,6 +386,26 @@ def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel],
     Requires a list of BillToBillModel objects with bill_id and bill_to_id set.
     """
 
+    # Backfill the bill to bill models with bill DB ids before saving.
+    # If we pass in bill to bill models with bill DB ids already set,
+    # this is unnecessary, but we'll do it anyway for simplicity.
+    billnumber_versions_to_query = []
+    for model in b2b_models:
+        billnumber_versions_to_query.append(model.billnumber_version)
+        billnumber_versions_to_query.append(model.billnumber_version_to)
+
+    billnumber_version_id_dict = batch_get_bill_ids(billnumber_versions_to_query)
+
+    for billnum in billnumber_version_id_dict:
+        # The caller should ensure all bills are saved in the bill table before using this
+        # method.
+        if billnumber_version_id_dict[billnum] is None:
+            raise ValueError(f"Bill numberversion not found in the database: {billnum}")
+
+    for model in b2b_models:
+        model.bill_id = billnumber_version_id_dict[model.billnumber_version]
+        model.bill_to_id = billnumber_version_id_dict[model.billnumber_version_to]
+
     bill_to_bills = []
     for model in b2b_models:
         if (model.bill_id is None) or (model.bill_to_id is None):
