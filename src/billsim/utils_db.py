@@ -404,7 +404,12 @@ def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel],
 
     for model in b2b_models:
         model.bill_id = billnumber_version_id_dict[model.billnumber_version]
+        if not model.bill_id:
+            raise ValueError(f"No bill_id found for: {model.billnumber_version}")
+
         model.bill_to_id = billnumber_version_id_dict[model.billnumber_version_to]
+        if not model.bill__to_id:
+            raise ValueError(f"No bill_to_id found for: {model.billnumber_version_to}")
 
     bill_to_bills = []
     for model in b2b_models:
