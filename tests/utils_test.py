@@ -105,8 +105,8 @@ def test_walkBillDirs(rootDir=CONGRESS_PATH_TEST):
                             fileMatch=CDG['fileMatch'],
                             processFile=getBillPath_ext('congressdotgov'))
     assert len(billDirs) >= 27
-    assert billDirs[2].billnumber_version == "116hr2005ih"
-    assert billDirs[2].fileName == "BILLS-116hr2005ih-uslm.xml"
+    assert billDirs[2].billnumber_version == "116hr2004ih"
+    assert billDirs[2].fileName == "BILLS-116hr2004ih-uslm.xml"
 
 
 def test_getBillXmlPaths(congressDataDir=CONGRESS_PATH_TEST):
@@ -114,5 +114,14 @@ def test_getBillXmlPaths(congressDataDir=CONGRESS_PATH_TEST):
     billDirs = getBillXmlPaths(congressDataDir=congressDataDir,
                                pathType='congressdotgov')
     assert len(billDirs) >= 27
-    assert billDirs[2].billnumber_version == "116hr2005ih"
-    assert billDirs[2].fileName == "BILLS-116hr2005ih-uslm.xml"
+    assert billDirs[2].billnumber_version == "116hr2004ih"
+    assert billDirs[2].fileName == "BILLS-116hr2004ih-uslm.xml"
+
+
+def test_getBillnumberVersionParts():
+    from billsim.utils import getBillnumberversionParts
+
+    parts = getBillnumberversionParts('117hr2222enr')
+
+    assert parts == {'billnumber': '117hr2222', 'version': 'enr'}
+    
