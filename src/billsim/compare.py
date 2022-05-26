@@ -13,7 +13,7 @@ from billsim.bill_similarity import getSimilarBillSections, getBillToBill
 from billsim.utils_db import save_bill_to_bill, save_bill_to_bill_sections
 from billsim.pymodels import BillToBillModel
 
-logging.basicConfig(filename='compare.log', filemode='w', level='INFO')
+#logging.basicConfig(filename='compare.log', filemode='w', level='INFO')
 logger = logging.getLogger(LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
