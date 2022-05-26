@@ -7,14 +7,14 @@ import argparse
 import random
 from typing import List
 from billsim import pymodels
-from billsim.constants import COMPAREMATRIX_GO_CMD, TIMEOUT_SECONDS
+from billsim.constants import LOGGER_NAME, COMPAREMATRIX_GO_CMD, TIMEOUT_SECONDS
 from billsim.utils import billNumberVersionToBillPath, getBillXmlPaths, getBillnumberversionParts
 from billsim.bill_similarity import getSimilarBillSections, getBillToBill
 from billsim.utils_db import save_bill_to_bill, save_bill_to_bill_sections
 from billsim.pymodels import BillToBillModel
 
 logging.basicConfig(filename='compare.log', filemode='w', level='INFO')
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 # See https://stackoverflow.com/a/63546765/628748

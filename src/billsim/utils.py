@@ -8,13 +8,13 @@ from typing import List
 from lxml import etree
 from xml.etree import ElementTree
 
-from billsim.constants import PATHTYPE_DEFAULT, PATHTYPE_OBJ, CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS, BILL_NUMBER_PART_REGEX_COMPILED
+from billsim.constants import LOGGER_NAME, PATHTYPE_DEFAULT, PATHTYPE_OBJ, CURRENT_CONGRESS, PATH_TO_CONGRESSDATA_DIR, CONGRESS_DIRS, BILL_NUMBER_PART_REGEX_COMPILED
 from billsim.pymodels import BillPath
 
 import traceback
 
-logging.basicConfig(filename='utils.log', filemode='w', level='INFO')
-logger = logging.getLogger(__name__)
+#logging.basicConfig(filename='utils.log', filemode='w', level='INFO')
+logger = logging.getLogger(LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 
