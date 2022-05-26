@@ -105,8 +105,16 @@ def test_walkBillDirs(rootDir=CONGRESS_PATH_TEST):
                             fileMatch=CDG['fileMatch'],
                             processFile=getBillPath_ext('congressdotgov'))
     assert len(billDirs) >= 27
-    assert billDirs[2].billnumber_version == "116hr2004ih"
-    assert billDirs[2].fileName == "BILLS-116hr2004ih-uslm.xml"
+
+    for bill_path in billDirs:
+        if bill_path.billnumber_version == "116hr2004ih":
+            found116hr2004ih = True
+            assert bill_path.fileName == 'BILLS-116hr2004ih-uslm.xml'
+
+    assert found116hr2004ih
+    
+#    assert billDirs[2].billnumber_version == "116hr2004ih"
+#    assert billDirs[2].fileName == "BILLS-116hr2004ih-uslm.xml"
 
 
 def test_getBillXmlPaths(congressDataDir=CONGRESS_PATH_TEST):
