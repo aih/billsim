@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+LOGGER_NAME = 'billsim'
 TIMEOUT_SECONDS = 300
 PATHTYPE_DEFAULT = os.getenv('PATHTYPE_DEFAULT', default='congressdotgov')
 

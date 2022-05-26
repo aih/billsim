@@ -8,7 +8,7 @@ from billsim.pymodels import SectionMeta, QuerySection
 
 es = Elasticsearch()
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(constants.LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 

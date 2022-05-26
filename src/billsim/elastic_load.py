@@ -15,8 +15,8 @@ from billsim.utils import getBillnumberversionParts, getBillXmlPaths, getBillLen
 from billsim.utils_es import getBill_es
 from billsim.pymodels import SectionMeta, Status, BillPath, Bill, SectionItem
 
-logging.basicConfig(filename='elastic_load.log', filemode='w', level='INFO')
-logger = logging.getLogger(__name__)
+#logging.basicConfig(filename='elastic_load.log', filemode='w', level='INFO')
+logger = logging.getLogger(constants.LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 
 

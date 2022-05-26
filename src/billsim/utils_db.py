@@ -11,7 +11,7 @@ from billsim.utils import getDefaultNamespace, getBillLength, getBillLengthbyPat
 from billsim.database import SessionLocal
 from billsim import pymodels, constants
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(constants.LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 logging.basicConfig(level='INFO')
 """ 
