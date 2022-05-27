@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import logging
 from re import S
 from lxml import etree
 from pathlib import Path
@@ -113,9 +114,6 @@ def test_walkBillDirs(rootDir=CONGRESS_PATH_TEST):
 
     assert found116hr2004ih
     
-#    assert billDirs[2].billnumber_version == "116hr2004ih"
-#    assert billDirs[2].fileName == "BILLS-116hr2004ih-uslm.xml"
-
 
 def test_getBillXmlPaths(congressDataDir=CONGRESS_PATH_TEST):
     from billsim.utils import getBillXmlPaths
