@@ -10,6 +10,7 @@ es = Elasticsearch()
 
 logger = logging.getLogger(constants.LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
+logger.setLevel(logging.INFO)
 
 
 def getHitsHits(res) -> list:

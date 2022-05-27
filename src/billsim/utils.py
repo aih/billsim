@@ -16,6 +16,7 @@ import traceback
 #logging.basicConfig(filename='utils.log', filemode='w', level='INFO')
 logger = logging.getLogger(LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
+logger.setLevel(logging.INFO)
 
 
 def get_traceback(e):

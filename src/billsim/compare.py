@@ -16,6 +16,7 @@ from billsim.pymodels import BillToBillModel
 logging.basicConfig(filename='compare.log', filemode='w', level='INFO')
 logger = logging.getLogger(LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
+logger.setLevel(logging.INFO)
 
 # See https://stackoverflow.com/a/63546765/628748
 # and https://stackoverflow.com/a/66515961/628748
