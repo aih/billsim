@@ -16,7 +16,7 @@ from billsim.utils import billNumberVersionToBillPath, deep_get, getBillLengthby
 from billsim.pymodels import SectionMeta, Section
 from billsim.utils_es import getHitsHits, moreLikeThis
 
-logging.basicConfig(filename='bill_similarity.log', filemode='w', level='INFO')
+#logging.basicConfig(filename='bill_similarity.log', filemode='w', level='INFO')
 logger = logging.getLogger(constants.LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 

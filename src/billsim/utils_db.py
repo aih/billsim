@@ -396,25 +396,33 @@ def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel],
 
     billnumber_version_id_dict = batch_get_bill_ids(billnumber_versions_to_query)
 
-    for billnum in billnumber_version_id_dict:
-        # The caller should ensure all bills are saved in the bill table before using this
-        # method.
-        if billnumber_version_id_dict[billnum] is None:
-            raise ValueError(f"Bill numberversion not found in the database: {billnum}")
+    # TODO: remove
+    # This seems duplicative and unnecessary; if the bill is missing from the db
+    # we add it below
+    #for billnum in billnumber_version_id_dict:
+    #    # The caller should ensure all bills are saved in the bill table before using this
+    #    # method.
+    #    if billnumber_version_id_dict[billnum] is None:
+    #        #raise ValueError(f"Bill numberversion not found in the database: {billnum}")
 
     for model in b2b_models:
-        model.bill_id = billnumber_version_id_dict[model.billnumber_version]
-        if not model.bill_id:
-            raise ValueError(f"No bill_id found for: {model.billnumber_version}")
+        # billnumber, version, billnumber_to, version_to
+        model.bill_id = billnumber_version_id_dict.get(model.billnumber_version)
+        if model.bill_id is None:
+            bill = save_bill(pymodels.Bill(billnumber=model.billnumber, version=model.version))
+            if bill is None:
+                raise ValueError('Could not save bill: {0}'.format(model.billnumber_version))
+            model.bill_id = bill.id
 
         model.bill_to_id = billnumber_version_id_dict[model.billnumber_version_to]
-        if not model.bill__to_id:
-            raise ValueError(f"No bill_to_id found for: {model.billnumber_version_to}")
+        if model.bill_id is None:
+            bill_to = save_bill(pymodels.Bill(billnumber=model.billnumber_to, version=model.version_to))
+            if bill_to is None:
+                raise ValueError('Could not save bill_to: {0}'.format(model.billnumber_version_to))
+            model.bill_to_id = bill_to.id
 
     bill_to_bills = []
     for model in b2b_models:
-        if (model.bill_id is None) or (model.bill_to_id is None):
-            raise ValueError('bill_id and bill_to_id must be set')
 
         bill_to_bills.append({
             'bill_id': model.bill_id,
