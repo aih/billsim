@@ -1,6 +1,6 @@
 astroid==2.8.4
 attrs==21.2.0
--e git+https://github.com/aih/billsim.git@d04488ac7cc454440e0c1df6587eca006b293068#egg=billsim_aih
+-e git+https://github.com/aih/billsim.git@50aeef8fbb14504c49ade46d58bd99cfe358792d#egg=billsim_aih
 build==0.7.0
 certifi==2021.10.8
 elasticsearch==7.10.1
@@ -26,7 +26,7 @@ python-dotenv==0.19.1
 PyYAML==6.0
 SQLAlchemy==1.4.26
 sqlalchemy2-stubs==0.0.2a19
-sqlmodel==0.0.4
+sqlmodel==0.0.6
 toml==0.10.2
 tomli==1.2.2
 typing-extensions==3.10.0.2
