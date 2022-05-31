@@ -4,3 +4,4 @@ psycopg2-binary~=2.9
 python-dotenv~=0.19
 SQLAlchemy~=1.4
 sqlmodel==0.0.6
+tomli~=2.0
