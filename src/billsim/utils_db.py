@@ -11,7 +11,7 @@ from sqlalchemy.dialects.postgresql import insert
 from billsim.utils import getDefaultNamespace, getBillLength, getBillLengthbyPath, getBillnumberversionParts, getId, getEnum, getSections, parseFilePath
 from billsim.database import SessionLocal
 from billsim import pymodels, constants
-from datetime import date
+from datetime import datetime
 
 logger = logging.getLogger(constants.LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -34,13 +34,13 @@ Take the Section object (which consists of the from Section Meta and a list of s
 def create_currency(
     version: str,
     db: Session = SessionLocal()) -> Optional[int]:
-    new_currency = pymodels.CurrencyModel(version=version, date=date.today() )
+    new_currency = pymodels.CurrencyModel(version=version, date=datetime.utcnow())
     with db as session:
         session.add(new_currency)
         session.flush()
         session.commit()
         session.refresh(new_currency)
-    return new_currency.id
+    return new_currency.currency_id
 
 def save_bill(
     bill: pymodels.Bill,

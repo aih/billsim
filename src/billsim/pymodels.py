@@ -103,7 +103,8 @@ class BillToBillModel(SQLModel):
     sections_match: Optional[int] = None
     sections: Optional[list[
         Section]] = None    # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
-    currency_id: Optional[int] = None
+    currency_id: Optional[int] = Field(default=None, foreign_key="currencymodel.currency_id")
+
 
 
 class BillModelDeep(SQLModel):
@@ -155,7 +156,7 @@ class BillToBill(SQLModel, table=True):
     identified_by: Optional[str] = None
     sections_num: Optional[int] = None
     sections_match: Optional[int] = None
-    currency_id: Optional[int] = None
+    currency_id: Optional[int] = Field(default=None, foreign_key="currencymodel.currency_id")
 
 
 # NOTE: section_id is the id attribute from the XML. It may not be unique.
