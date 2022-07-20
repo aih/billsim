@@ -5,6 +5,7 @@ from sqlalchemy.sql.sqltypes import ARRAY, VARCHAR, String
 from sqlmodel import Field, SQLModel, Column
 from typing import List, Optional
 from billsim.database import engine
+from datetime import datetime
 
 
 class Status(SQLModel):
@@ -68,6 +69,10 @@ class Bill(SQLModel, table=True):
     def getBillnumberversion(cls):
         return "{cls.billnumber}{cls.version}".format(cls=cls)
 
+class CurrencyModel(SQLModel, table=True):
+    currency_id: Optional[int] = Field(default=None, primary_key=True)
+    version: Optional[str] = Field(default=None)
+    date: Optional[datetime] = None
 
 class BillToBillModel(SQLModel):
     bill_id: Optional[int] = Field(default=None,
@@ -98,6 +103,7 @@ class BillToBillModel(SQLModel):
     sections_match: Optional[int] = None
     sections: Optional[list[
         Section]] = None    # for BillToBill, the Section.sections has just the highest scoring similar section between the bills
+    currency_id: Optional[int] = None
 
 
 class BillModelDeep(SQLModel):
@@ -149,6 +155,7 @@ class BillToBill(SQLModel, table=True):
     identified_by: Optional[str] = None
     sections_num: Optional[int] = None
     sections_match: Optional[int] = None
+    currency_id: Optional[int] = None
 
 
 # NOTE: section_id is the id attribute from the XML. It may not be unique.

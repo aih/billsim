@@ -3,6 +3,7 @@
 import sys
 import logging
 from typing import Optional
+from urllib.parse import _NetlocResultMixinStr
 from lxml import etree
 from sqlalchemy import tuple_
 from sqlalchemy.orm import Session
@@ -10,6 +11,7 @@ from sqlalchemy.dialects.postgresql import insert
 from billsim.utils import getDefaultNamespace, getBillLength, getBillLengthbyPath, getBillnumberversionParts, getId, getEnum, getSections, parseFilePath
 from billsim.database import SessionLocal
 from billsim import pymodels, constants
+from datetime import date
 
 logger = logging.getLogger(constants.LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -28,6 +30,17 @@ Take the Section object (which consists of the from Section Meta and a list of s
 >>>    save_bill_to_bill_sections(b2b[bill]) # This should save the individual sections and the se
 """
 
+
+def create_currency(
+    version: str,
+    db: Session = SessionLocal()) -> Optional[int]:
+    new_currency = pymodels.CurrencyModel(version=version, date=date.today() )
+    with db as session:
+        session.add(new_currency)
+        session.flush()
+        session.commit()
+        session.refresh(new_currency)
+    return new_currency.id
 
 def save_bill(
     bill: pymodels.Bill,
@@ -317,7 +330,8 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
         reasonsstring=reasonsstring,
         identified_by=bill_to_bill_model.identified_by,
         sections_num=bill_to_bill_model.sections_num,
-        sections_match=bill_to_bill_model.sections_match)
+        sections_match=bill_to_bill_model.sections_match,
+        currency_id=bill_to_bill_model.currency_id)
     if bill_to_bill is None:
         logger.debug(
             "********** NO Bill-to-bill yet for: {0}, {1} ********".format(
@@ -431,7 +445,8 @@ def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel],
             'score_to': model.score_to,
             'reasonsstring': ','.join(model.reasons),
             'sections_num': model.sections_num,
-            'sections_match': model.sections_match
+            'sections_match': model.sections_match,
+            'currency_id': model.currency_id
         })
 
     insert_stmt = insert(pymodels.BillToBill).values(bill_to_bills)
