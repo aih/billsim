@@ -6,14 +6,29 @@ This repository extracts the bill similarity functions from the BillMap project 
 
 A separate repository (github.com/aih/bills) contains tools in Go to process bill data.
 
+## Install
+
+### As a python package
+
 This repository can be installed as a Python package directly from Github:
 `pip install -e git+https://github.com/aih/billsim.git#egg=billsim-aih`
 
 Then it can be imported as `import billsim`
 
 The repository can also be installed with `git clone https://github.com/aih/billsim.git`.
+## Installation (quick) From a local repository
 
-## Installation
+* Clone the repository to a directory called `billsim`
+  `git clone https://github.com/aih/billsim.git`
+* Create a virtualenvironment from Python >=3.8
+  For example, in `pyenv virtualenv`:
+  `pyenv virtualenv 3.9.12 billsim`
+* Activate the virtual environment
+  `pyenv activate billsim`
+* Install the dependencies
+* Run `python setup.py install`
+
+## Installation (m1 mac)
 
 To install BillSim, it is suggested to do the following steps.
 
@@ -52,7 +67,6 @@ To solve this, install pytest in the virtual enviroment, and make sure via `pyth
 that a version of python running in the virtual enviroment is running, versus the global enviroment.
 
 Below is a stackoverflow explaining this issue: https://stackoverflow.com/questions/40718770/pytest-running-with-another-version-of-python
-
 
 ## Processing bill XML files
 
