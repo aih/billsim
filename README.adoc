@@ -32,7 +32,7 @@ The repository can also be installed with `git clone https://github.com/aih/bill
 
 To install BillSim, it is suggested to do the following steps.
 
-If one is running this on a m1 mac, it is suggested to run the following instructions 
+If you is running this on a m1 mac, it is suggested to run the following instructions 
 to install `brew` on `arch` in the `Users` folder.
 
 https://stackoverflow.com/questions/64963370/error-cannot-install-in-homebrew-on-arm-processor-in-intel-default-prefix-usr
@@ -45,7 +45,7 @@ The following is a good set of instructions to set up a virtual enviroment with 
 
 A more detailed guide can be found here: https://realpython.com/intro-to-pyenv/
 
-If one gets the following error when trying to set up the virtual enviroment, below is the error and the way to remedy it
+If you gets the following error when trying to set up the virtual enviroment, below is the error and the way to remedy it
 
 ```
 Failed to activate virtualenv.
