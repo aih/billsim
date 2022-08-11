@@ -15,7 +15,8 @@ This repository can be installed as a Python package directly from Github:
 
 Then it can be imported as `import billsim`
 
-### From a local repository
+The repository can also be installed with `git clone https://github.com/aih/billsim.git`.
+## Installation (quick) From a local repository
 
 * Clone the repository to a directory called `billsim`
   `git clone https://github.com/aih/billsim.git`
@@ -27,6 +28,45 @@ Then it can be imported as `import billsim`
 * Install the dependencies
 * Run `python setup.py install`
 
+## Installation (m1 mac)
+
+To install BillSim, it is suggested to do the following steps.
+
+If you are running this on a m1 mac, it is suggested to run the following instructions 
+to install `brew` on `arch` in the `Users` folder.
+
+https://stackoverflow.com/questions/64963370/error-cannot-install-in-homebrew-on-arm-processor-in-intel-default-prefix-usr
+
+Next run `brew install pyenv-virtualenv` to install `pyenv-virtualenv` 
+to set up a virtual enviroment for python to ensure that architecture errors do not occur
+when installing certain packages. 
+ 
+The following is a good set of instructions to set up a virtual enviroment with `pyenv-virtualenv` quickly: https://towardsdatascience.com/python-how-to-create-a-clean-learning-environment-with-pyenv-pyenv-virtualenv-pipx-ed17fbd9b790
+
+A more detailed guide can be found here: https://realpython.com/intro-to-pyenv/
+
+If you get the following error when trying to set up the virtual enviroment, below is the error and the way to remedy it
+
+```
+Failed to activate virtualenv.
+
+Perhaps pyenv-virtualenv has not been loaded into your shell properly.
+Please restart current shell and try again.
+```
+If this is the case, run the following to ensure it can be activated properly:
+
+```bash
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+```
+
+Finally, to see if everyone works, run `pytest`. However the issue with `pytest` is that it runs
+on the default global version, so it can be running tests on a version of python you are not using.
+
+To solve this, install pytest in the virtual enviroment, and make sure via `python pytest`
+that a version of python running in the virtual enviroment is running, versus the global enviroment.
+
+Below is a stackoverflow explaining this issue: https://stackoverflow.com/questions/40718770/pytest-running-with-another-version-of-python
 
 ## Processing bill XML files
 
