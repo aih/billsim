@@ -32,4 +32,5 @@ USER appuser
 # NOTE: We are dockerize a script, not a API. This runs slightly differently
 
 ADD ./src/billsim/compare.py /
+ADD ./src/billsim/pymodels.py /
 CMD [ "python", "./src/billsim/compare.py" ]
