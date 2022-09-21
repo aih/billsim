@@ -237,6 +237,14 @@ Tests, built with `pytest` are found in the `tests` directory. To run the tests,
 Uses the `pytest-order` plugin. See https://pytest-dev.github.io/pytest-order/dev/
 
 
+## Run with Docker
+While you can run this script locally, as a alternative a dockerfile is provided. To run it do the following:
+
+```bash
+docker build -t billsim .
+docker run billsim -m INSERT OTHER ARGS HERE
+```
+
 ## Run with Postgres (docker)
 
 ```bash
