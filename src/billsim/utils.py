@@ -66,6 +66,8 @@ def getText(item) -> str:
 def getId(section) -> str:
     return section.get('id', '')
 
+def getIdentifier(section) -> str:
+    return section.get('identifier', '')
 
 # NOTE: USLM uses 'num', bill dtd uses 'enum'
 def getEnum(section, defaultNS=None) -> str:
