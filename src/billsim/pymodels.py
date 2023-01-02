@@ -2,7 +2,7 @@
 
 from sqlalchemy.sql.schema import UniqueConstraint, Index
 from sqlalchemy.sql.sqltypes import ARRAY, VARCHAR, String
-from sqlmodel import Field, SQLModel, Column
+from sqlmodel import Field, SQLModel, Column, Integer, Sequence
 from typing import List, Optional
 from billsim.database import engine
 from datetime import datetime
@@ -167,7 +167,7 @@ class SectionItem(SQLModel, table=True):
     __table_args__ = (UniqueConstraint('billnumber_version',
                                        'section_id_attr',
                                        name='billnumber_version_section_id'),)
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int = Field(sa_column=Column('id',Integer,Sequence("section_id_seq", start=1),primary_key=True))
     bill_id: Optional[int] = Field(default=None, foreign_key="bill.id")
     billnumber_version: Optional[str] = Field(default=None)
     section_id_attr: Optional[str] = Field(default=None)

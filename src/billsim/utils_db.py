@@ -77,11 +77,12 @@ def save_sections(
     section_models,
     db: Session = SessionLocal()):
     logger.info("Saving sections")
-    insert_stmt = insert(pymodels.BillToBill).values(section_models)
+    section_dicts = [i.__dict__ for i in section_models]
+    insert_stmt = insert(pymodels.SectionItem)
     do_update_stmt = insert_stmt.on_conflict_do_nothing(
         constraint='billnumber_version_section_id')
     with db as session:
-        session.execute(do_update_stmt)
+        session.execute(do_update_stmt, section_dicts)
         session.commit()
 
 
