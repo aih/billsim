@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from sqlalchemy.sql.schema import UniqueConstraint
+from sqlalchemy.sql.schema import UniqueConstraint, Index
 from sqlalchemy.sql.sqltypes import ARRAY, VARCHAR, String
 from sqlmodel import Field, SQLModel, Column
 from typing import List, Optional
@@ -159,34 +159,55 @@ class BillToBill(SQLModel, table=True):
     currency_id: Optional[int] = Field(default=None, foreign_key="currencymodel.currency_id")
 
 
-# NOTE: section_id is the id attribute from the XML. It may not be unique.
-# However, the SQL bill_id + section_id is unique.
+# NOTES:
+# 1. section_id_attr is the id attribute from the XML. It may not be unique.
+#    However, the SQL bill_id + section_id is unique.
+# 2. bill_id is both a foreign key, and part of a composite primary key.
 class SectionItem(SQLModel, table=True):
-    __table_args__ = (UniqueConstraint('bill_id',
-                                       'section_id',
+    __table_args__ = (UniqueConstraint('billnumber_version',
+                                       'section_id_attr',
                                        name='billnumber_version_section_id'),)
     id: Optional[int] = Field(default=None, primary_key=True)
     bill_id: Optional[int] = Field(default=None, foreign_key="bill.id")
-    section_id: Optional[str] = Field(default=None)
-    label: Optional[str] = Field(default=None, index=True)
+    billnumber_version: Optional[str] = Field(default=None)
+    section_id_attr: Optional[str] = Field(default=None)
+    identifier: Optional[str] = Field(default=None, index=True)
+    number: Optional[str] = Field(default=None, index=True)
     header: Optional[str] = Field(default=None, index=True)
     length: int
+
+class SectionToSectionModel(SQLModel):
+    """
+    This table is used in-memory, before the indexes for bills and sections are known
+    """    
+    bill_number: Optional[str] = Field(default=None,
+                                   primary_key=True)
+    bill_number_to: Optional[str] = Field(default=None,
+                                      primary_key=True)
+    section_id: Optional[str] = Field(default=None)
+    section_to_id: Optional[str] = Field(default=None)
+    from_idx: Optional[int] = Field(default=None)
+    to_idx: Optional[int] = Field(default=None)
+    score: Optional[float] = None
+    currency_id: Optional[int] = Field(default=None, foreign_key="currencymodel.currency_id")
 
 
 class SectionToSection(SQLModel, table=True):
     """
-    This is a self-join of the SectionItem table.
+    This table is indexed by the matched bills. It is a one-to many relation, 
+    so for each pair of bill_id, bill_to_id, we get a list of matched sections.
     """
-    id: Optional[int] = Field(default=None,
-                              foreign_key="sectionitem.id",
-                              primary_key=True)
-    id_to: Optional[int] = Field(default=None,
-                                 foreign_key="sectionitem.id",
-                                 primary_key=True)
-    score_es: Optional[float] = None
+    __table_args__ = (Index('sectionmatch_index', 'bill_id','bill_to_id'),)
+    bill_id: Optional[int] = Field(default=None,
+                                   foreign_key="bill.id")
+    bill_to_id: Optional[int] = Field(default=None,
+                                      foreign_key="bill.id")
+    section_id: Optional[int] = Field(default=None, primary_key=True,
+                              foreign_key="sectionitem.id")
+    section_to_id: Optional[int] = Field(default=None, primary_key=True,
+                                 foreign_key="sectionitem.id")
     score: Optional[float] = None
-    score_to: Optional[float] = None
-
+    currency_id: Optional[int] = Field(default=None, foreign_key="currencymodel.currency_id")
 
 # From billtitles-py
 class Title(SQLModel, table=True):
