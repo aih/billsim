@@ -194,6 +194,8 @@ def batch_get_section_ids(s2s_models: list[pymodels.SectionToSectionModel], db: 
         results = query.all()
 
     for result in results:
+        logger.debug('result for section id query: {}'.format(result))
+
         billname = result[2]
         section_attr = result[3]
         if (billname not in sectiondict):
@@ -206,13 +208,14 @@ def batch_save_section_to_section(s2s_models: list[pymodels.SectionToSectionMode
     sectiondict = batch_get_section_ids(s2s_models)
     section_to_sections = []
     for model in s2s_models:
+        logger.debug('sectiontosection model: {}'.format(model))
         from_ids = sectiondict[model.bill_number][model.section_id]
         to_ids = sectiondict[model.bill_number_to][model.section_to_id]
         section_to_sections.append({
-            'bill_id': from_ids[0],
-            'bill_to_id': to_ids[0],
-            'section_id': from_ids[1],
-            'section_to_id': to_ids[1],
+            'bill_id': from_ids[1],
+            'bill_to_id': to_ids[1],
+            'section_id': from_ids[0],
+            'section_to_id': to_ids[0],
             'score': model.score,
             'currency_id': model.currency_id
         })
