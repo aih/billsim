@@ -5,7 +5,7 @@ import logging
 from typing import Optional
 from urllib.parse import _NetlocResultMixinStr
 from lxml import etree
-from sqlalchemy import tuple_
+from sqlalchemy import tuple_, delete
 from sqlalchemy.orm import Session
 from sqlalchemy.dialects.postgresql import insert
 from billsim.utils import getDefaultNamespace, getBillLength, getBillLengthbyPath, getBillnumberversionParts, getId, getEnum, getSections, parseFilePath
@@ -440,6 +440,18 @@ def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel],
     )
     with db as session:
         session.execute(do_update_stmt)
+        session.commit()
+
+def cleanup_old_bill_to_bill(current_currency_id, db: Session = SessionLocal()):
+    delete_stmt = delete(pymodels.BillToBill).where(pymodels.BillToBill.currency_id<current_currency_id)
+    with db as session:
+        session.execute(delete_stmt)
+        session.commit()
+
+def cleanup_old_section_to_section(current_currency_id, db: Session = SessionLocal()):
+    delete_stmt = delete(pymodels.SectionToSection).where(pymodels.SectionToSection.currency_id<current_currency_id)
+    with db as session:
+        session.execute(delete_stmt)
         session.commit()
 
 
