@@ -7,6 +7,7 @@ from urllib.parse import _NetlocResultMixinStr
 from lxml import etree
 from sqlalchemy import tuple_, delete
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.expression import func
 from sqlalchemy.dialects.postgresql import insert
 from billsim.utils import getDefaultNamespace, getBillLength, getBillLengthbyPath, getBillnumberversionParts, getId, getEnum, getSections, parseFilePath
 from billsim.database import SessionLocal
@@ -41,6 +42,13 @@ def create_currency(
         session.commit()
         session.refresh(new_currency)
     return new_currency.currency_id
+
+def get_last_currency_id(db: Session = SessionLocal()):
+    max_id = 0
+    with db as session:
+        max_id = session.query(func.max(pymodels.CurrencyModel.currency_id)).scalar()
+
+    return max_id
 
 def save_bill(
     bill: pymodels.Bill,
@@ -442,14 +450,20 @@ def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel],
         session.execute(do_update_stmt)
         session.commit()
 
-def cleanup_old_bill_to_bill(current_currency_id, db: Session = SessionLocal()):
+def cleanup_old_bill_to_bill(current_currency_id: int, db: Session = SessionLocal()):
     delete_stmt = delete(pymodels.BillToBill).where(pymodels.BillToBill.currency_id<current_currency_id)
+    last_id = get_last_currency_id()
+    if current_currency_id<0 or current_currency_id>last_id:
+        raise ValueError('Currency id {0} is out of range.', current_currency_id)
     with db as session:
         session.execute(delete_stmt)
         session.commit()
 
-def cleanup_old_section_to_section(current_currency_id, db: Session = SessionLocal()):
+def cleanup_old_section_to_section(current_currency_id: int, db: Session = SessionLocal()):
     delete_stmt = delete(pymodels.SectionToSection).where(pymodels.SectionToSection.currency_id<current_currency_id)
+    last_id = get_last_currency_id()
+    if current_currency_id<0 or current_currency_id>last_id:
+        raise ValueError('Currency id {0} is out of range.', current_currency_id)
     with db as session:
         session.execute(delete_stmt)
         session.commit()
