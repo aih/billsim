@@ -453,7 +453,7 @@ def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel],
 def cleanup_old_bill_to_bill(current_currency_id: int, db: Session = SessionLocal()):
     delete_stmt = delete(pymodels.BillToBill).where(pymodels.BillToBill.currency_id<current_currency_id)
     last_id = get_last_currency_id()
-    if current_currency_id<0 or current_currency_id>last_id:
+    if current_currency_id < 0 or current_currency_id >= last_id:
         raise ValueError('Currency id {0} is out of range.', current_currency_id)
     with db as session:
         session.execute(delete_stmt)
@@ -462,7 +462,7 @@ def cleanup_old_bill_to_bill(current_currency_id: int, db: Session = SessionLoca
 def cleanup_old_section_to_section(current_currency_id: int, db: Session = SessionLocal()):
     delete_stmt = delete(pymodels.SectionToSection).where(pymodels.SectionToSection.currency_id<current_currency_id)
     last_id = get_last_currency_id()
-    if current_currency_id<0 or current_currency_id>last_id:
+    if current_currency_id < 0 or current_currency_id >= last_id:
         raise ValueError('Currency id {0} is out of range.', current_currency_id)
     with db as session:
         session.execute(delete_stmt)
