@@ -106,7 +106,7 @@ def getSections(billTree, namespace=None) -> List:
     return sections
 
 
-def getBillnumberversionParts(billnumber_version: str) -> dict:
+def getBillnumberversionParts(billnumber_version: str, accept_all: bool = False) -> dict:
     """
     Split a billnumber_version string into its parts.
 
@@ -121,6 +121,8 @@ def getBillnumberversionParts(billnumber_version: str) -> dict:
     """
     billmatch = BILL_NUMBER_PART_REGEX_COMPILED.match(billnumber_version)
     if billmatch is None:
+        if accept_all:
+            return {'billnumber': billnumber_version, 'version':''}
         raise ValueError(
             'Billnumber version not of the correct form: {}'.format(
                 billnumber_version))

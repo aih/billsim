@@ -2,6 +2,7 @@
 
 from sqlalchemy.sql.schema import UniqueConstraint, Index
 from sqlalchemy.sql.sqltypes import ARRAY, VARCHAR, String
+from sqlalchemy.ext.declarative import declared_attr
 from sqlmodel import Field, SQLModel, Column, Integer, Sequence
 from typing import List, Optional
 from billsim.database import engine
@@ -68,6 +69,23 @@ class Bill(SQLModel, table=True):
     @classmethod
     def getBillnumberversion(cls):
         return "{cls.billnumber}{cls.version}".format(cls=cls)
+
+class UploadedDoc(SQLModel, table=True):
+    __table_args__ = (UniqueConstraint('billnumber',
+                                       'version',
+                                       name='uploaded_billnumber_version'),)
+    id: Optional[int] = Field(default=None, primary_key=True)
+    length: Optional[int] = None
+    # TODO: when indexing/storing Bill initially, calculate number of sections
+    #sections_num: Optional[int] = None
+    billnumber: str = Field(index=True)
+    version: str = Field(index=True)
+    processed: bool = Field(default=False)
+
+    @classmethod
+    def getBillnumberversion(cls):
+        return "{cls.billnumber}{cls.version}".format(cls=cls)
+
 
 class CurrencyModel(SQLModel, table=True):
     currency_id: Optional[int] = Field(default=None, primary_key=True)
@@ -158,6 +176,24 @@ class BillToBill(SQLModel, table=True):
     sections_match: Optional[int] = None
     currency_id: Optional[int] = Field(default=None, foreign_key="currencymodel.currency_id")
 
+# Model used to store in db
+class UBillToBill(SQLModel, table=True):
+    bill_id: Optional[int] = Field(default=None,
+                                   foreign_key="uploadeddoc.id",
+                                   primary_key=True)
+    bill_to_id: Optional[int] = Field(default=None,
+                                      foreign_key="bill.id",
+                                      primary_key=True)
+    score_es: Optional[float] = None
+    score: Optional[float] = None
+    score_to: Optional[float] = None
+    reasonsstring: Optional[str] = Field(default=None,
+                                         sa_column=Column(VARCHAR(100)))
+    identified_by: Optional[str] = None
+    sections_num: Optional[int] = None
+    sections_match: Optional[int] = None
+    currency_id: Optional[int] = Field(default=None, foreign_key="currencymodel.currency_id")
+
 
 # NOTES:
 # 1. section_id_attr is the id attribute from the XML. It may not be unique.
@@ -175,6 +211,20 @@ class SectionItem(SQLModel, table=True):
     number: Optional[str] = Field(default=None, index=True)
     header: Optional[str] = Field(default=None, index=True)
     length: int
+
+class USectionItem(SQLModel, table=True):
+    __table_args__ = (UniqueConstraint('billnumber_version',
+                                       'section_id_attr',
+                                       name='uploaded_billnumber_version_section_id'),)
+    id: int = Field(sa_column=Column('id',Integer,Sequence("usection_id_seq", start=1),primary_key=True))
+    bill_id: Optional[int] = Field(default=None, foreign_key="uploadeddoc.id")
+    billnumber_version: Optional[str] = Field(default=None)
+    section_id_attr: Optional[str] = Field(default=None)
+    identifier: Optional[str] = Field(default=None, index=True)
+    number: Optional[str] = Field(default=None, index=True)
+    header: Optional[str] = Field(default=None, index=True)
+    length: int
+
 
 class SectionToSectionModel(SQLModel):
     """
@@ -208,6 +258,24 @@ class SectionToSection(SQLModel, table=True):
                                  foreign_key="sectionitem.id")
     score: Optional[float] = None
     currency_id: Optional[int] = Field(default=None, foreign_key="currencymodel.currency_id")
+
+class USectionToSection(SQLModel, table=True):
+    """
+    This table is indexed by the matched bills. It is a one-to many relation, 
+    so for each pair of bill_id, bill_to_id, we get a list of matched sections.
+    """
+    __table_args__ = (Index('uploaded_sectionmatch_index', 'bill_id','bill_to_id'),)
+    bill_id: Optional[int] = Field(default=None,
+                                   foreign_key="uploadeddoc.id")
+    bill_to_id: Optional[int] = Field(default=None,
+                                      foreign_key="bill.id")
+    section_id: Optional[int] = Field(default=None, primary_key=True,
+                              foreign_key="usectionitem.id")
+    section_to_id: Optional[int] = Field(default=None, primary_key=True,
+                                 foreign_key="sectionitem.id")
+    score: Optional[float] = None
+    currency_id: Optional[int] = Field(default=None, foreign_key="currencymodel.currency_id")
+
 
 # From billtitles-py
 class Title(SQLModel, table=True):
