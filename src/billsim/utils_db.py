@@ -87,7 +87,7 @@ def save_bill(
         else:
             return bill_saved
 
-def mark_upload_processed(billnumber_version: str, db: Session = SessionLocal()):
+def mark_upload_processed(billnumber_version: str, doc_id: int, user: str, db: Session = SessionLocal()):
     """
     Change UploadedDoc's status to processed in the database
     """
@@ -97,7 +97,7 @@ def mark_upload_processed(billnumber_version: str, db: Session = SessionLocal())
     logger.info(f'Mark document {billnumber} version {version} as processed')
     with db as session:
         docobj = pymodels.UploadedDoc
-        session.execute(update(docobj).where(and_(docobj.billnumber == billnumber, docobj.version == version)).values(processed=True))
+        session.execute(update(docobj).where(and_(docobj.billnumber == billnumber, docobj.version == version)).values(processed=True, ext_id=doc_id, user=user))
         session.commit()
     return
 

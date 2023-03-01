@@ -75,11 +75,14 @@ class UploadedDoc(SQLModel, table=True):
                                        'version',
                                        name='uploaded_billnumber_version'),)
     id: Optional[int] = Field(default=None, primary_key=True)
+    # The doc_id is an externally provided id for the document
+    ext_id: Optional[int] = Field(index=True, default=None)
     length: Optional[int] = None
     # TODO: when indexing/storing Bill initially, calculate number of sections
     #sections_num: Optional[int] = None
     billnumber: str = Field(index=True)
     version: str = Field(index=True)
+    user: Optional[str] = None
     processed: bool = Field(default=False)
 
     @classmethod
