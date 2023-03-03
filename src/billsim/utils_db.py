@@ -5,7 +5,7 @@ import logging
 from typing import Optional
 from urllib.parse import _NetlocResultMixinStr
 from lxml import etree
-from sqlalchemy import tuple_, delete
+from sqlalchemy import tuple_, delete, and_, update
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func
 from sqlalchemy.dialects.postgresql import insert
@@ -13,7 +13,7 @@ from billsim.utils import getDefaultNamespace, getBillLength, getBillLengthbyPat
 from billsim.database import SessionLocal
 from billsim import pymodels, constants
 from datetime import datetime
-
+from sqlmodel import SQLModel
 logger = logging.getLogger(constants.LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stdout))
 logging.basicConfig(level='INFO')
@@ -51,16 +51,22 @@ def get_last_currency_id(db: Session = SessionLocal()):
     return max_id
 
 def save_bill(
-    bill: pymodels.Bill,
-    db: Session = SessionLocal()) -> Optional[pymodels.Bill]:
+    bill: SQLModel,
+    is_upload: bool = False,
+
+    db: Session = SessionLocal()) -> Optional[SQLModel]:
     """
     Save a bill to the database.
     """
     logger.info('Saving bill: {}'.format(bill))
     with db as session:
-        billitem = session.query(pymodels.Bill).filter(
-            pymodels.Bill.billnumber == bill.billnumber,
-            pymodels.Bill.version == bill.version).first()
+        if is_upload:
+            query_object = pymodels.UploadedDoc
+        else:
+            query_object = pymodels.Bill
+        billitem = session.query(query_object).filter(
+            query_object.billnumber == bill.billnumber,
+            query_object.version == bill.version).first()
         if billitem:
             logger.debug('Bill already exists: {}'.format(str(bill)))
             return billitem
@@ -71,9 +77,9 @@ def save_bill(
         session.commit()
         logger.debug(
             f'Flush and Commit to save bill {bill.billnumber} {bill.version}')
-        bill_saved = session.query(pymodels.Bill).filter(
-            pymodels.Bill.billnumber == bill.billnumber,
-            pymodels.Bill.version == bill.version).first()
+        bill_saved = session.query(query_object).filter(
+            query_object.billnumber == bill.billnumber,
+            query_object.version == bill.version).first()
         if bill_saved is None:
             logger.error(
                 f'Bill not saved to db: {bill.billnumber} {bill.version}')
@@ -81,14 +87,35 @@ def save_bill(
         else:
             return bill_saved
 
+def mark_upload_processed(billnumber_version: str, doc_id: int, user: str, db: Session = SessionLocal()):
+    """
+    Change UploadedDoc's status to processed in the database
+    """
+    billnumber_version_dict = getBillnumberversionParts(billnumber_version, accept_all=True)
+    billnumber = str(billnumber_version_dict.get('billnumber'))
+    version = str(billnumber_version_dict.get('version'))
+    logger.info(f'Mark document {billnumber} version {version} as processed')
+    with db as session:
+        docobj = pymodels.UploadedDoc
+        session.execute(update(docobj).where(and_(docobj.billnumber == billnumber, docobj.version == version)).values(processed=True, ext_id=doc_id, user=user))
+        session.commit()
+    return
+
 def save_sections(
     section_models,
+    is_upload: bool = False,
     db: Session = SessionLocal()):
     logger.info("Saving sections")
     section_dicts = [i.__dict__ for i in section_models]
-    insert_stmt = insert(pymodels.SectionItem)
+    if is_upload:
+        query_object = pymodels.USectionItem
+        constraint = 'uploaded_billnumber_version_section_id'
+    else:
+        query_object = pymodels.SectionItem
+        constraint = 'billnumber_version_section_id'
+    insert_stmt = insert(query_object)
     do_update_stmt = insert_stmt.on_conflict_do_nothing(
-        constraint='billnumber_version_section_id')
+        constraint=constraint)
     with db as session:
         session.execute(do_update_stmt, section_dicts)
         session.commit()
@@ -131,7 +158,7 @@ def get_bill_ids(
     return billdict
 
 
-def batch_get_bill_ids(billnumber_versions: list, db: Session = SessionLocal()) -> dict:
+def batch_get_bill_ids(billnumber_versions: list, is_uploaded: bool = False, db: Session = SessionLocal()) -> dict:
     """
     Return a dictionary of bill_id's for the billnumber_versions
      { billnumber_version: bill_id }
@@ -143,21 +170,26 @@ def batch_get_bill_ids(billnumber_versions: list, db: Session = SessionLocal()) 
     Returns:
         billdict (dict): dictionary of the form { billnumber_version: bill_id }
     """
+    
+    if is_uploaded:
+        bill_pymodel = pymodels.UploadedDoc
+    else:
+        bill_pymodel = pymodels.Bill
+        
     billdict = {}
     split_number_versions = []
     for billnumber_version in billnumber_versions:
         billdict[billnumber_version] = None
-        billnumber_version_dict = getBillnumberversionParts(billnumber_version)
+        billnumber_version_dict = getBillnumberversionParts(billnumber_version, True)
         billnumber = str(billnumber_version_dict.get('billnumber'))
         version = str(billnumber_version_dict.get('version'))
         split_number_versions.append((billnumber, version))
 
     with db as session:
-        query = session.query(pymodels.Bill.id, pymodels.Bill.billnumber, pymodels.Bill.version).filter(
-            tuple_(pymodels.Bill.billnumber, pymodels.Bill.version).in_(split_number_versions)
+        query = session.query(bill_pymodel.id, bill_pymodel.billnumber, bill_pymodel.version).filter(
+            tuple_(bill_pymodel.billnumber, bill_pymodel.version).in_(split_number_versions)
         )
         results = query.all()
-
     for result in results:
         billdict[f'{result[1]}{result[2]}'] = result.id
         
@@ -178,7 +210,11 @@ def get_bill_to_bill(
     return bill_to_bill
 
 
-def batch_get_section_ids(s2s_models: list[pymodels.SectionToSectionModel], db: Session = SessionLocal()) -> dict:
+def batch_get_section_ids(s2s_models: list[pymodels.SectionToSectionModel], 
+                          do_query_from: bool,
+                          do_query_to: bool,
+                          is_uploaded: bool = False, 
+                          db: Session = SessionLocal()) -> dict:
     """
     Return a dictionary from billnumber and section id attribute to (bill_id, section id)
 
@@ -189,18 +225,24 @@ def batch_get_section_ids(s2s_models: list[pymodels.SectionToSectionModel], db: 
     Returns:
         sectiondict (dict)
     """
+    
+    if is_uploaded:
+        section_pymodel = pymodels.USectionItem
+    else:
+        section_pymodel = pymodels.SectionItem
+        
     sections_set = set()
     sectiondict = {}
     for model in s2s_models:
-        sections_set.add((model.bill_number, model.section_id))
-        sections_set.add((model.bill_number_to, model.section_to_id))
-
+        if do_query_from:
+            sections_set.add((model.bill_number, model.section_id))
+        if do_query_to:
+            sections_set.add((model.bill_number_to, model.section_to_id))
     with db as session:
-        query = session.query(pymodels.SectionItem.id, pymodels.SectionItem.bill_id, pymodels.SectionItem.billnumber_version, pymodels.SectionItem.section_id_attr).filter(
-            tuple_(pymodels.SectionItem.billnumber_version, pymodels.SectionItem.section_id_attr).in_(sections_set)
+        query = session.query(section_pymodel.id, section_pymodel.bill_id, section_pymodel.billnumber_version, section_pymodel.section_id_attr).filter(
+            tuple_(section_pymodel.billnumber_version, section_pymodel.section_id_attr).in_(sections_set)
         )
         results = query.all()
-
     for result in results:
         logger.debug('result for section id query: {}'.format(result))
 
@@ -212,13 +254,24 @@ def batch_get_section_ids(s2s_models: list[pymodels.SectionToSectionModel], db: 
         
     return sectiondict
 
-def batch_save_section_to_section(s2s_models: list[pymodels.SectionToSectionModel], db: Session = SessionLocal()):
-    sectiondict = batch_get_section_ids(s2s_models)
+def batch_save_section_to_section(s2s_models: list[pymodels.SectionToSectionModel], is_uploaded: bool = False, db: Session = SessionLocal()):
+    
+    logger.info("Batch save section to section")
+    if is_uploaded:
+        s2s_pymodel = pymodels.USectionToSection
+        the_constraint='usectiontosection_pkey'
+    else:
+        s2s_pymodel = pymodels.SectionToSection
+        the_constraint='sectiontosection_pkey'
+        
+    sectiondict_from = batch_get_section_ids(s2s_models, True, False, is_uploaded)
+    sectiondict_to = batch_get_section_ids(s2s_models, False, True, False)
+
     section_to_sections = []
     for model in s2s_models:
         logger.debug('sectiontosection model: {}'.format(model))
-        from_ids = sectiondict[model.bill_number][model.section_id]
-        to_ids = sectiondict[model.bill_number_to][model.section_to_id]
+        from_ids = sectiondict_from[model.bill_number][model.section_id]
+        to_ids = sectiondict_to[model.bill_number_to][model.section_to_id]
         section_to_sections.append({
             'bill_id': from_ids[1],
             'bill_to_id': to_ids[1],
@@ -228,15 +281,18 @@ def batch_save_section_to_section(s2s_models: list[pymodels.SectionToSectionMode
             'currency_id': model.currency_id
         })
 
-    insert_stmt = insert(pymodels.SectionToSection).values(section_to_sections)
+    insert_stmt = insert(s2s_pymodel).values(section_to_sections)
+
     update_values = { 
         'score': insert_stmt.excluded.score, 
         'currency_id': insert_stmt.excluded.currency_id
     }
+
     do_update_stmt = insert_stmt.on_conflict_do_update(
-        constraint='sectiontosection_pkey',
+        constraint=the_constraint,
         set_= update_values
     )
+
     with db as session:
         session.execute(do_update_stmt)
         session.commit()
@@ -377,23 +433,34 @@ def save_bill_to_bill(bill_to_bill_model: pymodels.BillToBillModel,
             session.flush()
             session.commit()
 
-def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel],
+def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel], 
+                      is_uploaded: bool = False,
                       db: Session = SessionLocal()):
     """
     Save bill to bill join to the database.
     Requires a list of BillToBillModel objects with bill_id and bill_to_id set.
     """
-
+    if is_uploaded:
+        bill_pymodel = pymodels.UploadedDoc
+        b2b_pymodel = pymodels.UBillToBill
+        constraint='ubilltobill_pkey'        
+    else:
+        bill_pymodel = pymodels.Bill
+        b2b_pymodel = pymodels.BillToBill
+        constraint='billtobill_pkey'        
+    
+    logger.info("Batch save bill to bill")
     # Backfill the bill to bill models with bill DB ids before saving.
     # If we pass in bill to bill models with bill DB ids already set,
     # this is unnecessary, but we'll do it anyway for simplicity.
-    billnumber_versions_to_query = []
+    billnumber_versions_from = []
+    billnumber_versions_to = []    
     for model in b2b_models:
-        billnumber_versions_to_query.append(model.billnumber_version)
-        billnumber_versions_to_query.append(model.billnumber_version_to)
+        billnumber_versions_from.append(model.billnumber_version)
+        billnumber_versions_to.append(model.billnumber_version_to)
 
-    billnumber_version_id_dict = batch_get_bill_ids(billnumber_versions_to_query)
-
+    billnumber_version_id_dict = batch_get_bill_ids(billnumber_versions_from, is_uploaded)
+    billnumber_version_id_dict_to = batch_get_bill_ids(billnumber_versions_to, False)
     # TODO: remove
     # This seems duplicative and unnecessary; if the bill is missing from the db
     # we add it below
@@ -407,14 +474,14 @@ def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel],
         # billnumber, version, billnumber_to, version_to
         model.bill_id = billnumber_version_id_dict.get(model.billnumber_version)
         if model.bill_id is None:
-            bill = save_bill(pymodels.Bill(billnumber=model.billnumber, version=model.version))
+            bill = save_bill(bill_pymodel(billnumber=model.billnumber, version=model.version))
             if bill is None:
                 raise ValueError('Could not save bill: {0}'.format(model.billnumber_version))
             model.bill_id = bill.id
 
-        model.bill_to_id = billnumber_version_id_dict[model.billnumber_version_to]
+        model.bill_to_id = billnumber_version_id_dict_to[model.billnumber_version_to]
         if model.bill_id is None:
-            bill_to = save_bill(pymodels.Bill(billnumber=model.billnumber_to, version=model.version_to))
+            bill_to = save_bill(bill_pymodel(billnumber=model.billnumber_to, version=model.version_to))
             if bill_to is None:
                 raise ValueError('Could not save bill_to: {0}'.format(model.billnumber_version_to))
             model.bill_to_id = bill_to.id
@@ -433,7 +500,7 @@ def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel],
             'currency_id': model.currency_id
         })
 
-    insert_stmt = insert(pymodels.BillToBill).values(bill_to_bills)
+    insert_stmt = insert(b2b_pymodel).values(bill_to_bills)
     update_values = { 
         'score': insert_stmt.excluded.score, 
         'score_to': insert_stmt.excluded.score_to, 
@@ -443,7 +510,7 @@ def batch_save_bill_to_bill(b2b_models: [pymodels.BillToBillModel],
         'currency_id': insert_stmt.excluded.currency_id
     }
     do_update_stmt = insert_stmt.on_conflict_do_update(
-        constraint='billtobill_pkey',
+        constraint=constraint,
         set_= update_values
     )
     with db as session:
