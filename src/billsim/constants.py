@@ -91,6 +91,9 @@ US_CONGRESS_PATH_REGEX_COMPILED = re.compile(
 )
 USCONGRESS_XML_FILE = 'document.xml'
 
+
+POSTGRES_USER = os.getenv('POSTGRES_USER', default='postgres')
+POSTGRES_DB = os.getenv('POSTGRES_DB', default='billsim')
 POSTGRES_HOST = os.getenv('POSTGRES_HOST', default='localhost')
 POSTGRES_PORT = os.getenv('POSTGRES_PORT', default='5432')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD', default='1234')
