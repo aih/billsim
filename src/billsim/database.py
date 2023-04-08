@@ -6,8 +6,6 @@ from sqlmodel import create_engine
 
 postgres_url = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
-print(postgres_url)
-
 engine = create_engine(postgres_url, echo=False)
 
 SessionLocal = sessionmaker(autocommit=False,
