@@ -74,15 +74,17 @@ def save_bill(
         else:
             logger.debug('Saving bill: {}'.format(str(bill)))
 
-        try:
-            session.add(bill)
-            session.flush()
-            session.commit()
-        except SQLAlchemyError as e:
-            error = str(e.orig)
-            logger.error(error)
-        logger.debug(
-            f'Flush and Commit to save bill {bill.billnumber} {bill.version}')
+            try:
+                session.add(bill)
+                logger.debug(f'Flush and Commit to save bill {bill.billnumber} {bill.version}')
+                session.flush()
+                logger.debug('done flush')
+                session.commit()
+                logger.debug('done commit')
+            except SQLAlchemyError as e:
+                error = str(e.orig)
+                logger.debug(error)
+
         bill_saved = session.query(query_object).filter(
             query_object.billnumber == bill.billnumber,
             query_object.version == bill.version).first()
