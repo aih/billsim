@@ -9,6 +9,7 @@ from sqlalchemy import tuple_, delete, and_, update
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import func
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.exc import SQLAlchemyError
 from billsim.utils import getDefaultNamespace, getBillLength, getBillLengthbyPath, getBillnumberversionParts, getId, getEnum, getSections, parseFilePath
 from billsim.database import SessionLocal
 from billsim import pymodels, constants
@@ -72,9 +73,14 @@ def save_bill(
             return billitem
         else:
             logger.debug('Saving bill: {}'.format(str(bill)))
-        session.add(bill)
-        session.flush()
-        session.commit()
+
+        try:
+            session.add(bill)
+            session.flush()
+            session.commit()
+        except SQLAlchemyError as e:
+            error = str(e.orig)
+            logger.error(error)
         logger.debug(
             f'Flush and Commit to save bill {bill.billnumber} {bill.version}')
         bill_saved = session.query(query_object).filter(
